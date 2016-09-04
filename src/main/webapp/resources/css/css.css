@@ -1,0 +1,86 @@
+/*.form_add_card{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    margin: 0 20px;
+    border: 1px solid #6678b1;
+    width: 470px;
+    height: 160px;
+}
+.form_text{
+    float: left;
+    width: 270px;
+}
+.form_text input:focus{
+    border: 1px solid blue;
+}
+.form_btn{   
+    float: left;
+    width: 150px;
+    margin: 20px;
+}
+.form_btn input{
+    width: 120px;
+    border-radius: 10px;
+    border: 1px solid #6678b1;
+    font-size: 18px;
+    padding: 30px 20px;
+    color: #039;
+    font-weight: bold;
+}
+.form_add_card tr td{
+    padding: 6px 8px;
+}
+.form_add_card tr td input{
+    width: 250px;
+    padding: 3px 5px;
+    border-radius: 5px;
+    border: 1px solid #6678b1
+}
+.show_car{
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    width: 700px;
+    margin:  10px 20px;
+    border: 1px solid #669;
+}
+.table_data {
+    font-size: 12px;
+    background: #fff;
+    width: 1000px;
+    border-collapse: collapse;
+    text-align: left;
+    margin: 5px auto;
+    border: 1px solid #669;
+}
+.table_data th {
+    font-size: 14px;
+    font-weight: bold;
+    color: #039;
+    border-bottom: 2px solid #6678b1;
+    padding: 10px 8px;
+}
+.table_data td {
+    border-bottom: 1px solid #ccc;
+    color: #669;
+    padding: 6px 8px;
+}
+.table_data tr:hover{
+  font-weight: bold
+}
+.table_data tr.row_page{
+	border-bottom: 1px solid #ccc;
+	color: #669;
+}
+.del_car{
+	cursor: pointer;
+}
+.page{
+    padding: 0 140px;
+}
+.page .page_index{
+    font-size: 13px;
+	color: #669;
+	cursor: pointer;
+	padding: 0 5px;	
+}
+.page .page_index:hover{
+	font-weight: bold;
+}*/
