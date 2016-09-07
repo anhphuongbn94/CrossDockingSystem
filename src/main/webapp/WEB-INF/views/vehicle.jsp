@@ -14,7 +14,7 @@
                 <a href="javascript:;" class="fa fa-chevron-down"></a>
              </span>	    
 	    </header><!-- End Header -->
-   		<section class="panel-body">
+   		<section class="panel-body"> 
 	        <form role="form" class="form-horizontal adminex-form" id="addV" method="post">
 	            <section class="form-group">
 	                <label class="col-lg-3 control-label"><s:message code="vehicle.code" /></label>

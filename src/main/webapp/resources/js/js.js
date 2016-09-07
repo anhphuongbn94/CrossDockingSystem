@@ -4,6 +4,390 @@ function getContextPath() {
 var contextPath=getContextPath();
 var url = window.location.pathname;
 var currentPage = 1;
+$(document).ready(function(e){
+	$('#addID').submit(function(e){
+		insertInDoor();
+		e.preventDefault();
+	});
+	$('.edit-indoor').click(function(e){
+		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+		var trC=$(this).parents('tr');
+		eventEditIndoor(e, trC_old, trC);
+	});	
+	$('#addOD').submit(function(e){
+		insertOutDoor();
+		e.preventDefault();
+	});
+	$('.edit-outdoor').click(function(e){
+		var trC=$(this).parents('tr');
+		var idOutDoor = trC.find('.idOutDoor').html();
+		var nameD = trC.find('.nameD').html();
+		var capD = trC.find('.capD').html();
+		var statusD = trC.find('.statusD').html();
+		var content="";
+		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
+				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
+				+ "<td>" 
+					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>" 
+						+ "<option value='0'>Processing</option>"
+						+ "<option value='1'>Active</option>"
+						+ "<option value='2'>InActive</option>"
+						+ "<option value='3'>Maintenance</option>"
+					+ "</select>" 
+				+ "</td>"
+				+ "<td><a href='' class='save-outdoor'>Save</a></td>";
+		trC.html(content);
+		$('.save-outdoor').click(function(e){
+			trC=$(this).parents('tr');
+			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
+			statusD = trC.find('.statusD').val();
+			editOutDoor(idOutDoor, nameD, capD, statusD);
+			e.preventDefault();
+		});
+		e.preventDefault();
+	});
+	$('.save-cost').click(function(e){
+		var trC = $(this).parents('tr');
+		var idCost = trC.find('.id-cost').html();
+		var cost = trC.find('.form-control').val();
+		editCost(idCost, cost);
+		e.preventDefault();
+	});
+	$('.edit-cost').click(function(e){
+		var trC = $(this).parents('tr');
+		var idCost = trC.find('.id-cost').html();
+		var cost = trC.find('.cost').html();
+		trC.find('.cost').parent().html("" +
+				"<input type='text' class='form-control small' value='"+cost+"'/>");
+		$(this).parent().html("<td><a href='' class='save-cost'>Save</a></td>");
+		$('.save-cost').click(function(e){
+			var trC = $(this).parents('tr');
+			var idCost = trC.find('.id-cost').html();
+			var cost = trC.find('.form-control').val();
+			editCost(idCost, cost);
+			e.preventDefault();
+		});
+		e.preventDefault();
+	});
+	$('.pageCost .page_index').click(function(){
+		currentPage = $(this).attr('data-index');
+		getPageCost(currentPage);
+	});
+});
+function eventEditIndoor(e, trC_old, trC){
+//	var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+	var idInDoor_old = trC_old.find('.idInDoor').html();
+	var nameD_old = trC_old.find('.nameD').val();
+	var capD_old = trC_old.find('.capD').val();
+	
+	var statusD_old = trC_old.find('.statusD').val();
+	if(statusD_old == 0) statusD_old = "Processing";
+	else if(statusD_old == 1) statusD_old = "Active";
+	else if(statusD_old == 2) statusD_old = "InActive";
+	else statusD_old = "Maintenance";
+	
+	var content_old="";
+	content_old += "<td style='display: none'><span class='idInDoor' >"+idInDoor_old+"</span></td>" 
+			+ "<td><span class='nameD'>"+nameD_old+"</span></td>"
+			+ "<td><span class='capD'>"+capD_old+"</span></td>"
+			+ "<td><span class='statusD'>"+statusD_old+"</span></td>"
+			+ "<td><a href='' class='edit-indoor'>Edit</a></td>";
+	trC_old.html(content_old);
+	
+//	var trC=$(this).parents('tr');
+	var idInDoor = trC.find('.idInDoor').html();
+	var nameD = trC.find('.nameD').html();
+	var capD = trC.find('.capD').html();
+	var statusD = trC.find('.statusD').html();
+	var content="";
+	content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
+			+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
+			+ "<td>" 
+				+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
+					+ "<option value='0'>Processing</option>"
+					+ "<option value='1'>Active</option>"
+					+ "<option value='2'>InActive</option>"
+					+ "<option value='3'>Maintenance</option>"
+				+ "</select>" 
+			+ "</td>"
+			+ "<td><a href='' class='save-indoor'>Save</a></td>";
+	trC.html(content);
+	$('.save-indoor').click(function(e){
+		trC=$(this).parents('tr');
+		nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
+		statusD = trC.find('.statusD').val();
+		editInDoor(idInDoor, nameD, capD, statusD);
+		e.preventDefault();
+	});
+	$('.edit-indoor').click(function(e){
+		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+		var trC=$(this).parents('tr');
+		eventEditIndoor(e, trC_old, trC);
+	});
+	e.preventDefault();
+}
+function getPageCost(currentPage){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageCost',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentCost(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function showContentCost(response){
+	var content="";
+	for(var i=0; i<response.length; i++){
+		var tdCost="<td><span class='cost'>"+response[i].cost+"</span></td>";
+		var tdOp="<td><a href='' class='edit-cost'>Edit</a></td>"
+		if(response[i].cost == 0){
+			tdCost="<td><input type='text' class='form-control small'/></td>";
+			tdOp="<td><a href='' class='save-cost'>Save</a></td>";
+		}
+		content += "<tr>"
+				+ "<td style='display: none'><span class='id-cost'>"+response[i].idCost+"</span></td>"
+				+ "<td><span>"+response[i].inDoor.nameDoor+"</span></td>"
+				+ "<td><span>"+response[i].outDoor.nameDoor+"</span></td>"
+				+ tdCost 
+				+ tdOp
+				+"</tr>"
+	}
+	$('.rowCost_data').html(content);
+	$('.save-cost').click(function(e){
+		var trC = $(this).parents('tr');
+		var idCost = trC.find('.id-cost').html();
+		var cost = trC.find('.form-control').val();
+		editCost(idCost, cost);
+		e.preventDefault();
+	});
+	$('.edit-cost').click(function(e){
+		var trC = $(this).parents('tr');
+		var idCost = trC.find('.id-cost').html();
+		var cost = trC.find('.cost').html();
+		trC.find('.cost').parent().html("" +
+				"<input type='text' class='form-control small' value='"+cost+"'/>");
+		$(this).parent().html("<td><a href='' class='save-cost'>Save</a></td>");
+		$('.save-cost').click(function(e){
+			var trC = $(this).parents('tr');
+			var idCost = trC.find('.id-cost').html();
+			var cost = trC.find('.form-control').val();
+			editCost(idCost, cost);
+			e.preventDefault();
+		});
+		e.preventDefault();
+	});
+}
+function editCost(idCost, cost){
+	$.ajax({
+        type: "POST",
+        data: "idCost=" + idCost + "&cost=" + cost + "&currentPage=" + currentPage,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/editCost',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentCost(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function showContentInDoor(response){
+	var content="";
+	for(var i=0; i<response.length; i++){
+		if(response[i].status == 0) status = "Processing";
+		else if(response[i].status == 1) status = "Active";
+		else if(response[i].status == 2) status = "InActive";
+		else status = "Maintenance";
+		content += "<tr>"
+			+ "<td style='display: none'><span class='idInDoor'>"+response[i].idDoor+"</span>"
+			+ "<td><span class='nameD'>"+response[i].nameDoor+"</span></td>"
+			+ "<td><span class='capD'>"+response[i].capacity+"</span></td>"
+			+ "<td><span class='statusD'>"+status+"</span></td>"
+			+ "<td><a href='' class='edit-indoor'>Edit</a></td>"
+			+ "</tr>";
+	}
+	$('.rowI_data').html(content);
+	$('.edit-indoor').click(function(e){
+		var trC=$(this).parents('tr');
+		var idInDoor = trC.find('.idInDoor').html();
+		var nameD = trC.find('.nameD').html();
+		var capD = trC.find('.capD').html();
+		var statusD = trC.find('.statusD').html();		
+		var content="";
+		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
+				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
+				+ "<td>" 
+					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
+						+ "<option value='0'>Processing</option>"
+						+ "<option value='1'>Active</option>"
+						+ "<option value='2'>InActive</option>"
+						+ "<option value='3'>Maintenance</option>"
+					+ "</select>" 
+				+ "</td>"
+				+ "<td><a href='' class='save-indoor'>Save</a></td>";
+		trC.html(content);
+		$('.save-indoor').click(function(e){
+			trC=$(this).parents('tr');
+			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
+			statusD = trC.find('.statusD').val();
+			editInDoor(idInDoor, nameD, capD, statusD);
+			e.preventDefault();
+		});
+		e.preventDefault();
+	});
+}
+function showContentOutDoor(response){
+	var content="";
+	for(var i=0; i<response.length; i++){
+		if(response[i].status == 0) status = "Processing";
+		else if(response[i].status == 1) status = "Active";
+		else if(response[i].status == 2) status = "InActive";
+		else status = "Maintenance";
+		content += "<tr>"
+			+ "<td style='display: none'><span class='idInDoor'>"+response[i].idDoor+"</span>"
+			+ "<td><span class='nameD'>"+response[i].nameDoor+"</span></td>"
+			+ "<td><span class='capD'>"+response[i].capacity+"</span></td>"
+			+ "<td><span class='statusD'>"+status+"</span></td>"
+			+ "<td><a href='' class='edit-outdoor'>Edit</a></td>"
+			+ "</tr>";
+	}
+	$('.rowO_data').html(content);
+	$('.edit-outdoor').click(function(e){
+		var trC=$(this).parents('tr');
+		var idInDoor = trC.find('.idInDoor').html();
+		var nameD = trC.find('.nameD').html();
+		var capD = trC.find('.capD').html();
+		var statusD = trC.find('.statusD').html();
+		var content="";
+		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
+				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
+				+ "<td>" 
+					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
+						+ "<option value='0'>Processing</option>"
+						+ "<option value='1'>Active</option>"
+						+ "<option value='2'>InActive</option>"
+						+ "<option value='3'>Maintenance</option>"
+					+ "</select>" 
+				+ "</td>"
+				+ "<td><a href='' class='save-outdoor'>Save</a></td>";
+		trC.html(content);
+		$('.save-outdoor').click(function(e){
+			trC=$(this).parents('tr');
+			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
+			statusD = trC.find('.statusD').val();
+			editOutDoor(idInDoor, nameD, capD, statusD);
+			e.preventDefault();
+		});
+		e.preventDefault();
+	});
+}
+function insertInDoor(){
+	$.ajax({
+        type: "POST",
+        data: $("#addID").serialize(),
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/insertInDoor',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentInDoor(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function editInDoor(idInDoor, nameD, capD, statusD){
+	$.ajax({
+        type: "POST",
+        data: 'idInDoor=' + idInDoor + '&nameD=' + nameD + '&capD=' + capD + '&statusD=' + statusD,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/editInDoor',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentInDoor(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function insertOutDoor(){
+	$.ajax({
+        type: "POST",
+        data: $("#addOD").serialize(),
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/insertOutDoor',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentOutDoor(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function editOutDoor(idOutDoor, nameD, capD, statusD){
+	$.ajax({
+        type: "POST",
+        data: 'idOutDoor=' + idOutDoor + '&nameD=' + nameD + '&capD=' + capD + '&statusD=' + statusD,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/editOutDoor',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showContentOutDoor(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+/**********************************************************************************************************
+ **********************************************************************************************************
+ **********************************************************************************************************
+ */
 $(document).ready(function() {
 	$('#addV').submit( function (e){
 		insertVehicle();

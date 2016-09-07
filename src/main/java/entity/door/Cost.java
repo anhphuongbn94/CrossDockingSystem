@@ -1,7 +1,4 @@
-package entity.cost;
-
-import entity.door.InDoor;
-import entity.door.OutDoor;
+package entity.door;
 
 public class Cost {
 	private Integer idCost;
@@ -11,6 +8,12 @@ public class Cost {
 	
 	public Cost() {
 		super();
+	}
+	public Cost(InDoor inDoor, OutDoor outDoor, Double cost) {
+		super();
+		this.inDoor = inDoor;
+		this.outDoor = outDoor;
+		this.cost = cost;
 	}
 	public Cost(Integer idCost, InDoor inDoor, OutDoor outDoor, Double cost) {
 		super();

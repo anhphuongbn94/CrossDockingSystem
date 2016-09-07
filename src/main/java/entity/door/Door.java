@@ -4,22 +4,46 @@ public class Door {
 	private Integer idDoor;
 	private String nameDoor; 
 	private Integer capacity; // Sức chứa của cửa trong 1 ngày.
+	private Integer status; // 1: Dang hoat dong, 2: Ngung hoat dong, 3: Dang bao tri, 4:	
 	private CrossDockingSystem cDS;
 	
 	public Door() {
 		super();
 	}
-	public Door(int idDoor, String nameDoor, Integer capacity) {
+	public Door(String nameDoor, Integer capacity, CrossDockingSystem cDS, Integer status) {
+		super();
+		this.nameDoor = nameDoor;
+		this.capacity = capacity;
+		this.cDS = cDS;
+		this.status = status;
+	}
+	public Door(Integer idDoor, String nameDoor, Integer capacity) {
 		super();
 		this.idDoor = idDoor;
 		this.nameDoor = nameDoor;
 		this.capacity = capacity;
 	}
-	public Door(int idDoor, String nameDoor, Integer capacity, CrossDockingSystem cDS) {
+	public Door(Integer idDoor, String nameDoor, Integer capacity, CrossDockingSystem cDS) {
 		super();
 		this.idDoor = idDoor;
 		this.nameDoor = nameDoor;
 		this.capacity = capacity;
+		this.cDS = cDS;
+	}
+
+	public Door(int idDoor, String nameDoor, Integer capacity, Integer status) {
+		super();
+		this.idDoor = idDoor;
+		this.nameDoor = nameDoor;
+		this.capacity = capacity;
+		this.status = status;
+	}
+	public Door(int idDoor, String nameDoor, Integer capacity, Integer status, CrossDockingSystem cDS) {
+		super();
+		this.idDoor = idDoor;
+		this.nameDoor = nameDoor;
+		this.capacity = capacity;
+		this.status = status;
 		this.cDS = cDS;
 	}
 	public Integer getIdDoor() {
@@ -39,6 +63,12 @@ public class Door {
 	}
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
+	}
+	public Integer getStatus() {
+		return status;
+	}
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	public CrossDockingSystem getcDS() {
 		return cDS;

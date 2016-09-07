@@ -6,11 +6,21 @@ public class InDoor extends Door{
 	public InDoor() {
 		super();
 	}
-	public InDoor(int idDoor, String nameDoor, Integer capacity, CrossDockingSystem cDS) {
+	
+	public InDoor(String nameDoor, Integer capacity, CrossDockingSystem cDS, Integer status) {
+		super(nameDoor, capacity, cDS, status);
+	}
+	public InDoor(Integer idDoor, String nameDoor, Integer capacity) {
+		super(idDoor, nameDoor, capacity);
+	}
+	public InDoor(Integer idDoor, String nameDoor, Integer capacity, CrossDockingSystem cDS) {
 		super(idDoor, nameDoor, capacity, cDS);
 	}
-	public InDoor(int idDoor, String nameDoor, Integer capacity) {
-		super(idDoor, nameDoor, capacity);
+	public InDoor(int idDoor, String nameDoor, Integer capacity, Integer status, CrossDockingSystem cDS) {
+		super(idDoor, nameDoor, capacity, status, cDS);
+	}
+	public InDoor(int idDoor, String nameDoor, Integer capacity, Integer status) {
+		super(idDoor, nameDoor, capacity, status);
 	}
 	public InDoor(Integer idInDoor) {
 		super();

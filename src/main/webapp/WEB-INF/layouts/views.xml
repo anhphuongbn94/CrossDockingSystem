@@ -19,8 +19,17 @@
 	<definition name="assign.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/assign.jsp" />
 	</definition>
-	
-	
+	<!-- Door -->
+	<definition name="indoor.data.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/door/indoor.jsp"/>
+	</definition>
+	<definition name="outdoor.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/door/outdoor.jsp"/>
+	</definition>
+	<definition name="setcost.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/door/setcost.jsp"/>
+	</definition>
+	<!-- Vehicle -->
 	<definition name="invehicle.data.def" extends="temp1.def">
 	    <put-attribute name="content" value="/WEB-INF/views/invehicle/data.jsp" />
 	</definition>

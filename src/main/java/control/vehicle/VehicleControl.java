@@ -101,7 +101,7 @@ public class VehicleControl {
 		mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereAssignDoor(currentPage, sizePage));
 		mm.put("listOutDoor", doorDAO.getListOutDoor());
 		mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereAssignDoor(currentPage, sizePage));
-		mm.put("listCost", doorDAO.getListCost());
+//		mm.put("listCost", doorDAO.getListCost());
 		mm.put("listPT", vehicleDAO.getProductTransfer());
 		return new ModelAndView("assign.def");
 	}

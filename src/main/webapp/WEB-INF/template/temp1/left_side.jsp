@@ -34,6 +34,13 @@
 	            	<span><s:message code="menu.home" /></span>
             	</a>
            	</li>
+           	<li class="menu-list">
+            	<a href=""><i class="fa fa-laptop"></i><span><s:message code="menu.door" /></span></a>
+                <ul class="sub-menu-list">
+                    <li><a href="${pageContext.request.contextPath }/indoor"><s:message code="menu.door.data" /></a></li>
+                    <li><a href="${pageContext.request.contextPath }/setcost"><s:message code="menu.setcost" /></a></li>
+                </ul>
+            </li>
            	<li><a href="${pageContext.request.contextPath }/mtrstatus">
            			<i class="fa fa-tv"></i> 
             		<span><s:message code="menu.mtrstatus" /></span>
@@ -44,13 +51,6 @@
             		<span><s:message code="menu.vehicle" /></span>
            		</a>
            	</li>
-            <%-- <li class="menu-list">
-            	<a href=""><i class="fa fa-laptop"></i><span><s:message code="menu.door" /></span></a>
-                <ul class="sub-menu-list">
-                    <li><a href="${pageContext.request.contextPath }/indoor">InDoor</a></li>
-                    <li><a href="${pageContext.request.contextPath }/outdoor">OutDoor</a></li>
-                </ul>
-            </li> --%>
             <li class="menu-list">
             	<a href=""><i class="fa fa-truck"></i><span><s:message code="menu.invehicle" /></span></a>
                 <ul class="sub-menu-list">

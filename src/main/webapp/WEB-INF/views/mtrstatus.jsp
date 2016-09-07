@@ -3,7 +3,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <section class="page-heading">
-    <h3><s:message code="monitoring.vehicle.title" /></h3>
+    <h3><s:message code="monitoring.vehicle.title" /></h3> 
 </section><!-- End Page-Heading -->
 <section class="wrapper">
 	<!-- InVehicle Data -->
@@ -12,7 +12,7 @@
            <section class="col-sm-6">
                <section class="panel">
                    <header class="panel-heading">Data InVehicle
-                      	<span class="tools pull-right">
+                      	<span class="tools pull-right"> 
                        	<a href="javascript:;" class="fa fa-chevron-down"></a>
                       	</span>
                    </header>
