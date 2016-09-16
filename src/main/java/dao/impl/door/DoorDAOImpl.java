@@ -1,4 +1,4 @@
-package daoImpl.door;
+package dao.impl.door;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,12 +55,56 @@ public class DoorDAOImpl implements DoorDAO{
 		}
 		return 0;
 	}
+	public ArrayList<InDoor> getListInDoorActive() {
+		String sql="SELECT i.idInDoor, i.nameInDoor, i.capacity, i.status, i.idCrossDockingSystem, "
+				+ "c.nameCrossDockingSystem, c.address, c.capacity "
+				+ "FROM tblInDoor as i "
+				+ "JOIN tblCrossDockingSystem as c ON i.idCrossDockingSystem=c.idCrossDockingSystem "
+				+ "WHERE i.status=?";
+		ArrayList<InDoor> listInDoor=null;
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			listInDoor = new ArrayList<InDoor>();
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, 1);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				CrossDockingSystem cDS=new CrossDockingSystem(
+						rs.getInt("idCrossDockingSystem"), 
+						rs.getString("nameCrossDockingSystem"), 
+						rs.getString("address"), rs.getInt("capacity"));
+				InDoor iDoor=new InDoor(
+						rs.getInt("idInDoor"), 
+						rs.getString("nameInDoor"), 
+						rs.getInt("capacity"), 
+						rs.getInt("status"), cDS);
+				listInDoor.add(iDoor);
+			}
+			return listInDoor;
+		} catch (SQLException e) { e.printStackTrace();
+		} finally {
+			try {
+				if(conn != null) {
+					conn.close();
+				}
+				if(ps != null){
+					ps.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+		return null;
+	}
 	public ArrayList<InDoor> getListInDoor() {
 		String sql="SELECT i.idInDoor, i.nameInDoor, i.capacity, i.status, i.idCrossDockingSystem, "
 				+ "c.nameCrossDockingSystem, c.address, c.capacity "
 				+ "FROM tblInDoor as i "
-				+ "JOIN tblCrossDockingSystem as c "
-				+ "ON i.idCrossDockingSystem=c.idCrossDockingSystem";
+				+ "JOIN tblCrossDockingSystem as c ON i.idCrossDockingSystem=c.idCrossDockingSystem ";
 		ArrayList<InDoor> listInDoor=null;
 		Connection conn=null;
 		PreparedStatement ps=null;
@@ -109,6 +153,24 @@ public class DoorDAOImpl implements DoorDAO{
 		if(n==1) return true;
 		return false;
 	}
+	public boolean checkTransitonStatusActiveIndoor(int idInDoor){
+		String sql="SELECT idCost FROM tblCost WHERE idIndoor=? AND cost=?";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		
+		try {
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, idInDoor);
+			ps.setInt(2, 0);		
+			rs = ps.executeQuery();
+			if(rs.next()) return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
 	public boolean editInDoor(InDoor iDoor){
 		String sql="UPDATE tblInDoor SET nameInDoor=?, capacity=?, status=? WHERE idInDoor=?";
 		int n = new JdbcTemplate(dataSource).update(sql, new Object[]{ 
@@ -117,6 +179,10 @@ public class DoorDAOImpl implements DoorDAO{
 		if(n==1) return true;
 		return false;
 	}
+	/****************************************************************************
+	 * OuDoor
+	 * */
+	
 	public Integer getIdOutDoorInsert() {
 		String sql="SELECT idOutDoor FROM tblOutDoor ORDER BY idOutDoor DESC";
 		Connection conn=null;
@@ -146,12 +212,56 @@ public class DoorDAOImpl implements DoorDAO{
 		}
 		return 0;
 	}
+	public ArrayList<OutDoor> getListOutDoorActive() {
+		String sql="SELECT o.idOutDoor, o.nameOutDoor, o.capacity, o.status, o.idCrossDockingSystem, "
+				+ "c.nameCrossDockingSystem, c.address, c.capacity "
+				+ "FROM tblOutDoor as o "
+				+ "JOIN tblCrossDockingSystem as c ON o.idCrossDockingSystem=c.idCrossDockingSystem "
+				+ "WHERE o.status=?";
+		ArrayList<OutDoor> listOutDoor=null;
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			listOutDoor = new ArrayList<OutDoor>();
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, 1);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				CrossDockingSystem cDS=new CrossDockingSystem(
+						rs.getInt("idCrossDockingSystem"), 
+						rs.getString("nameCrossDockingSystem"), 
+						rs.getString("address"), rs.getInt("capacity"));
+				OutDoor oDoor=new OutDoor(
+						rs.getInt("idOutDoor"), 
+						rs.getString("nameOutDoor"), 
+						rs.getInt("capacity"), 
+						rs.getInt("status"), cDS);
+				listOutDoor.add(oDoor);
+			}
+			return listOutDoor;
+		} catch (SQLException e) { e.printStackTrace();
+		} finally {
+			try {
+				if(conn != null) {
+					conn.close();
+				}
+				if(ps != null){
+					ps.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+			} catch (SQLException e) { e.printStackTrace(); }
+		}
+		return null;
+	}
 	public ArrayList<OutDoor> getListOutDoor() {
 		String sql="SELECT o.idOutDoor, o.nameOutDoor, o.capacity, o.status, o.idCrossDockingSystem, "
 				+ "c.nameCrossDockingSystem, c.address, c.capacity "
 				+ "FROM tblOutDoor as o "
-				+ "JOIN tblCrossDockingSystem as c "
-				+ "ON o.idCrossDockingSystem=c.idCrossDockingSystem";
+				+ "JOIN tblCrossDockingSystem as c ON o.idCrossDockingSystem=c.idCrossDockingSystem ";
 		ArrayList<OutDoor> listOutDoor=null;
 		Connection conn=null;
 		PreparedStatement ps=null;
@@ -199,6 +309,24 @@ public class DoorDAOImpl implements DoorDAO{
 		});
 		if(n==1) return true;
 		return false;
+	}
+	public boolean checkTransitonStatusActiveOutdoor(int idOutDoor){
+		String sql="SELECT idCost FROM tblCost WHERE idOutdoor=? AND cost=?";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		
+		try {
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, idOutDoor);
+			ps.setInt(2, 0);		
+			rs = ps.executeQuery();
+			if(rs.next()) return false;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 	public boolean editOutDoor(OutDoor oDoor){
 		String sql="UPDATE tblOutDoor SET nameOutDoor=?, capacity=?, status=? WHERE idOutDoor=?";
@@ -267,6 +395,49 @@ public class DoorDAOImpl implements DoorDAO{
 		}
 		return 0;
 	}
+	public ArrayList<Cost> getListCost(){
+		String sql="SELECT c.idCost, c.idInDoor, c.idOutDoor, c.cost "
+				+ "FROM tblCost AS c "
+				+ "JOIN tblInDoor AS i ON c.idInDoor=i.idInDoor "
+				+ "JOIN tblOutDoor AS o ON c.idOutDoor=o.idOutDoor "
+				+ "WHERE i.status=? AND o.status=?";
+		ArrayList<Cost> listC=null;
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			listC=new ArrayList<Cost>();
+			conn=dataSource.getConnection();
+			ps=conn.prepareStatement(sql);
+			ps.setInt(1, 1);
+			ps.setInt(2, 1);
+			rs=ps.executeQuery();
+			while(rs.next()){
+				InDoor inDoor=new InDoor(); inDoor.setIdDoor(rs.getInt("idInDoor"));
+				OutDoor outDoor=new OutDoor(); outDoor.setIdDoor(rs.getInt("idOutDoor"));
+				Cost cost=new Cost(inDoor, outDoor, rs.getDouble("cost"));
+				listC.add(cost);
+			}
+			return listC;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null){
+					ps.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+				if(conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
 	public ArrayList<Cost> getPageCost(int currentPage, int sizePage) {
 		int sIndex = (currentPage-1) * sizePage;
 		String sql="SELECT c.idCost, "
@@ -334,5 +505,4 @@ public class DoorDAOImpl implements DoorDAO{
 		if(n==1) return true;
 		return false;
 	}
-	
 }

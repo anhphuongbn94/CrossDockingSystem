@@ -9,7 +9,7 @@ public class OutVehicle extends Vehicle{
 	private String arrivalTime;
 	private String startLoadTime;
 	private String finishLoadTime;
-	private float demand;
+	private Double demand;
 	private Integer status; // 0: Dang cho gan cua, 1: Dang cho do hang, 2: Bat dau do hang, 3: Ket thuc do hang
 	private Door door;
 	private CrossDockingSystem cDS;
@@ -25,7 +25,7 @@ public class OutVehicle extends Vehicle{
 			Integer vehicleWeight, Integer vehicleTrailerNum, String vehicleDes) {
 		super(vehicleCode, vehicleType, vehicleYear, vehicleMake, vehicleWeight, vehicleTrailerNum, vehicleDes);
 	}
-	public OutVehicle(String date, String arrivalTime, String startLoadTime, String finishLoadTime, float demand,
+	public OutVehicle(String date, String arrivalTime, String startLoadTime, String finishLoadTime, Double demand,
 			Integer status, Door door, CrossDockingSystem cDS) {
 		super();
 		this.date = date;
@@ -38,7 +38,7 @@ public class OutVehicle extends Vehicle{
 		this.cDS = cDS;
 	}
 	public OutVehicle(Integer idOutVehicle, String date, String arrivalTime, String startLoadTime,
-			String finishLoadTime, float demand, Integer status, Door door, CrossDockingSystem cDS) {
+			String finishLoadTime, Double demand, Integer status, Door door, CrossDockingSystem cDS) {
 		super();
 		this.idOutVehicle = idOutVehicle;
 		this.date = date;
@@ -80,10 +80,10 @@ public class OutVehicle extends Vehicle{
 	public void setFinishLoadTime(String finishLoadTime) {
 		this.finishLoadTime = finishLoadTime;
 	}
-	public float getDemand() {
+	public Double getDemand() {
 		return demand;
 	}
-	public void setDemand(float demand) {
+	public void setDemand(Double demand) {
 		this.demand = demand;
 	}
 	public Integer getStatus() {

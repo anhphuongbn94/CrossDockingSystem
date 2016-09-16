@@ -1,4 +1,4 @@
-package daoImpl.vehicle;
+package dao.impl.vehicle;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -205,7 +205,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 	public ArrayList<InVehicle> getPageInVehicle(int currentPage, int sizePage) {
 		int sIndex = (currentPage-1) * sizePage;
 		String sql="SELECT iv.idInVehicle, iv.date, "
-			+ "iv.arrivalTime, iv.startUnloadTime, iv.finishUnloadTime, iv.status, " 
+			+ "iv.arrivalTime, iv.startUnloadTime, iv.finishUnloadTime, iv.status, iv.volumn, " 
 		    + "iv.idInDoor, i.nameInDoor, i.capacity, "
 		    + "iv.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, "
 		    + "iv.idCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
@@ -246,6 +246,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 				inV.setDate(rs.getString("date"));
 				inV.setArrivalTime(rs.getString("arrivalTime"));
 				inV.setStatus(rs.getInt("status"));
+				inV.setVolumn(rs.getDouble("volumn"));
 				inV.setDoor(iDoor);
 				inV.setcDS(cDS);
 				inV.setStartUnloadTime(rs.getString("startUnloadTime"));
@@ -272,18 +273,10 @@ public class VehicleDAOImpl implements VehicleDAO{
 		}
 		return null;
 	}
-	public ArrayList<InVehicle> getListInVehicle_byCurDate(){
-		String sql="SELECT iv.idInVehicle, iv.date, "
-			+ "iv.arrivalTime, iv.startUnloadTime, iv.finishUnloadTime, iv.status, " 
-		    + "iv.idInDoor, i.nameInDoor, i.capacity, "
-		    + "iv.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, "
-		    + "iv.idCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
-			+ "FROM tblInVehicle AS iv "
-			+ "JOIN tblVehicle AS v ON iv.idVehicle=v.idVehicle "
-			+ "LEFT JOIN tblInDoor AS i ON iv.idInDoor=i.idInDoor "
-			+ "JOIN tblCrossDockingSystem AS c ON iv.idCrossDockingSystem=c.idCrossDockingSystem "
-			+ "WHERE status=? "
-//			+ "AND date=?"
+	public ArrayList<InVehicle> getListInVehicle_byCurDate(String date){
+		String sql="SELECT iv.idInVehicle, v.vehicleCode, iv.date "
+			+ "FROM tblInVehicle AS iv JOIN tblVehicle AS v ON iv.idVehicle=v.idVehicle "
+			+ "WHERE status=? AND date=?"
 			;
 		ArrayList<InVehicle> listIV=null;
 		Connection conn=null;
@@ -294,34 +287,13 @@ public class VehicleDAOImpl implements VehicleDAO{
 			conn = dataSource.getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, 0);
-//			ps.setString(2, new MyTool().getTimeSystem());
+			ps.setString(2, date);
 			rs = ps.executeQuery();
 			while(rs.next()){
-				CrossDockingSystem cDS=new CrossDockingSystem(
-						rs.getInt("idCrossDockingSystem"), 
-						rs.getString("nameCrossDockingSystem"), 
-						rs.getString("address"), rs.getInt("capacity"));
-				InDoor iDoor = new InDoor(
-						rs.getInt("idInDoor"), 
-						rs.getString("nameInDoor"), 
-						rs.getInt("capacity")); 
-				InVehicle inV = new InVehicle(
-						rs.getInt("idVehicle"),
-						rs.getString("vehicleCode"), 
-						rs.getString("vehicleType"), 
-						rs.getInt("vehicleYear"), 
-						rs.getString("vehicleMake"), 
-						rs.getInt("vehicleWeight"), 
-						rs.getInt("vehicleTrailerNum"), 
-						rs.getString("vehicleDes"));
+				InVehicle inV=new InVehicle();
 				inV.setIdInVehicle(rs.getInt("idInVehicle"));
+				inV.setVehicleCode(rs.getString("vehicleCode"));
 				inV.setDate(rs.getString("date"));
-				inV.setArrivalTime(rs.getString("arrivalTime"));
-				inV.setStatus(rs.getInt("status"));
-				inV.setDoor(iDoor);
-				inV.setcDS(cDS);
-				inV.setStartUnloadTime(rs.getString("startUnloadTime"));
-				inV.setFinishUnloadTime(rs.getString("finishUnloadTime"));
 				listIV.add(inV);
 			}
 			return listIV;
@@ -347,7 +319,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 	public ArrayList<InVehicle> getPageInVehicle_whereAssignDoor(int currentPage, int sizePage){
 		int sIndex = (currentPage-1) * sizePage;		
 		String sql="SELECT iv.idInVehicle, iv.date, "
-			 + "iv.arrivalTime, iv.startUnloadTime, iv.finishUnloadTime, iv.status, " 
+			 + "iv.arrivalTime, iv.startUnloadTime, iv.finishUnloadTime, iv.status, iv.volumn, " 
 		     + "iv.idInDoor, i.nameInDoor, i.capacity, "
 		     + "iv.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, "
 		     + "iv.idCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
@@ -394,7 +366,8 @@ public class VehicleDAOImpl implements VehicleDAO{
 				inV.setDate(rs.getString("date"));
 				inV.setArrivalTime(rs.getString("arrivalTime"));
 				inV.setStatus(rs.getInt("status"));
-				inV.setVolumn(getVolumnInVehicle(rs.getInt("idInVehicle")));
+//				inV.setVolumn(getVolumnInVehicle(rs.getInt("idInVehicle")));
+				inV.setVolumn(rs.getDouble("volumn"));
 				inV.setDoor(iDoor);
 				inV.setcDS(cDS);
 				inV.setStartUnloadTime(rs.getString("startUnloadTime"));
@@ -605,11 +578,11 @@ public class VehicleDAOImpl implements VehicleDAO{
 	}
 	public void insertInVehicle(InVehicle iv) {
 		String sql="INSERT INTO tblInVehicle"
-				+ "(idInVehicle, date, arrivalTime, status, idVehicle, idCrossDockingSystem) "
-				+ "VALUES(?, ?, ?, ?, ?, ?)";
+				+ "(idInVehicle, date, arrivalTime, volumn, status, idVehicle, idCrossDockingSystem) "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
 		new JdbcTemplate(dataSource).update(sql, new Object[]{ 
 				getIdInVehicleInsert() + 1, iv.getDate(), 
-				iv.getArrivalTime(), iv.getStatus(), iv.getIdVehicle(), 
+				iv.getArrivalTime(), iv.getVolumn(), iv.getStatus(), iv.getIdVehicle(), 
 				iv.getcDS().getIdCrossDockingSystem()
 		});
 	}
@@ -699,6 +672,37 @@ public class VehicleDAOImpl implements VehicleDAO{
 		}
 		return 0;
 	}
+	public int countInVehicle_whereAssignDoor(){
+		String sql="SELECT COUNT(*) FROM tblInVehicle WHERE status=? OR status=?";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, 0);
+			ps.setInt(2, 1);
+			rs = ps.executeQuery();
+			if(rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null){
+					ps.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+				if(conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
 	public int countInVehicle() {
 		String sql="SELECT COUNT(*) FROM tblInVehicle";
 		Connection conn=null;
@@ -728,7 +732,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 		}
 		return 0;
 	}
-	public float getVolumnInVehicle(int idInVehicle){
+	public Double getVolumnInVehicle(int idInVehicle){
 		String sql="SELECT pV.idProductInVehicle, "
 				+ "SUM(pV.quantity) AS volumn, "
 				+ "pV.unit, pV.idProduct, pV.idInVehicle "
@@ -742,7 +746,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, idInVehicle);
 			rs = ps.executeQuery();
-			if(rs.next()) return rs.getFloat("volumn");
+			if(rs.next()) return rs.getDouble("volumn");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -760,7 +764,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 				e.printStackTrace();
 			}
 		}
-		return 0;
+		return 0d;
 	}
 	public int getIdInVehicleInsert() {
 		String sql="SELECT idInVehicle FROM tblInVehicle ORDER BY idInVehicle DESC";
@@ -800,7 +804,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 	public ArrayList<OutVehicle> getPageOutVehicle(int currentPage, int sizePage) {
 		int sIndex = (currentPage-1) * sizePage;
 		String sql="SELECT ov.idOutVehicle, ov.date, "
-			+ "ov.arrivalTime, ov.startLoadTime, ov.finishLoadTime, ov.status, "
+			+ "ov.arrivalTime, ov.startLoadTime, ov.finishLoadTime, ov.status, ov.demand, "
 			+ "ov.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, " 
 		    + "ov.idOutDoor, o.nameOutDoor, o.capacity, "
 		    + "ov.idCrossDockingSystem, c.nameCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
@@ -842,6 +846,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 				outV.setArrivalTime(rs.getString("arrivalTime"));
 				outV.setStartLoadTime(rs.getString("startLoadTime"));
 				outV.setFinishLoadTime(rs.getString("finishLoadTime"));
+				outV.setDemand(rs.getDouble("demand"));
 				outV.setStatus(rs.getInt("status"));
 				outV.setDoor(oDoor);
 				outV.setcDS(cDS);
@@ -867,18 +872,11 @@ public class VehicleDAOImpl implements VehicleDAO{
 		}
 		return null;
 	}
-	public ArrayList<OutVehicle> getListOutVehicle_byCurDate(){
-		String sql="SELECT ov.idOutVehicle, ov.date, "
-			+ "ov.arrivalTime, ov.startLoadTime, ov.finishLoadTime, ov.status, "
-			+ "ov.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, " 
-		    + "ov.idOutDoor, o.nameOutDoor, o.capacity, "
-		    + "ov.idCrossDockingSystem, c.nameCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
+	public ArrayList<OutVehicle> getListOutVehicle_byCurDate(String date){
+		String sql="SELECT ov.idOutVehicle, v.vehicleCode, ov.date  "
 			+ "FROM tblOutVehicle AS ov "
-			+ "LEFT JOIN tblOutDoor AS o ON ov.idOutDoor=o.idOutDoor "
 			+ "JOIN tblVehicle AS v ON ov.idVehicle=v.idVehicle "			
-			+ "JOIN tblCrossDockingSystem AS c ON ov.idCrossDockingSystem=c.idCrossDockingSystem "
-			+ "WHERE status=? "
-//			+ "AND date=?"
+			+ "WHERE status=? AND date=?"
 			;
 		ArrayList<OutVehicle> listOV=null;
 		Connection conn=null;
@@ -889,34 +887,13 @@ public class VehicleDAOImpl implements VehicleDAO{
 			conn = dataSource.getConnection();
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, 0);
-//			ps.setString(2, new MyTool().getTimeSystem());
+			ps.setString(2, date);
 			rs = ps.executeQuery();
 			while(rs.next()){
-				CrossDockingSystem cDS=new CrossDockingSystem(
-						rs.getInt("idCrossDockingSystem"), 
-						rs.getString("nameCrossDockingSystem"), 
-						rs.getString("address"), rs.getInt("capacity"));
-				OutDoor oDoor = new OutDoor(
-						rs.getInt("idOutDoor"), 
-						rs.getString("nameOutDoor"), 
-						rs.getInt("capacity")); 
-				OutVehicle outV = new OutVehicle(
-						rs.getInt("idVehicle"),
-						rs.getString("vehicleCode"), 
-						rs.getString("vehicleType"), 
-						rs.getInt("vehicleYear"), 
-						rs.getString("vehicleMake"), 
-						rs.getInt("vehicleWeight"), 
-						rs.getInt("vehicleTrailerNum"), 
-						rs.getString("vehicleDes"));
+				OutVehicle outV=new OutVehicle();
 				outV.setIdOutVehicle(rs.getInt("idOutVehicle"));
+				outV.setVehicleCode(rs.getString("vehicleCode"));
 				outV.setDate(rs.getString("date"));
-				outV.setArrivalTime(rs.getString("arrivalTime"));
-				outV.setStartLoadTime(rs.getString("startLoadTime"));
-				outV.setFinishLoadTime(rs.getString("finishLoadTime"));
-				outV.setStatus(rs.getInt("status"));
-				outV.setDoor(oDoor);
-				outV.setcDS(cDS);
 				listOV.add(outV);
 			}
 			return listOV;
@@ -1018,7 +995,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 	public ArrayList<OutVehicle> getPageOutVehicle_whereAssignDoor(int currentPage, int sizePage){
 		int sIndex = (currentPage-1) * sizePage;		
 		String sql="SELECT ov.idOutVehicle, ov.date, "
-			+ "ov.arrivalTime, ov.startLoadTime, ov.finishLoadTime, ov.status, "
+			+ "ov.arrivalTime, ov.startLoadTime, ov.finishLoadTime, ov.status, ov.demand, "
 			+ "ov.idVehicle, v.vehicleCode, v.vehicleType, v.vehicleYear, v.vehicleMake, v.vehicleWeight, v.vehicleTrailerNum, v.vehicleDes, " 
 		    + "ov.idOutDoor, o.nameOutDoor, o.capacity, "
 		    + "ov.idCrossDockingSystem, c.nameCrossDockingSystem, c.nameCrossDockingSystem, c.address, c.capacity "
@@ -1067,7 +1044,8 @@ public class VehicleDAOImpl implements VehicleDAO{
 				outV.setStartLoadTime(rs.getString("startLoadTime"));
 				outV.setFinishLoadTime(rs.getString("finishLoadTime"));
 				outV.setStatus(rs.getInt("status"));
-				outV.setDemand(getDemandOutVehicle(rs.getInt("idOutVehicle")));
+//				outV.setDemand(getDemandOutVehicle(rs.getInt("idOutVehicle")));
+				outV.setDemand(rs.getDouble("demand"));
 				outV.setDoor(oDoor);
 				outV.setcDS(cDS);
 				listOV.add(outV);
@@ -1185,11 +1163,11 @@ public class VehicleDAOImpl implements VehicleDAO{
 	}
 	public void insertOutVehicle(OutVehicle oVehicle) {
 		String sql="INSERT INTO tblOutVehicle(idOutVehicle, idVehicle, "
-				+ "date, arrivalTime, status, idCrossDockingSystem) "
-				+ "VALUES(?, ?, ?, ?, ?, ?)";
+				+ "date, arrivalTime, demand, status, idCrossDockingSystem) "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?)";
 		new JdbcTemplate(dataSource).update(sql, new Object[]{ 
 				getIdOutVehicleInsert() + 1, oVehicle.getIdVehicle(), 
-				oVehicle.getDate(), oVehicle.getArrivalTime(), 
+				oVehicle.getDate(), oVehicle.getArrivalTime(), oVehicle.getDemand(), 
 				oVehicle.getStatus(), oVehicle.getcDS().getIdCrossDockingSystem()
 		});
 	}
@@ -1212,6 +1190,37 @@ public class VehicleDAOImpl implements VehicleDAO{
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, 1);
 			ps.setInt(2, 2);
+			rs = ps.executeQuery();
+			if(rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if(ps != null){
+					ps.close();
+				}
+				if(rs != null){
+					rs.close();
+				}
+				if(conn != null){
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
+	public int countOutVehicle_whereAssignDoor(){
+		String sql="SELECT COUNT(*) FROM tblOutVehicle WHERE status=? OR status=?";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			conn = dataSource.getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, 0);
+			ps.setInt(2, 1);
 			rs = ps.executeQuery();
 			if(rs.next()) return rs.getInt(1);
 		} catch (SQLException e) {
@@ -1292,7 +1301,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 		}
 		return 0;
 	}
-	public float getDemandOutVehicle(int idOutVehicle){
+	public Double getDemandOutVehicle(int idOutVehicle){
 		String sql="SELECT pV.idProductOutVehicle, "
 				+ "SUM(pV.quantity) AS volumn, "
 				+ "pV.unit, pV.idProduct, pV.idOutVehicle "
@@ -1306,7 +1315,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, idOutVehicle);
 			rs = ps.executeQuery();
-			if(rs.next()) return rs.getFloat("volumn");
+			if(rs.next()) return rs.getDouble("volumn");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -1324,7 +1333,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 				e.printStackTrace();
 			}
 		}
-		return 0;
+		return 0d;
 	}
 	public int getIdOutVehicleInsert() {
 		String sql="SELECT idOutVehicle FROM tblOutVehicle "
@@ -1370,16 +1379,19 @@ public class VehicleDAOImpl implements VehicleDAO{
 				pTransfer.getoVehicle().getIdOutVehicle(), pTransfer.getTransfer()
 		});
 	}
-	public ArrayList<ProductTransfer> getProductTransfer(){
+	public ArrayList<ProductTransfer> getProductTransfer(String date){
 		String sql="SELECT p.idProductTransfer, p.idInVehicle, "
 				+ "p.idOutVehicle, p.transfer, "
 				+ "vi.vehicleCode AS vCodeI, "
 				+ "vo.vehicleCode AS vCodeO "
 				+ "FROM tblProductTransfer AS p "
 				+ "JOIN tblInVehicle AS iv ON p.idInVehicle = iv.idInVehicle "
-				+ "JOIN tblVehicle AS vi ON iv.idVehicle=vi.idVehicle "
+					+ "JOIN tblVehicle AS vi ON iv.idVehicle=vi.idVehicle AND iv.date=? "
 				+ "JOIN tblOutVehicle AS ov ON p.idOutVehicle = ov.idOutVehicle "
-				+ "JOIN tblVehicle AS vo ON ov.idVehicle=vo.idVehicle";
+					+ "JOIN tblVehicle AS vo ON ov.idVehicle=vo.idVehicle AND ov.date=?"
+//				+ "WHERE p.idInVehicle IN (SELECT idInVehicle FROM tblInVehicle WHERE iv.date=?) "
+//					+ "AND o.idOutVehicle IN (SELECT idOutVehicle FROM tblOutVehicle WHERE ov.date=?)"
+				;
 		ArrayList<ProductTransfer> listPT=null;
 		Connection conn=null;
 		PreparedStatement ps=null;
@@ -1388,6 +1400,8 @@ public class VehicleDAOImpl implements VehicleDAO{
 			listPT = new ArrayList<ProductTransfer>();
 			conn = dataSource.getConnection();
 			ps = conn.prepareStatement(sql);
+			ps.setString(1, date);
+			ps.setString(2, date);
 			rs = ps.executeQuery();
 			while(rs.next()){
 				InVehicle iVehicle=new InVehicle(); 

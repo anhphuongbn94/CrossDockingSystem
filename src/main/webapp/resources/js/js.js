@@ -119,11 +119,11 @@ function eventEditIndoor(e, trC_old, trC){
 		editInDoor(idInDoor, nameD, capD, statusD);
 		e.preventDefault();
 	});
-	$('.edit-indoor').click(function(e){
-		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
-		var trC=$(this).parents('tr');
-		eventEditIndoor(e, trC_old, trC);
-	});
+//	$('.edit-indoor').click(function(e){
+//		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+//		var trC=$(this).parents('tr');
+//		eventEditIndoor(e, trC_old, trC);
+//	});
 	e.preventDefault();
 }
 function getPageCost(currentPage){
@@ -331,8 +331,8 @@ function editInDoor(idInDoor, nameD, capD, statusD){
         },
 		url: contextPath + '/editInDoor',
         success: function (response) {
-        	if(response == null){
-        		alert("Error");
+        	if(response == ''){
+        		alert("You need to setup the cost of the door before transition active state");
         	}else{
         		showContentInDoor(response);
         	}
@@ -373,8 +373,8 @@ function editOutDoor(idOutDoor, nameD, capD, statusD){
         },
 		url: contextPath + '/editOutDoor',
         success: function (response) {
-        	if(response == null){
-        		alert("Error");
+        	if(response == ''){
+        		alert("You need to setup the cost of the door before transition active state");
         	}else{
         		showContentOutDoor(response);
         	}
@@ -479,17 +479,6 @@ $(document).ready(function() {
 		$('#btnAddIV').attr('disabled', 'disabled');
 		e.preventDefault();
 	});
-	$('#addTF').submit( function (e){
-		insertTransferTime();
-		$('#btnTF').attr('disabled', 'disabled');
-		e.preventDefault();
-	});
-	$('.pI .page_index').click( function() {
-		currentPage = $(this).attr('data-index');
-		getPInVehicle(currentPage);
-		$('.pI').find('li.active').removeClass('active').addClass('page_index');
-		$(this).removeClass('page_index').addClass('active');
-	});
 	$('.pageI .page_index').click( function() {
 		currentPage = $(this).attr('data-index');
 		getPageInVehicle(currentPage);
@@ -545,36 +534,6 @@ function assignDoorInVehicle(arrIDV, arrIDD, cDoor){
         }
 	});
 }
-function insertTransferTime(){
-	$.ajax({
-        type: "POST",
-        data: $("#addTF").serialize(),
-        header: {
-            Accept: "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-		url: contextPath + '/insertTransferTime',
-        success: function (response) {
-        	if(response == null){
-        		alert("Error");
-        	}else{
-        		var content="";
-        		for(var i=0; i<response.length; i++){
-        			content+=
-        				"<tr>" 
-        					+ "<td>"+ response[i].iVehicle.vehicleCode +"</td>" 
-        					+ "<td>"+ response[i].oVehicle.vehicleCode +"</td>"
-        					+ "<td>"+ response[i].transfer +"</td>"
-        				"</tr>";
-        		}
-        		$('.row_data').html(content);
-        	}
-        },
-        error: function (xhr, status, error) {
-        	alert(error + status + xhr);
-        }
-    });
-}
 /* 
  * InVehicle
  * */
@@ -597,6 +556,7 @@ function showContentInVehicle(response){
 				+ "<td>"+ response[i].arrivalTime +"</td>"
 				+ "<td>"+ startUnloadTime +"</td>"
 				+ "<td>"+ finishUnloadTime +"</td>"
+				+ "<td>"+ response[i].volumn +"</td>"
 				+ "<td>"+ response[i].status +"</td>"
 				+ "<td>"+ nameDoor +"</td>"
 				/*+ "<td>"+ response[i].cDS.nameCrossDockingSystem +"</td>"*/
@@ -773,29 +733,7 @@ function insertInVehicle(){
         	if(response == null){
         		alert("Error");
         	}else{
-        		content="";        		
-        		for(var i=0; i<response.length; i++){
-        			var startUnloadTime = "", finishUnloadTime = "", nameDoor = "";
-        			if(response[i].startUnloadTime != null){
-        				startUnloadTime = response[i].startUnloadTime;        				
-        			}if(response[i].finishUnloadTime != null){
-        				finishUnloadTime = response[i].finishUnloadTime;
-        			}if(response[i].door.nameDoor != null){
-        				nameDoor = response[i].door.nameDoor; 
-        			}
-        			content+=
-	        			"<tr>" 
-	    					+ "<td>"+ response[i].vehicleCode +"</td>" 
-	    					+ "<td>"+ response[i].date +"</td>"
-	    					+ "<td>"+ response[i].arrivalTime +"</td>"
-	    					+ "<td>"+ startUnloadTime +"</td>"
-	    					+ "<td>"+ finishUnloadTime +"</td>"
-	    					+ "<td>"+ response[i].status +"</td>"
-	    					+ "<td>"+ nameDoor +"</td>"
-	    					/*+ "<td>"+ response[i].cDS.nameCrossDockingSystem +"</td>"*/
-	    				"</tr>";
-        		}        		
-        		$('.row_data').html(content);
+        		showContentInVehicle(response);
         		currentPage = 1;
         	}
         },
@@ -943,12 +881,6 @@ $(document).ready(function() {
 		$('.pageO_unload').find('li.active').removeClass('active').addClass('page_index');
 		$(this).removeClass('page_index').addClass('active');
 	});
-	$('.pO .page_index').click( function() {
-		currentPage = $(this).attr('data-index');
-		getPOutVehicle(currentPage);
-		$('.pO').find('li.active').removeClass('active').addClass('page_index');
-		$(this).removeClass('page_index').addClass('active');
-	});
 	$('#addOV').submit( function(e) {
 		insertOutVehicle();
 		$('#btnAddOV').attr('disabled', 'disabled');
@@ -1008,6 +940,7 @@ function showContentOutVehicle(response){
 				+ "<td>"+ response[i].arrivalTime +"</td>"
 				+ "<td>"+ startLoadTime +"</td>"
 				+ "<td>"+ finishLoadTime +"</td>"
+				+ "<td>"+ response[i].demand +"</td>"
 				+ "<td>"+ response[i].status +"</td>"
 				+ "<td>"+ nameDoor +"</td>"
 				/*+ "<td>"+ response[i].cDS.nameCrossDockingSystem +"</td>"*/
@@ -1162,29 +1095,7 @@ function insertOutVehicle(){
         	if(response == null){
         		alert("Error");
         	}else{
-        		content="";        		
-        		for(var i=0; i<response.length; i++){
-        			var startLoadTime = "", finishLoadTime = "", nameDoor = "";
-        			if(response[i].startLoadTime != null){
-        				startLoadTime = response[i].startLoadTime;        				
-        			}if(response[i].finishLoadTime != null){
-        				finishLoadTime = response[i].finishLoadTime;
-        			}if(response[i].door.nameDoor != null){
-        				nameDoor = response[i].door.nameDoor; 
-        			}
-        			content+=
-	        			"<tr>" 
-	    					+ "<td>"+ response[i].vehicleCode +"</td>" 
-	    					+ "<td>"+ response[i].date +"</td>"
-	    					+ "<td>"+ response[i].arrivalTime +"</td>"
-	    					+ "<td>"+ startLoadTime +"</td>"
-	    					+ "<td>"+ finishLoadTime +"</td>"
-	    					+ "<td>"+ response[i].status +"</td>"
-	    					+ "<td>"+ nameDoor +"</td>"
-	    					/*+ "<td>"+ response[i].cDS.nameCrossDockingSystem +"</td>"*/
-	    				"</tr>";
-        		}        		
-        		$('.row_data').html(content);
+        		showContentOutVehicle(response);
         		currentPage = 1;
         	}
         },
@@ -1332,81 +1243,36 @@ for(var i=0; i<sizeInVehicle; i++){
 var idInVehiclesChoose = [], idOutVehiclesChoose = [];
 var arrInDoorChoose = []; arrOutDoorChoose = []; 
 var objective;
+var flagI=false;
 $(document).ready(function(){
 	/*--------------------------------------------------------------------------------------
 	 * InVehicle */
 	$(".gIDoor input[type='radio']").click(function (){
-		var volumn = $(this).parents('.gIDoor').find('.volumn').html();
-		var doorChoose = $(this).parents('.gIDoor').find("[data-flag = 'choose']");
-		var iDoor = doorChoose.attr('data-index');
-		var nGroup = doorChoose.attr('name');
-		// Ban dau chua ton tai thuoc tinh flag -> lan chon dau tien se gan bien flag 
-		if(doorChoose.attr('class') == null){
-			var iDoor = $(this).attr('data-index');
-			uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
-			$(this).attr('data-flag', 'choose');
-		// Lan tiep theo da ton tai bien flag se xoa bien flag cua radio cu va tao them bien flag vao radio moi
-		}else{
-			if($(this).attr('data-index') != iDoor || $(this).attr('name') == nGroup){
-				var iDoor = doorChoose.attr('data-index');
-				uIDoor[iDoor] = uIDoor[iDoor] - volumn;
-				doorChoose.removeAttr('data-flag');
-				
-				iDoor = $(this).attr('data-index');
-				uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
-				$(this).attr('data-flag', 'choose');
-			}else{// Cung chon 1 cua
-				$(this).attr('data-flag', 'choose');
-				iDoor = $(this).attr('data-index');
-				uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
-			}
-		}
-		for(var i=0; i<sizeIDoor; i++){
-			$('.' + arrID[i]).parent().find('.remain').html(cIDoor[i] - uIDoor[i]);
-		}
-		objective = getObjective();
-		$('.total-cost').html(objective);
+		eventAssignInDoor($(this));
 	});
-	/*$('#btnAssID').click(function(){
-		var arrIDV = $(".gIDoor [data-flag = choose]").map( function() {
-		    return $(this).attr('data-idInVehicle');
-		}).get();
-		var arrIDD = $(".gIDoor [data-flag = choose]").map( function() {
-		    return $(this).attr('data-idDoor');
-		}).get();
-		assignDoorInVehicle(arrIDV, arrIDD, cIDoor);
-	});*/
+	$('.page-invehicle-assign-door .page_index').click(function(){
+		console.log(flagI);
+		var currentPage=$(this).attr('data-index');
+		for(var i=0; i<sizeIDoor; i++){
+			arrID[i] = 'iDoor-' + i;
+			uIDoor[i] = $('.uIDoor-' + i).html();
+			cIDoor[i] = $('.cIDoor-' + i).html();
+		}
+		getPageInVehicle_whereAssignDoor(currentPage);
+	});
 	/*--------------------------------------------------------------------------------------
 	 * OutVehicle*/
 	$(".gODoor input[type='radio']").click(function (){
-		var demand = $(this).parents('.gODoor').find('.demand').html();
-		var doorChoose = $(this).parents('.gODoor').find("[data-flag = 'choose']");
-		var oDoor = doorChoose.attr('data-index');
-		var nGroup = doorChoose.attr('name');
-		if(doorChoose.attr('class') == null){
-			var oDoor = $(this).attr('data-index');
-			uODoor[oDoor] = uODoor[oDoor] - (-demand);
-			$(this).attr('data-flag', 'choose');
-		}else{
-			if($(this).attr('data-index') != oDoor || $(this).attr('name') == nGroup){
-				var oDoor = doorChoose.attr('data-index');
-				uODoor[oDoor] = uODoor[oDoor] - demand;
-				doorChoose.removeAttr('data-flag');
-				
-				oDoor = $(this).attr('data-index');
-				uODoor[oDoor] = uODoor[oDoor] - (-demand);
-				$(this).attr('data-flag', 'choose');
-			}else{
-				$(this).attr('data-flag', 'choose');
-				oDoor = $(this).attr('data-index');
-				uODoor[oDoor] = uODoor[oDoor] - (-demand);
-			}
-		}
+		eventAssignOutDoor($(this));
+	});
+	$('.page-outvehicle-assign-door .page_index').click(function(){
+		var currentPage=$(this).attr('data-index');
 		for(var i=0; i<sizeODoor; i++){
-			$('.' + arrOD[i]).parent().find('.remain').html(cODoor[i] - uODoor[i]);
+			arrOD[i] = 'oDoor-' + i;
+			uODoor[i] = $('.uODoor-' + i).html();
+			cODoor[i] = $('.cODoor-' + i).html();
 		}
-		objective = getObjective();
-		$('.total-cost').html(objective);
+		getPageOutVehicle_whereAssignDoor(currentPage);
 	});
 	$('#btnAssDoor').click(function(){
 		var arrIDV = $(".gIDoor [data-flag = choose]").map( function() {
@@ -1431,6 +1297,69 @@ $(document).ready(function(){
 		assignDoorAI();
 	});
 });
+function eventAssignInDoor(This){
+	flagI=true;
+	var volumn = This.parents('.gIDoor').find('.volumn').html();
+	var doorChoose = This.parents('.gIDoor').find("[data-flag = 'choose']");
+	var iDoor = doorChoose.attr('data-index');
+	var nGroup = doorChoose.attr('name');
+	// Ban dau chua ton tai thuoc tinh flag -> lan chon dau tien se gan bien flag 
+	if(doorChoose.attr('class') == null){
+		var iDoor = This.attr('data-index');
+		uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
+		This.attr('data-flag', 'choose');
+	// Lan tiep theo da ton tai bien flag se xoa bien flag cua radio cu va tao them bien flag vao radio moi
+	}else{
+		if(This.attr('data-index') != iDoor || This.attr('name') == nGroup){
+			var iDoor = doorChoose.attr('data-index');
+			uIDoor[iDoor] = uIDoor[iDoor] - volumn;
+			doorChoose.removeAttr('data-flag');
+			
+			iDoor = This.attr('data-index');
+			uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
+			This.attr('data-flag', 'choose');
+		}else{// Cung chon 1 cua
+			This.attr('data-flag', 'choose');
+			iDoor = This.attr('data-index');
+			uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
+		}
+	}
+	for(var i=0; i<sizeIDoor; i++){
+		$('.' + arrID[i]).parent().find('.remain').html(cIDoor[i] - uIDoor[i]);
+	}
+	objective = getObjective();
+	$('.total-cost').html(objective);
+}
+function eventAssignOutDoor(This){
+	var demand = This.parents('.gODoor').find('.demand').html();
+	var doorChoose = This.parents('.gODoor').find("[data-flag = 'choose']");
+	var oDoor = doorChoose.attr('data-index');
+	var nGroup = doorChoose.attr('name');
+	if(doorChoose.attr('class') == null){
+		var oDoor = This.attr('data-index');
+		uODoor[oDoor] = uODoor[oDoor] - (-demand);
+		This.attr('data-flag', 'choose');
+	}else{
+		if(This.attr('data-index') != oDoor || This.attr('name') == nGroup){
+			var oDoor = doorChoose.attr('data-index');
+			uODoor[oDoor] = uODoor[oDoor] - demand;
+			doorChoose.removeAttr('data-flag');
+			
+			oDoor = This.attr('data-index');
+			uODoor[oDoor] = uODoor[oDoor] - (-demand);
+			This.attr('data-flag', 'choose');
+		}else{
+			This.attr('data-flag', 'choose');
+			oDoor = This.attr('data-index');
+			uODoor[oDoor] = uODoor[oDoor] - (-demand);
+		}
+	}
+	for(var i=0; i<sizeODoor; i++){
+		$('.' + arrOD[i]).parent().find('.remain').html(cODoor[i] - uODoor[i]);
+	}
+	objective = getObjective();
+	$('.total-cost').html(objective);
+}
 function getObjective(){
 	var i=0;
 	var arrIDV = $(".gIDoor [data-flag = choose]").map( function() {
@@ -1449,9 +1378,9 @@ function getObjective(){
 		for(var j=0; j<idOutVehiclesChoose.length; j++){
 			var trip = $('.trip-' + idInVehiclesChoose[i] + '-' + idOutVehiclesChoose[j]).attr('data-bind');
 			var cost = costs[arrInDoorChoose[i]][arrOutDoorChoose[j]];
-			console.log('Trip=' + trip);
-			console.log('Cost=' + cost)
-			console.log('Obj=' + trip*cost);
+//			console.log('Trip=' + trip);
+//			console.log('Cost=' + cost)
+//			console.log('Obj=' + trip*cost);
 			objective += trip*costs[arrInDoorChoose[i]][arrOutDoorChoose[j]];
 		}
 	}
@@ -1470,16 +1399,16 @@ function assignDoorAI(){
         	if(response == null){
         		alert("Error");
         	}else{
-        		for(var i=0; i<sizeIDoor; i++){
-        			arrID[i] = 'iDoor-' + i;
-        			uIDoor[i] = $('.uIDoor-' + i).html();
-        			cIDoor[i] = $('.cIDoor-' + i).html();
-        		}
-        		for(var i=0; i<sizeODoor; i++){
-        			arrOD[i] = 'oDoor-' + i;
-        			uODoor[i] = $('.uODoor-' + i).html();
-        			cODoor[i] = $('.cODoor-' + i).html();
-        		}
+//        		for(var i=0; i<sizeIDoor; i++){
+//        			arrID[i] = 'iDoor-' + i;
+//        			uIDoor[i] = $('.uIDoor-' + i).html();
+//        			cIDoor[i] = $('.cIDoor-' + i).html();
+//        		}
+//        		for(var i=0; i<sizeODoor; i++){
+//        			arrOD[i] = 'oDoor-' + i;
+//        			uODoor[i] = $('.uODoor-' + i).html();
+//        			cODoor[i] = $('.cODoor-' + i).html();
+//        		}
         		var o = jQuery.parseJSON(response);
         		var objective = o.objective;
     			var sol_invehicles = o.inVehicleAssignments;
@@ -1493,9 +1422,9 @@ function assignDoorAI(){
 //    				var iDoor = sol_invehicles[i];
 //    				uIDoor[iDoor] = uIDoor[iDoor] - (-volumn);
     			}
-    			for(var i=0; i<sizeIDoor; i++){
-    				$('.' + arrID[i]).parent().find('.remain').html(cIDoor[i] - uIDoor[i]);
-    			}
+//    			for(var i=0; i<sizeIDoor; i++){
+//    				$('.' + arrID[i]).parent().find('.remain').html(cIDoor[i] - uIDoor[i]);
+//    			}
     			for(var i=0; i<sol_outvehicles.length; i++){
     				var doorChoose = $(".gODoor [name = groupO-"+i+"][data-index="+sol_outvehicles[i]+"]");
     				doorChoose.parent().find('.remain').css('background', '#B0E0E6');
@@ -1505,9 +1434,9 @@ function assignDoorAI(){
 //    				var oDoor = sol_outvehicles[i];
 //    				uODoor[oDoor] = uODoor[oDoor] - (-demand);
     			}
-    			for(var i=0; i<sizeODoor; i++){
-    				$('.' + arrOD[i]).parent().find('.remain').html(cODoor[i] - uODoor[i]);
-    			}
+//    			for(var i=0; i<sizeODoor; i++){
+//    				$('.' + arrOD[i]).parent().find('.remain').html(cODoor[i] - uODoor[i]);
+//    			}
     			$('.total-cost-ai').html(objective);
         	}
         },
@@ -1515,6 +1444,127 @@ function assignDoorAI(){
         	alert(error + status + xhr);
         }
     });
+}
+function showContentInVehicle_whereAssignDoor(response){
+	flagI=false;
+	arrIDoor=response[0];
+	arrIV=response[1];
+	var content="";	
+	content+="<tr><td><span class='size-in-vehicle' data-bind='"+arrIV.length+"'></span></td></tr>";
+	for(var i=0; i<arrIV.length; i++){
+		content+="<tr class='gIDoor'>";
+		content+="<td>"+arrIV[i].vehicleCode+"</td>"
+			+ "<td><span class='volumn' data-bind='"+arrIV[i].volumn+"'>"+arrIV[i].volumn+"</span>"
+				+ "<span class='volumn-"+i+"' data-bind='"+arrIV[i].volumn+"'></span>"
+			+ "</td>"
+			+ "<td>"+arrIV[i].arrivalTime+"</td>";
+		for(var j=0; j<arrIDoor.length; j++){
+			var remain=arrIDoor[j].capacity;
+			for(var k=0; k<arrIV.length; k++){
+				if(arrIDoor[j].idDoor == arrIV[k].door.idDoor){
+					remain=remain-arrIV[k].volumn;
+				}
+			}
+			content+="<td style='text-align: center;'>";
+			if(arrIV[i].door.idDoor == arrIDoor[j].idDoor){
+				content+="<input type='radio' name='groupI-"+i+"' " 
+						+ "class='iDoor-"+j+"' " +
+						+ "data-idInVehicle='"+arrIV[i].idInVehicle+"' " +
+						+ "data-index='"+j+"' data-idDoor='"+arrIDoor[j].idDoor+"' " 
+						+ "checked='checked' data-flag='choose'/>";
+			}else{
+				content+="<input type='radio' " 
+						+ "name='groupI-"+i+"' class='iDoor-"+j+"' " 
+						+ "data-idInVehicle='"+arrIV[i].idInVehicle+"' " 
+						+ "data-index='"+j+"' " 
+						+ "data-idDoor='"+arrIDoor[j].idDoor+"'/>";
+			}
+			content+="<span class='remain'>"+remain+"</span>";
+			content+"</td>";
+		}
+		content+="</tr>"
+	}
+	$('.rowI_data').html(content);
+	$(".gIDoor input[type='radio']").click(function (){
+		eventAssignInDoor($(this));
+	});
+}
+function getPageInVehicle_whereAssignDoor(currentPage){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageInVehicle_whereAssignDoor',
+        success: function (response) {
+        	showContentInVehicle_whereAssignDoor(response);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function showContentOutVehicle_whereAssignDoor(response){
+	arrODoor=response[0];
+	arrOV=response[1];
+	var content="";	
+	content+="<tr><td><span class='size-out-vehicle' data-bind='"+arrOV.length+"'></span></td></tr>";
+	for(var i=0; i<arrOV.length; i++){
+		content+="<tr class='gODoor'>";
+		content+="<td>"+arrOV[i].vehicleCode+"</td>"
+			+ "<td><span class='demand' data-bind='"+arrOV[i].demand+"'>"+arrOV[i].demand+"</span>"
+				+ "<span class='demand-"+i+"' data-bind='"+arrOV[i].demand+"'></span>"
+			+ "</td>"
+			+ "<td>"+arrOV[i].arrivalTime+"</td>";
+		for(var j=0; j<arrODoor.length; j++){
+			var remain=arrODoor[j].capacity;
+			for(var k=0; k<arrOV.length; k++){
+				if(arrODoor[j].idDoor == arrOV[k].door.idDoor){
+					remain=remain-arrOV[k].demand;
+				}
+			}
+			content+="<td style='text-align: center;'>";
+			if(arrOV[i].door.idDoor == arrODoor[j].idDoor){
+				content+="<input type='radio' name='groupO-"+i+"' " 
+						+ "class='oDoor-"+j+"' " +
+						+ "data-idOutVehicle='"+arrOV[i].idOutVehicle+"' " +
+						+ "data-index='"+j+"' data-idDoor='"+arrODoor[j].idDoor+"' " 
+						+ "checked='checked' data-flag='choose'/>";
+			}else{
+				content+="<input type='radio' " 
+						+ "name='groupO-"+i+"' class='oDoor-"+j+"' " 
+						+ "data-idOutVehicle='"+arrOV[i].idOutVehicle+"' " 
+						+ "data-index='"+j+"' " 
+						+ "data-idDoor='"+arrODoor[j].idDoor+"'/>";
+			}
+			content+="<span class='remain'>"+remain+"</span>";
+			content+"</td>";
+		}
+		content+="</tr>"
+	}
+	$('.rowO_data').html(content);
+	$(".gODoor input[type='radio']").click(function (){
+		eventAssignOutDoor($(this));
+	});
+}
+function getPageOutVehicle_whereAssignDoor(currentPage){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageOutVehicle_whereAssignDoor',
+        success: function (response) {
+        	showContentOutVehicle_whereAssignDoor(response);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
 }
 function getJSON_AssDoorAI(){
 	var json = "{"
@@ -1571,4 +1621,241 @@ function getJSON_AssDoorAI(){
 	json +="]";
 	json +="}";
 	return json;
+}
+$(document).ready(function(){
+	var status=0;
+	$('.status-vehicle').change(function(){
+		status = $(this).val();
+		getPageMtrStatus(status);
+	});
+	$('.pageI-status .page_index').click(function(){
+		var currentPage = $(this).attr('data-index');
+		getPageInVehicle_byStatus(currentPage, status);		
+	});
+});
+function showContent_MtrStatus(response){
+	var contentI="";
+	var pageIV=response[0];
+	var pageOV=response[1];
+	for(var i=0; i<pageIV.length; i++){
+		if(pageIV[i].status ==0) status="Waitting Assign Door";
+		else if(pageIV[i].status ==1) status="Watting Unload";
+		else if(pageIV[i].status ==2) status="Is Unloading";
+		else status="UnLoading is Finish";
+		var nameDoor=pageIV[i].door.nameDoor;
+		if(pageIV[i].door.nameDoor == null) nameDoor="";
+		contentI+=
+			"<tr>"
+				+ "<td>"+pageIV[i].vehicleCode+"</td>"
+				+ "<td>"+nameDoor+"</td>"
+				+ "<td>"+status+"</td>"
+			+ "</tr>"
+	}
+	$('.rowI_data').html(contentI);
+	var contentO="";
+	for(var i=0; i<pageOV.length; i++){
+		if(pageOV[i].status ==0) status="Waitting Assign Door";
+		else if(pageOV[i].status ==1) status="Watting load";
+		else if(pageOV[i].status ==2) status="Is Loading";
+		else status="Loading is Finish";
+		nameDoor=pageOV[i].door.nameDoor; 
+		if(pageOV[i].door.nameDoor == null) nameDoor="";
+		contentO+=
+			"<tr>"
+				+ "<td>"+pageOV[i].vehicleCode+"</td>"
+				+ "<td>"+nameDoor+"</td>"
+				+ "<td>"+status+"</td>"
+			+ "</tr>"
+	}
+	$('.rowO_data').html(contentO);
+}
+function getPageMtrStatus(status){
+	$.ajax({
+        type: "POST",
+        data: 'status=' + status,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageMtrStatus',
+        success: function (response) {
+        	showContent_MtrStatus(response);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function showContentInVehicle_byStatus(response){
+	var content="";
+	var pageIV=response;
+	for(var i=0; i<pageIV.length; i++){
+		if(pageIV[i].status ==0) status="Waitting Assign Door";
+		else if(pageIV[i].status ==1) status="Watting Unload";
+		else if(pageIV[i].status ==2) status="Is Unloading";
+		else status="UnLoading is Finish";
+		var nameDoor=pageIV[i].door.nameDoor;
+		if(pageIV[i].door.nameDoor == null) nameDoor="";
+		content+=
+			"<tr>"
+				+ "<td>"+pageIV[i].vehicleCode+"</td>"
+				+ "<td>"+nameDoor+"</td>"
+				+ "<td>"+status+"</td>"
+			+ "</tr>"
+	}
+	$('.rowI_data').html(content);
+}
+function getPageInVehicle_byStatus(currentPage, status){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage + '&status=' + status,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageInVehicle_byStatus',
+        success: function (response) {
+        	showContentInVehicle_byStatus(response);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function showContentOutVehicle_byStatus(response){
+	var content="";
+	var pageOV=response;
+	for(var i=0; i<pageOV.length; i++){
+		if(pageOV[i].status ==0) status="Waitting Assign Door";
+		else if(pageOV[i].status ==1) status="Watting Unload";
+		else if(pageOV[i].status ==2) status="Is Unloading";
+		else status="UnLoading is Finish";
+		var nameDoor=pageOV[i].door.nameDoor;
+		if(pageOV[i].door.nameDoor == null) nameDoor="";
+		content+=
+			"<tr>"
+				+ "<td>"+pageOV[i].vehicleCode+"</td>"
+				+ "<td>"+nameDoor+"</td>"
+				+ "<td>"+status+"</td>"
+			+ "</tr>"
+	}
+	$('.rowI_data').html(content);
+}
+function getPageOutVehicle_byStatus(currentPage, status){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage + '&status=' + status,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageOutVehicle_byStatus',
+        success: function (response) {
+        	showContentOutVehicle_byStatus(response);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+$(document).ready(function(){
+	$('.s-vehicle').select2({
+		placeholder: "Please select code vehicle",
+		allowClear: true,
+	});
+	$('#addTF').submit( function (e){
+		insertTransferTime();
+		$('#btnTF').attr('disabled', 'disabled');
+		e.preventDefault();
+	});
+	$('.default-date-picker').datepicker().on('changeDate', function(ev) {
+		var date = $(this).val();
+		getDataTransfer(date);
+	});
+});
+function showDataTransfer(response){
+	var listIV=response[0];
+	var listOV=response[1];
+	var listPT=response[2];
+	var opIV="";
+	opIV+="<select class='s-vehicle' name='idInVehicle'>";
+	for(var i=0; i<listIV.length; i++){
+		opIV+="<option value='"+listIV[i].idInVehicle+"'>"+listIV[i].vehicleCode+"</option>";
+	}
+	opIV+="<select>";
+	$('.data-select-in-vehicle').html(opIV);
+	
+	var opOV="";
+	opOV+="<select class='s-vehicle' name='idOutVehicle'>";
+	for(var i=0; i<listOV.length; i++){
+		opOV+="<option value='"+listOV[i].idOutVehicle+"'>"+listOV[i].vehicleCode+"</option>";
+	}
+	opOV+="<select>";
+	$('.data-select-out-vehicle').html(opOV);
+	$('.s-vehicle').select2({
+		placeholder: "Please select code vehicle",
+		allowClear: true,
+	});
+	
+	var content="";
+	for(var i=0; i<listPT.length; i++){
+		content+=
+			"<tr>"
+				+ "<td>"+listPT[i].iVehicle.vehicleCode+"</td>"
+				+ "<td>"+listPT[i].oVehicle.vehicleCode+"</td>"
+				+ "<td>"+listPT[i].transfer+"</td>"
+			+ "</tr>"
+	}
+	$('.row_data').html(content);
+}
+function getDataTransfer(date){
+	$.ajax({
+        type: "POST",
+        data: 'date=' + date,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getDataTransfer',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showDataTransfer(response);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function insertTransferTime(){
+	$.ajax({
+        type: "POST",
+        data: $("#addTF").serialize(),
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/insertTransferTime',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		var content="";
+        		for(var i=0; i<response.length; i++){
+        			content+=
+        				"<tr>" 
+        					+ "<td>"+ response[i].iVehicle.vehicleCode +"</td>" 
+        					+ "<td>"+ response[i].oVehicle.vehicleCode +"</td>"
+        					+ "<td>"+ response[i].transfer +"</td>"
+        				"</tr>";
+        		}
+        		$('.row_data').html(content);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
 }

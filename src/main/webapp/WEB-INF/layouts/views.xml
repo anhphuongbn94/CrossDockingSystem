@@ -4,6 +4,7 @@
 	"http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 	
 <tiles-definitions>
+	
 	<definition name="home.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
 	</definition>

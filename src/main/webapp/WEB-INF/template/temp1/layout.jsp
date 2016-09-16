@@ -34,12 +34,6 @@
 		<script src="resources/js/scripts.js"></script>
 		<script src="resources/js/js.js"></script>
 		<script src="resources/js/select2.js"></script>
-		<script type="text/javascript">
-			$('.s-vehicle').select2({
-				placeholder: "Please select code vehicle",
-				allowClear: true,
-			});
-		</script>
 	</section></section>
 </body>
 </html>

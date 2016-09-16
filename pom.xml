@@ -139,7 +139,6 @@
 	<build>
 		<finalName>CrossDockingSystem</finalName>
 		<plugins>
-
 			<!-- http://mvnrepository.com/artifact/org.eclipse.jetty/jetty-maven-plugin -->
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
@@ -151,6 +150,7 @@
 					<webApp>
 						<contextPath>/CrossDockingSystem</contextPath>
 					</webApp>
+					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 
 			</plugin>

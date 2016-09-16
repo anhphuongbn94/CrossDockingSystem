@@ -768,8 +768,8 @@ pre code {
 	{
 	position: relative;
 	min-height: 1px;
-	padding-left: 15px;
-	padding-right: 15px
+	padding-left: 10px;
+	padding-right: 10px
 }
 
 .col-xs-1, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6,
@@ -1472,7 +1472,7 @@ th {
 
 .table {
 	width: 100%;
-	margin-bottom: 20px
+	margin-bottom: 0px
 }
 
 .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td,

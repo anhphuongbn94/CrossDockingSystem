@@ -41,9 +41,15 @@
 	            <section class="form-group">
 	                <label class="col-lg-2 control-label"><s:message code="outvehicle.arrival" /></label>
 	                <section class="col-lg-7">
-	                    <input type="text" name="arrivalTime" placeholder="ArrivalTime" class="form-control timepicker-24"/>
+	                    <input type="text" name="arrivalTime" placeholder="<s:message code="outvehicle.arrival" />" class="form-control timepicker-24"/>
 	                </section>
-	            </section>	            	           
+	            </section>	 
+	            <section class="form-group">
+	                <label class="col-lg-2 control-label"><s:message code="outvehicle.demand" /></label>
+	                <section class="col-lg-7">
+	                    <input type="text" name="demand" placeholder="<s:message code="outvehicle.demand" />" class="form-control"/>
+	                </section>
+	            </section>           	           
 	            <section class="form-group">
 	                <section class="col-lg-offset-2 col-lg-10">
 	                    <input class="btnDefault btn-primary" type="submit" 
@@ -86,6 +92,7 @@
 						<th><s:message code="outvehicle.arrival" /></th>
 						<th><s:message code="outvehicle.startload" /></th>
 						<th><s:message code="outvehicle.finishload" /></th>
+						<th><s:message code="outvehicle.demand" /></th>
 						<th><s:message code="outvehicle.status" /></th>
 						<th><s:message code="outvehicle.outdoor" /></th>
 						<%-- <th><s:message code="outvehicle.cds" /></th> --%>
@@ -100,6 +107,7 @@
 							<td>${rows.arrivalTime }</td>
 							<td>${rows.startLoadTime }</td>
 							<td>${rows.finishLoadTime }</td>
+							<td>${rows.demand }</td>
 							<td>${rows.status }</td>
 							<td>${rows.door.nameDoor }</td>
 							<%-- <td>${rows.cDS.nameCrossDockingSystem }</td> --%>

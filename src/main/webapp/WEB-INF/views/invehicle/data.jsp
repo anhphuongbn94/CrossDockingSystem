@@ -31,13 +31,19 @@
 	            <section class="form-group">
 	                <label class="col-lg-2 control-label"><s:message code="invehicle.date" /></label>
 	                <section class="col-lg-7">
-	                    <input type="text" name="date" placeholder="Date" class="form-control form-control-inline input-medium default-date-picker"/>
+	                    <input type="text" name="date" placeholder="<s:message code="invehicle.date" />" class="form-control form-control-inline input-medium default-date-picker"/>
 	                </section>
 	            </section>
 	            <section class="form-group">
 	                <label class="col-lg-2 control-label"><s:message code="invehicle.arrival" /></label>
 	                <section class="col-lg-7">
-	                    <input type="text" name="arrivalTime" placeholder="ArrivalTime" class="form-control timepicker-24"/>
+	                    <input type="text" name="arrivalTime" placeholder="<s:message code="invehicle.arrival" />" class="form-control timepicker-24"/>
+	                </section>
+	            </section>
+	            <section class="form-group">
+	                <label class="col-lg-2 control-label"><s:message code="invehicle.volumn" /></label>
+	                <section class="col-lg-7">
+	                    <input type="text" name="volumn" placeholder=<s:message code="invehicle.volumn" /> class="form-control"/>
 	                </section>
 	            </section>	            	           
 	            <section class="form-group">
@@ -87,6 +93,7 @@
 						<th><s:message code="invehicle.arrival" /></th>
 						<th><s:message code="invehicle.startunload" /></th>
 						<th><s:message code="invehicle.finishunload" /></th>
+						<th><s:message code="invehicle.volumn" /></th>
 						<th><s:message code="invehicle.status" /></th>
 						<th><s:message code="invehicle.indoor" /></th>
 						<%-- <th><s:message code="invehicle.cds" /></th> --%>
@@ -101,6 +108,7 @@
 							<td>${rows.arrivalTime }</td>
 							<td>${rows.startUnloadTime }</td>
 							<td>${rows.finishUnloadTime }</td>
+							<td>${rows.volumn }</td>
 							<td>${rows.status }</td>
 							<td>${rows.door.nameDoor }</td>
 							<%-- <td>${rows.cDS.nameCrossDockingSystem }</td> --%>

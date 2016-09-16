@@ -47,7 +47,7 @@
 					<th style="display: none"><span class="sizeIDoor">${listInDoor.size() }</span></th>
 		        </tr>
 	        </thead>
-	        <tbody class="row_data">
+	        <tbody class="rowI_data">
 				<c:set var="group" value="0" />
 				<c:set var="uDoor" value="0" />
 				<tr><td><span class="size-in-vehicle" data-bind="${pInVehicle.size() }"></span></td></tr>
@@ -97,6 +97,13 @@
 	        </tbody>
         </table><!-- End Display-Table -->
        </section><!-- End Adv-Table -->
+       <section class="dataTables_paginate paging_bootstrap pagination">
+			<ul class="page-invehicle-assign-door">
+				<c:forEach begin="1" end="${numPageI }" var="i">
+					<li class="page_index" data-index="${i }"><a>${i }</a></li>
+				</c:forEach>
+			</ul>
+		</section><!-- End Pagination -->
        </section><!-- End Panel-Body-->
        </section><!-- End Panel -->
        </section><!-- End Col-Sm-12 -->
@@ -118,7 +125,7 @@
 	        <thead>
 		        <tr>
 		            <th><s:message code="outvehicle.code" /></th>
-					<th><s:message code="outvehicle.demain" /></th>
+					<th><s:message code="outvehicle.demand" /></th>
 					<th><s:message code="outvehicle.arrival" /></th>
 					<c:set var="numDoor" value="0" />						
 					<c:forEach items="${listOutDoor }" var="rowOD">
@@ -141,7 +148,7 @@
 					<th style="display: none"><span class="sizeODoor">${listOutDoor.size() }</span></th>
 		        </tr>
 	        </thead>
-	        <tbody class="row_data">
+	        <tbody class="rowO_data">
 				<c:set var="group" value="0" />
 				<c:set var="uDoor" value="0" />
 				<tr><td><span class="size-out-vehicle" data-bind="${pOutVehicle.size() }"></span></td></tr>
@@ -190,11 +197,18 @@
 				<tr style="display: none"><td><span class="sizeGroup">${group }</span></td></tr>
 	        </tbody>
         </table><!-- End Display-Table -->
+        <section class="dataTables_paginate paging_bootstrap pagination">
+			<ul class="page-outvehicle-assign-door">
+				<c:forEach begin="1" end="${numPageO }" var="i">
+					<li class="page_index" data-index="${i }"><a>${i }</a></li>
+				</c:forEach>
+			</ul>
+		</section><!-- End Pagination -->
+		<br/>
 		<section>
         	<button class="btnDefault btn-primary" id="btnAssDoor">Submit</button>
         	<button class="btnDefault btn-primary" id="btnAssAI">AI Assign</button>
         </section>
-        <br/>
         <section>
         	Total cost: <span class="total-cost">0</span> <br/>
         	AI Total cost: <span class="total-cost-ai">0</span>
@@ -205,13 +219,13 @@
        </section><!-- End Col-Sm-12 -->
        </section><!-- End Row -->
        <section class="row">
-       	<c:forEach begin="0" end="${listCost.size()-1 }" var="i">
+       	<%-- <c:forEach begin="0" end="${listCost.size()-1 }" var="i">
        		<span class="cost-${i }" data-bind="${listCost[i].cost }"></span>
        	</c:forEach>
        	<span class="size-transfer" data-bind="${listPT.size() }"></span>
        	<c:forEach begin="0" end="${listPT.size()-1 }" var="i">
        		<span class="trip-${listPT[i].iVehicle.idInVehicle }-${listPT[i].oVehicle.idOutVehicle}" data-bind="${listPT[i].transfer }"></span>
        		<span class="trip-${i }" data-bind="${listPT[i].transfer }"></span>
-       	</c:forEach>
+       	</c:forEach> --%>
        </section>
 </section><!-- End Wraper -->

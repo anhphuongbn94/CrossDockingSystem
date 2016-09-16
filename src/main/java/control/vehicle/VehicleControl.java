@@ -14,11 +14,14 @@ import org.springframework.web.servlet.ModelAndView;
 import dao.door.DoorDAO;
 import dao.vehicle.VehicleDAO;
 import entity.door.CrossDockingSystem;
+import entity.door.InDoor;
+import entity.door.OutDoor;
 import entity.product.ProductTransfer;
 import entity.vehicle.InVehicle;
 import entity.vehicle.OutVehicle;
 import entity.vehicle.Vehicle;
 import services.vehicle.VehicleServices;
+import tool.MyTool;
 
 @Controller
 public class VehicleControl {
@@ -27,11 +30,6 @@ public class VehicleControl {
 	@Autowired
 	private VehicleDAO vehicleDAO;
 	
-	@RequestMapping(value = {"", "home"}, method = RequestMethod.GET)
-	public ModelAndView m_home(){
-//		return new ModelAndView("views/index");
-		return new ModelAndView("home.def");
-	}
 	/*
 	 * Vehicle
 	 * */
@@ -97,12 +95,22 @@ public class VehicleControl {
 //		int status = 0;
 		int currentPage = 1;
 		int sizePage = 5;
-		mm.put("listInDoor", doorDAO.getListInDoor());
+		int totalI=vehicleDAO.countInVehicle_whereAssignDoor();
+		int totalO=vehicleDAO.countOutVehicle_whereAssignDoor();
+		int numPageI=totalI/sizePage + 1, numPageO=totalO/sizePage + 1;
+		if(totalI%sizePage == 0) numPageI=totalI/sizePage;
+		if(totalO%sizePage == 0) numPageO=totalO/sizePage;
+		
+		mm.put("numPageI", numPageI);
+		mm.put("listInDoor", doorDAO.getListInDoorActive());
 		mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereAssignDoor(currentPage, sizePage));
-		mm.put("listOutDoor", doorDAO.getListOutDoor());
+		
+		mm.put("numPageO", numPageO);
+		mm.put("listOutDoor", doorDAO.getListOutDoorActive());
 		mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereAssignDoor(currentPage, sizePage));
-//		mm.put("listCost", doorDAO.getListCost());
-		mm.put("listPT", vehicleDAO.getProductTransfer());
+		
+		mm.put("listCost", doorDAO.getListCost());
+		mm.put("listPT", vehicleDAO.getProductTransfer(new MyTool().getDateSystem()));
 		return new ModelAndView("assign.def");
 	}
 	@RequestMapping(value = "invehicle/unload", method = RequestMethod.GET)
@@ -160,6 +168,18 @@ public class VehicleControl {
 		if(flag) return "success";
 		return null;
 	}
+	@RequestMapping(value = "getPageInVehicle_whereAssignDoor", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<?> getPageInVehicle_whereAssignDoor(
+				@RequestParam(value = "currentPage") int currentPage
+	){
+		int sizePage = 5;
+		ArrayList<InDoor> listID=doorDAO.getListInDoorActive();
+		ArrayList<InVehicle> listIV=vehicleDAO.getPageInVehicle_whereAssignDoor(currentPage, sizePage);
+		ArrayList<ArrayList<?>> page=new ArrayList<ArrayList<?>>();
+		page.add(listID); page.add(listIV);
+		return page;
+	}
 	@RequestMapping(value = "getPageInVehicle_byRecords", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<InVehicle> getPageInVehicle_byRecords(
@@ -210,7 +230,8 @@ public class VehicleControl {
 	public ArrayList<InVehicle> insertInVehicle(
 			@RequestParam(value = "idVehicle") int idVehicle,
 			@RequestParam(value = "date") String date,
-			@RequestParam(value = "arrivalTime") String arrivalTime
+			@RequestParam(value = "arrivalTime") String arrivalTime,
+			@RequestParam(value = "volumn") Double volumn
 	){
 		int sizePage=5;
 		int currentPage=1;
@@ -220,6 +241,7 @@ public class VehicleControl {
 		iv.setIdVehicle(idVehicle);
 		iv.setDate(date);
 		iv.setArrivalTime(arrivalTime);
+		iv.setVolumn(volumn);
 		iv.setStatus(status);
 		iv.setcDS(cDS);
 		vehicleDAO.insertInVehicle(iv);
@@ -336,6 +358,18 @@ public class VehicleControl {
 		}
 		return null;
 	}
+	@RequestMapping(value = "getPageOutVehicle_whereAssignDoor", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<?> getPageOutVehicle_whereAssignDoor(
+				@RequestParam(value = "currentPage") int currentPage
+	){
+		int sizePage = 5;
+		ArrayList<OutDoor> listOD=doorDAO.getListOutDoorActive();
+		ArrayList<OutVehicle> listOV=vehicleDAO.getPageOutVehicle_whereAssignDoor(currentPage, sizePage);
+		ArrayList<ArrayList<?>> page=new ArrayList<ArrayList<?>>();
+		page.add(listOD); page.add(listOV);
+		return page;
+	}
 	@RequestMapping(value = "getPageOutVehicle_whereLoadStatus", method = RequestMethod.POST)
 	@ResponseBody
 	public ArrayList<OutVehicle> getPageOutVehicle_whereLoadStatus(
@@ -355,7 +389,8 @@ public class VehicleControl {
 	public ArrayList<OutVehicle> insertOutVehicle(
 			@RequestParam(value = "idVehicle") int idVehicle,
 			@RequestParam(value = "date") String date,
-			@RequestParam(value = "arrivalTime") String arrivalTime
+			@RequestParam(value = "arrivalTime") String arrivalTime,
+			@RequestParam(value = "demand") Double demand
 	){
 		int sizePage=5;
 		int currentPage=1;
@@ -365,6 +400,7 @@ public class VehicleControl {
 		ov.setIdVehicle(idVehicle);
 		ov.setDate(date);
 		ov.setArrivalTime(arrivalTime);
+		ov.setDemand(demand);
 		ov.setStatus(status);
 		ov.setcDS(cDS);
 		vehicleDAO.insertOutVehicle(ov);
@@ -426,84 +462,84 @@ public class VehicleControl {
 	@RequestMapping(value = "mtrstatus", method = RequestMethod.GET)
 	public ModelAndView mtrstatus(ModelMap mm){
 		int currentPage = 1;
-		int sizePage = 5;
-		/* **********************************************************************************************
-		 * InVehicle
+		int sizePage = 15;
+		int status=0;
+		/* InVehicle
 		 * */
-		int numPageI0=0, numPageI1=0, numPageI2=0, numPageI3=0;
-		int totalI0=vehicleDAO.countInVehicle_byStatus(0);
-		int totalI1=vehicleDAO.countInVehicle_byStatus(1);
-		int totalI2=vehicleDAO.countInVehicle_byStatus(2);
-		int totalI3=vehicleDAO.countInVehicle_byStatus(3);
-		if(totalI0%sizePage == 0) { numPageI0 = totalI0/sizePage;
-		}else {
-			numPageI0 = totalI0/sizePage + 1;
-		}if(totalI1%sizePage == 0) { numPageI1 = totalI1/sizePage;
-		}else {
-			numPageI1 = totalI1/sizePage + 1;
-		}if(totalI2%sizePage == 0) { numPageI2 = totalI2/sizePage;
-		}else {
-			numPageI2 = totalI2/sizePage + 1;
-		}if(totalI3%sizePage == 0) { numPageI3 = totalI3/sizePage;
-		}else {
-			numPageI3 = totalI3/sizePage + 1;
-		}
-		ArrayList<InVehicle> pageIV0=vehicleDAO.getPageInVehicle_byStatus(0, currentPage, sizePage);
-		ArrayList<InVehicle> pageIV1=vehicleDAO.getPageInVehicle_byStatus(1, currentPage, sizePage);
-		ArrayList<InVehicle> pageIV2=vehicleDAO.getPageInVehicle_byStatus(2, currentPage, sizePage);
-		ArrayList<InVehicle> pageIV3=vehicleDAO.getPageInVehicle_byStatus(3, currentPage, sizePage);
-		
-		ArrayList<Integer> listNIV=new ArrayList<Integer>();
-		listNIV.add(numPageI0); listNIV.add(numPageI1); listNIV.add(numPageI2); listNIV.add(numPageI3);
-		ArrayList<ArrayList<?>> listPIV=new ArrayList<ArrayList<?>>();
-		listPIV.add(pageIV0); listPIV.add(pageIV1); listPIV.add(pageIV2); listPIV.add(pageIV3);
-		
-		mm.put("listNIV", listNIV);
-		mm.put("listPIV", listPIV);
-		/* **********************************************************************************************
-		 * OutVehicle
+		int totalI=vehicleDAO.countInVehicle_byStatus(0);
+		int numPageI=totalI/sizePage + 1;;
+		if(totalI%sizePage == 0) numPageI = totalI/sizePage;
+		ArrayList<InVehicle> pageIV=vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
+		mm.put("numPageI", numPageI);
+		mm.put("pageIV", pageIV);
+		/* OutVehicle
 		 * */
-		int numPageO0=0, numPageO1=0, numPageO2=0, numPageO3=0;
-		int totalO0=vehicleDAO.countOutVehicle_byStatus(0);
-		int totalO1=vehicleDAO.countOutVehicle_byStatus(1);
-		int totalO2=vehicleDAO.countOutVehicle_byStatus(2);
-		int totalO3=vehicleDAO.countOutVehicle_byStatus(3);
-		if(totalO0%sizePage == 0) { numPageO0 = totalO0/sizePage;
-		}else {
-			numPageO0 = totalI0/sizePage + 1;
-		}if(totalO1%sizePage == 0) { numPageO1 = totalO1/sizePage;
-		}else {
-			numPageO1 = totalI1/sizePage + 1;
-		}if(totalO2%sizePage == 0) { numPageO2 = totalO2/sizePage;
-		}else {
-			numPageO2 = totalI2/sizePage + 1;
-		}if(totalO3%sizePage == 0) { numPageO3 = totalO3/sizePage;
-		}else {
-			numPageO3 = totalI3/sizePage + 1;
-		}
-		ArrayList<OutVehicle> pageOV0=vehicleDAO.getPageOutVehicle_byStatus(0, currentPage, sizePage);
-		ArrayList<OutVehicle> pageOV1=vehicleDAO.getPageOutVehicle_byStatus(1, currentPage, sizePage);
-		ArrayList<OutVehicle> pageOV2=vehicleDAO.getPageOutVehicle_byStatus(2, currentPage, sizePage);
-		ArrayList<OutVehicle> pageOV3=vehicleDAO.getPageOutVehicle_byStatus(3, currentPage, sizePage);
-		
-		ArrayList<Integer> listNOV=new ArrayList<Integer>();
-		listNOV.add(numPageO0); listNOV.add(numPageO1); listNOV.add(numPageO2); listNOV.add(numPageO3);
-		ArrayList<ArrayList<?>> listPOV=new ArrayList<ArrayList<?>>();
-		listPOV.add(pageOV0); listPOV.add(pageOV1); listPOV.add(pageOV2); listPOV.add(pageOV3);
-		
-		mm.put("listNOV", listNOV);
-		mm.put("listPOV", listPOV);
+		int totalO=vehicleDAO.countOutVehicle_byStatus(0);
+		int numPageO=totalO/sizePage + 1;;
+		if(totalI%sizePage == 0) numPageI = totalI/sizePage;
+		ArrayList<OutVehicle> pageOV=vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
+		mm.put("numPageO", numPageO);
+		mm.put("pageOV", pageOV);
 		return new ModelAndView("mtrstatus.def");
+	}
+	@RequestMapping(value = "getPageMtrStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<ArrayList<?>> getPageMtrStatus(
+			@RequestParam(value = "status") int status
+	){
+		int currentPage=1; int sizePage=15;
+		ArrayList<ArrayList<?>> page=new ArrayList<ArrayList<?>>();
+		ArrayList<InVehicle> pageIV=vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
+		ArrayList<OutVehicle> pageOV=vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
+		page.add(pageIV);
+		page.add(pageOV);
+		return page;
+	}
+	@RequestMapping(value = "getPageInVehicle_byStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<InVehicle> getPageInVehicle_byStatus(
+			@RequestParam(value="currentPage") int currentPage,
+			@RequestParam(value="status") int status
+	){
+		int sizePage = 15;
+		ArrayList<InVehicle> pageIV=vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
+		return pageIV;
+	}
+	@RequestMapping(value = "getPageOutVehicle_byStatus", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<OutVehicle> getPageOutVehicle_byStatus(
+			@RequestParam(value="currentPage") int currentPage,
+			@RequestParam(value="status") int status
+	){
+		int sizePage = 15;
+		ArrayList<OutVehicle> pageOV=vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
+		return pageOV;
 	}
 	@RequestMapping(value = "transfer", method = RequestMethod.GET)
 	public ModelAndView transfer(ModelMap mm){
-		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer();
-		ArrayList<InVehicle> listIV=vehicleDAO.getListInVehicle_byCurDate();
-		ArrayList<OutVehicle> listOV=vehicleDAO.getListOutVehicle_byCurDate();
+		String date=new MyTool().getDateSystem();
+		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer(date);
+		ArrayList<InVehicle> listIV=vehicleDAO.getListInVehicle_byCurDate(date);
+		ArrayList<OutVehicle> listOV=vehicleDAO.getListOutVehicle_byCurDate(date);
+		mm.put("currentDate", date);
 		mm.put("listIV", listIV);
 		mm.put("listOV", listOV);
 		mm.put("listPT", listPT);
 		return new ModelAndView("transfer.def");
+	}
+	@RequestMapping(value = "getDataTransfer", method = RequestMethod.POST)
+	@ResponseBody
+	public ArrayList<ArrayList<?>> getDataTransfer(
+			@RequestParam(value = "date") String date
+	){
+		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer(date);
+		ArrayList<InVehicle> listIV=vehicleDAO.getListInVehicle_byCurDate(date);
+		ArrayList<OutVehicle> listOV=vehicleDAO.getListOutVehicle_byCurDate(date);
+		ArrayList<ArrayList<?>> list=new ArrayList<ArrayList<?>>();
+		list.add(listIV); 
+		list.add(listOV);
+		list.add(listPT);
+		return list;
 	}
 	@RequestMapping(value = "insertTransferTime", method = RequestMethod.POST)
 	@ResponseBody
@@ -516,7 +552,7 @@ public class VehicleControl {
 		OutVehicle o=new OutVehicle(); o.setIdOutVehicle(idOutVehicle);
 		ProductTransfer pt=new ProductTransfer(i, o, transferTime);
 		vehicleDAO.insertTransfer(pt);
-		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer();
+		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer(new MyTool().getDateSystem());
 		return listPT;
 	}
 	@RequestMapping(value = "assignDoorAI", method = RequestMethod.POST)

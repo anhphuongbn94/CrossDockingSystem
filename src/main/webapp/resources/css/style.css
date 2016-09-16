@@ -9,7 +9,7 @@ Author: ThemeBucket
 @import url(http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css);
 
 body {
-    background: #424f63;
+    /* background: #424f63; */
     font-family: 'Open Sans', sans-serif;
     color: #7a7676;
     line-height: 20px;
@@ -50,12 +50,13 @@ hr {
 -------------------------------*/
 
 .login-body {
-    background: #65cea7 url("../icons/login-bg.jpg") no-repeat fixed;
+    /* background: #65cea7 url("../icons/login-bg.jpg") no-repeat fixed; */
+    background: #424f63;
     background-size: cover;
-    width: 100%;
+    width: 80%;
     height: 100%;
+    margin: 0 auto;
 }
-
 .form-signin {
     max-width: 330px;
     margin: 100px auto;
@@ -104,6 +105,7 @@ hr {
 }
 
 .form-signin .form-control {
+	width: 100%;
     position: relative;
     font-size: 16px;
     height: auto;
@@ -2171,7 +2173,9 @@ ul.user-states li {
     width: 65px;
     padding: 5px 8px;
 }
-
+.dataTables_length select.status-vehicle{
+	width: 230px;
+}
 .dataTables_length label, .dataTables_filter label {
     font-weight: 300;
 }
@@ -2227,7 +2231,7 @@ ul.user-states li {
 
 .dataTables_paginate.paging_bootstrap.pagination {
     float: right;
-    margin-bottom: 15px;
+    margin-bottom: 0px;
 }
 
 .dataTable tr:last-child {
@@ -2288,7 +2292,7 @@ ul.user-states li {
 }
 
 .adv-table .dataTables_info, .dataTables_paginate {
-    padding: 15px 0;
+    padding: 5px 0;
 }
 
 .adv-table .dataTables_length, .adv-table .dataTables_filter {
@@ -4706,4 +4710,8 @@ ol.comment-list {
     background: #EFF0F4;
     border-radius: 5px;
     -webkit-border-radius: 5px;
+}
+.date-picker{
+	padding: 3px 8px;
+	cursor: not-allowed;
 }

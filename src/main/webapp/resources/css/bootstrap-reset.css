@@ -102,7 +102,18 @@
 }
 
 /*button*/
-
+span.btn-primary{
+	display: block;
+	float: right;
+	text-align: center;
+	width: 35px;	
+	background-color: #424F63;
+	border-color: #374152;
+	color: #FFFFFF;
+	padding: 5px 8px;
+	border-radius: 4px;
+	cursor: pointer;
+}
 .btn-primary {
     background-color: #424F63;
     border-color: #374152;

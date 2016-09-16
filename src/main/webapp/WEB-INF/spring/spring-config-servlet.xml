@@ -12,7 +12,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<context:component-scan base-package="control" />
-	<context:component-scan base-package="daoImpl" />
+	<context:component-scan base-package="dao.impl" />
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:annotation-driven />
@@ -35,6 +35,7 @@
 		<bean parent="localeChangeInterceptor" />
 	</mvc:interceptors>
 	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+	
 	<!-- Tiles -->
 	<bean id="resourceViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
 	    <property name="viewClass">

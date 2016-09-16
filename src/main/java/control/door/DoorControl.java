@@ -60,10 +60,20 @@ public class DoorControl {
 			@RequestParam(value = "capD") Integer capD,
 			@RequestParam(value = "statusD") Integer statusD
 	){
-		InDoor iDoor=new InDoor(idInDoor, nameD, capD, statusD);
-		if(doorDAO.editInDoor(iDoor)){
-			ArrayList<InDoor> listID=doorDAO.getListInDoor();
-			return listID;
+		if(statusD == 1){
+			if(doorDAO.checkTransitonStatusActiveIndoor(idInDoor)){
+				InDoor iDoor=new InDoor(idInDoor, nameD, capD, statusD);
+				if(doorDAO.editInDoor(iDoor)){
+					ArrayList<InDoor> listID=doorDAO.getListInDoor();
+					return listID;
+				}
+			}
+		}else{
+			InDoor iDoor=new InDoor(idInDoor, nameD, capD, statusD);
+			if(doorDAO.editInDoor(iDoor)){
+				ArrayList<InDoor> listID=doorDAO.getListInDoor();
+				return listID;
+			}
 		}
 		return null;
 	}
@@ -104,10 +114,20 @@ public class DoorControl {
 			@RequestParam(value = "capD") Integer capD,
 			@RequestParam(value = "statusD") Integer statusD
 	){
-		OutDoor oDoor=new OutDoor(idOutDoor, nameD, capD, statusD);
-		if(doorDAO.editOutDoor(oDoor)){
-			ArrayList<OutDoor> listOD=doorDAO.getListOutDoor();
-			return listOD;
+		if(statusD == 1){
+			if(doorDAO.checkTransitonStatusActiveOutdoor(idOutDoor)){
+				OutDoor oDoor=new OutDoor(idOutDoor, nameD, capD, statusD);
+				if(doorDAO.editOutDoor(oDoor)){
+					ArrayList<OutDoor> listOD=doorDAO.getListOutDoor();
+					return listOD;
+				}
+			}
+		}else{			
+			OutDoor oDoor=new OutDoor(idOutDoor, nameD, capD, statusD);
+			if(doorDAO.editOutDoor(oDoor)){
+				ArrayList<OutDoor> listOD=doorDAO.getListOutDoor();
+				return listOD;
+			}
 		}
 		return null;
 	}

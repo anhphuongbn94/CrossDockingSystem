@@ -6,7 +6,22 @@
 		    <h3><s:message code="transfer.title" /></h3>
 		</section><!-- End Page-Heading -->
 		<section class="wrapper">
-			<section class="row">
+		<section id="dynamic-table_wrapper" class="dataTables_wrapper" role="grid">
+        	<div id="dynamic-table_length" class="dataTables_length">
+				<label>Date:
+					<%-- <input class="default-date-picker date-picker" 
+						size="30" type="text" value=""
+						readonly="readonly"> 
+					<span class="input-group-btn add-on">
+						<button class="btn btn-primary" type="button"><i class="fa fa-calendar"></i></button>
+					</span> --%>
+                    <input type="text" value="${currentDate }" size="30" 
+                    		class="default-date-picker date-picker">
+                   	<span class="btn-primary"><i class="fa fa-calendar"></i></span>
+				</label>
+			</div>
+		</section>
+		<section class="row">
 		<section class="col-sm-6">
 		<section class="panel">
 	    <header class="panel-heading"><s:message code="transfer.title.insert" />
@@ -19,21 +34,25 @@
 	            <section class="form-group">
 	                <label class="col-lg-3 control-label">InVehicle</label>
 	                <section class="col-lg-7">
-	                    <select class="s-vehicle" name="idInVehicle">
-	                    	<c:forEach items="${listIV }" var="rows">
-	                    		<option value="${rows.idInVehicle }">${rows.vehicleCode }</option>
-	                    	</c:forEach>
-		              	</select>
+	                	<section class="data-select-in-vehicle">
+		                    <select class="s-vehicle" name="idInVehicle">
+		                    	<c:forEach items="${listIV }" var="rows">
+		                    		<option value="${rows.idInVehicle }">${rows.vehicleCode }</option>
+		                    	</c:forEach>
+			              	</select>
+		              	</section>
 	                </section>
 	            </section>
 	            <section class="form-group">
 	                <label class="col-lg-3 control-label">OutVehicle</label>
 	                <section class="col-lg-7" >
-	                    <select class="s-vehicle" name="idOutVehicle">
-	                    	<c:forEach items="${listOV }" var="rows">
-	                    		<option value="${rows.idOutVehicle }">${rows.vehicleCode }</option>
-	                    	</c:forEach>
-		              	</select>
+	                	<section class="data-select-out-vehicle">
+		                    <select class="s-vehicle" name="idOutVehicle">
+		                    	<c:forEach items="${listOV }" var="rows">
+		                    		<option value="${rows.idOutVehicle }">${rows.vehicleCode }</option>
+		                    	</c:forEach>
+			              	</select>
+		              	</section>
 	                </section>
 	            </section>
 	            <section class="form-group">

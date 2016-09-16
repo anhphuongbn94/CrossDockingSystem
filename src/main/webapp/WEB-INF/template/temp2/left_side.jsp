@@ -83,6 +83,13 @@
             		<span><s:message code="menu.transfer" /></span>
            		</a>
            	</li>
+           	<li class="menu-list">
+            	<a href=""><i class="fa fa-language"></i><span><s:message code="menu.language" /></span></a>
+                <ul class="sub-menu-list">
+                    <li><a href="?lang=en" ><s:message code="language.en" /></a></li>
+                    <li><a href="?lang=vi"><s:message code="language.vi" /></a></li>
+                </ul>
+            </li>
             <li><a href="login"><i class="fa fa-sign-in"></i> <span><s:message code="menu.login" /></span></a></li>
         </ul><!-- End Nav Nav-pills -->
     </section><!-- End Left-Side-Inner -->
