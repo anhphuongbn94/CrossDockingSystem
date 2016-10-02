@@ -219,13 +219,15 @@
        </section><!-- End Col-Sm-12 -->
        </section><!-- End Row -->
        <section class="row">
-       	<%-- <c:forEach begin="0" end="${listCost.size()-1 }" var="i">
+       	<c:forEach begin="0" end="${listCost.size()-1 }" var="i">
        		<span class="cost-${i }" data-bind="${listCost[i].cost }"></span>
        	</c:forEach>
        	<span class="size-transfer" data-bind="${listPT.size() }"></span>
-       	<c:forEach begin="0" end="${listPT.size()-1 }" var="i">
-       		<span class="trip-${listPT[i].iVehicle.idInVehicle }-${listPT[i].oVehicle.idOutVehicle}" data-bind="${listPT[i].transfer }"></span>
-       		<span class="trip-${i }" data-bind="${listPT[i].transfer }"></span>
-       	</c:forEach> --%>
+       	<c:if test="${listPT.size() != 0 }">
+	       	<c:forEach begin="0" end="${listPT.size()-1 }" var="i">
+	       		<span class="trip-${listPT[i].iVehicle.idInVehicle }-${listPT[i].oVehicle.idOutVehicle}" data-bind="${listPT[i].transfer }"></span>
+	       		<span class="trip-${i }" data-bind="${listPT[i].transfer }"></span>
+	       	</c:forEach>
+       	</c:if>
        </section>
 </section><!-- End Wraper -->

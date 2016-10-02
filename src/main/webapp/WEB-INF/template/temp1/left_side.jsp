@@ -5,6 +5,7 @@
 <section class="left-side">  
 	<section class="logo">
 		<a href="${pageContext.request.contextPath }/">
+			<!-- <img src="resources/images/logo.png" alt="" width="200px" height="50px"> -->
 			<img src="resources/images/logo.png" alt="">
 		</a>
 	</section>

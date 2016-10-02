@@ -327,7 +327,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 			 + "JOIN tblVehicle AS v ON iv.idVehicle=v.idVehicle "
 			 + "LEFT JOIN tblInDoor AS i ON iv.idInDoor=i.idInDoor "
 			 + "JOIN tblCrossDockingSystem AS c ON iv.idCrossDockingSystem=c.idCrossDockingSystem " 
-			 + "WHERE iv.status=? OR iv.status=? "
+			 + "WHERE (iv.status=? OR iv.status=?) AND iv.date='"+new MyTool().getDateSystem()+"' "
 			 + "ORDER BY idInVehicle DESC " 						                          
 			 + "LIMIT  ? , ?"             
              ;
@@ -673,7 +673,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 		return 0;
 	}
 	public int countInVehicle_whereAssignDoor(){
-		String sql="SELECT COUNT(*) FROM tblInVehicle WHERE status=? OR status=?";
+		String sql="SELECT COUNT(*) FROM tblInVehicle WHERE (status=? OR status=?) AND date='"+new MyTool().getDateSystem()+"'";
 		Connection conn=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
@@ -1003,7 +1003,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 			+ "LEFT JOIN tblOutDoor AS o ON ov.idOutDoor=o.idOutDoor "
 			+ "JOIN tblVehicle AS v ON ov.idVehicle=v.idVehicle "			
 			+ "JOIN tblCrossDockingSystem AS c ON ov.idCrossDockingSystem=c.idCrossDockingSystem "
-			 + "WHERE ov.status=? OR ov.status=? "
+			 + "WHERE (ov.status=? OR ov.status=?) AND date='"+new MyTool().getDateSystem()+"' "
 			 + "ORDER BY idOutVehicle DESC " 						                          
 			 + "LIMIT  ? , ?"             
              ;
@@ -1212,7 +1212,7 @@ public class VehicleDAOImpl implements VehicleDAO{
 		return 0;
 	}
 	public int countOutVehicle_whereAssignDoor(){
-		String sql="SELECT COUNT(*) FROM tblOutVehicle WHERE status=? OR status=?";
+		String sql="SELECT COUNT(*) FROM tblOutVehicle WHERE (status=? OR status=?) AND date='"+new MyTool().getDateSystem()+"'";
 		Connection conn=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;

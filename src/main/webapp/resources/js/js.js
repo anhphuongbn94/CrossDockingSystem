@@ -1378,9 +1378,9 @@ function getObjective(){
 		for(var j=0; j<idOutVehiclesChoose.length; j++){
 			var trip = $('.trip-' + idInVehiclesChoose[i] + '-' + idOutVehiclesChoose[j]).attr('data-bind');
 			var cost = costs[arrInDoorChoose[i]][arrOutDoorChoose[j]];
-//			console.log('Trip=' + trip);
-//			console.log('Cost=' + cost)
-//			console.log('Obj=' + trip*cost);
+			console.log('Trip=' + trip);
+			console.log('Cost=' + cost)
+			console.log('Obj=' + trip*cost);
 			objective += trip*costs[arrInDoorChoose[i]][arrOutDoorChoose[j]];
 		}
 	}

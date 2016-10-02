@@ -2,6 +2,9 @@ package control.vehicle;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +19,7 @@ import dao.vehicle.VehicleDAO;
 import entity.door.CrossDockingSystem;
 import entity.door.InDoor;
 import entity.door.OutDoor;
+import entity.employee.Employee;
 import entity.product.ProductTransfer;
 import entity.vehicle.InVehicle;
 import entity.vehicle.OutVehicle;
@@ -34,16 +38,21 @@ public class VehicleControl {
 	 * Vehicle
 	 * */
 	@RequestMapping(value = "vehicle", method = RequestMethod.GET)
-	public ModelAndView vehicle(ModelMap mm){
-		int currentPage = 1;
-		int sizePage = 5;
-		int numPage=0;
-		int total=vehicleDAO.countVehicle();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("pVehicle", vehicleDAO.getPageVehicle(currentPage, sizePage));
-		return new ModelAndView("vehicle.def");
+	public ModelAndView vehicle(ModelMap mm, HttpSession session, HttpServletResponse response){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			int currentPage = 1;
+			int sizePage = 5;
+			int numPage=0;
+			int total=vehicleDAO.countVehicle();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("pVehicle", vehicleDAO.getPageVehicle(currentPage, sizePage));
+			return new ModelAndView("vehicle.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageVehicle", method = RequestMethod.POST)
 	@ResponseBody
@@ -78,53 +87,68 @@ public class VehicleControl {
 	 * InVehicle
 	 * */
 	@RequestMapping(value = "invehicle/data", method = RequestMethod.GET)
-	public ModelAndView invehicle(ModelMap mm){	
-		int currentPage = 1;
-		int sizePage = 5;
-		int numPage=0;
-		int total=vehicleDAO.countInVehicle();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("listV", vehicleDAO.getListVehicle());
-		mm.put("pInVehicle", vehicleDAO.getPageInVehicle(currentPage, sizePage));
-		return new ModelAndView("invehicle.data.def");
+	public ModelAndView invehicle(ModelMap mm, HttpSession session){	
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			int currentPage = 1;
+			int sizePage = 5;
+			int numPage=0;
+			int total=vehicleDAO.countInVehicle();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("listV", vehicleDAO.getListVehicle());
+			mm.put("pInVehicle", vehicleDAO.getPageInVehicle(currentPage, sizePage));
+			return new ModelAndView("invehicle.data.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "assign", method = RequestMethod.GET)
-	public ModelAndView invehicle_assign(ModelMap mm){
-//		int status = 0;
-		int currentPage = 1;
-		int sizePage = 5;
-		int totalI=vehicleDAO.countInVehicle_whereAssignDoor();
-		int totalO=vehicleDAO.countOutVehicle_whereAssignDoor();
-		int numPageI=totalI/sizePage + 1, numPageO=totalO/sizePage + 1;
-		if(totalI%sizePage == 0) numPageI=totalI/sizePage;
-		if(totalO%sizePage == 0) numPageO=totalO/sizePage;
-		
-		mm.put("numPageI", numPageI);
-		mm.put("listInDoor", doorDAO.getListInDoorActive());
-		mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereAssignDoor(currentPage, sizePage));
-		
-		mm.put("numPageO", numPageO);
-		mm.put("listOutDoor", doorDAO.getListOutDoorActive());
-		mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereAssignDoor(currentPage, sizePage));
-		
-		mm.put("listCost", doorDAO.getListCost());
-		mm.put("listPT", vehicleDAO.getProductTransfer(new MyTool().getDateSystem()));
-		return new ModelAndView("assign.def");
+	public ModelAndView invehicle_assign(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+//			int status = 0;
+			int currentPage = 1;
+			int sizePage = 5;
+			int totalI=vehicleDAO.countInVehicle_whereAssignDoor();
+			int totalO=vehicleDAO.countOutVehicle_whereAssignDoor();
+			int numPageI=totalI/sizePage + 1, numPageO=totalO/sizePage + 1;
+			if(totalI%sizePage == 0) numPageI=totalI/sizePage;
+			if(totalO%sizePage == 0) numPageO=totalO/sizePage;
+			
+			mm.put("numPageI", numPageI);
+			mm.put("listInDoor", doorDAO.getListInDoorActive());
+			mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereAssignDoor(currentPage, sizePage));
+			
+			mm.put("numPageO", numPageO);
+			mm.put("listOutDoor", doorDAO.getListOutDoorActive());
+			mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereAssignDoor(currentPage, sizePage));
+			
+			mm.put("listCost", doorDAO.getListCost());
+			mm.put("listPT", vehicleDAO.getProductTransfer(new MyTool().getDateSystem()));
+			return new ModelAndView("assign.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "invehicle/unload", method = RequestMethod.GET)
-	public ModelAndView invehicle_uploadtime(ModelMap mm){
-//		int status = 0;
-		int currentPage = 1;
-		int sizePage = 5;
-		int numPage=0;
-		int total=vehicleDAO.countInVehicle_whereUnloadStatus();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereUnloadStatus(currentPage, sizePage));
-		return new ModelAndView("invehicle.unload.def");
+	public ModelAndView invehicle_uploadtime(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+//			int status = 0;
+			int currentPage = 1;
+			int sizePage = 5;
+			int numPage=0;
+			int total=vehicleDAO.countInVehicle_whereUnloadStatus();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("pInVehicle", vehicleDAO.getPageInVehicle_whereUnloadStatus(currentPage, sizePage));
+			return new ModelAndView("invehicle.unload.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "assignDoorInVehicle", method = RequestMethod.POST)
 	@ResponseBody
@@ -319,30 +343,40 @@ public class VehicleControl {
 		return null;
 	}
 	@RequestMapping(value = "outvehicle/data", method = RequestMethod.GET)
-	public ModelAndView outvehicle(ModelMap mm){	
-		int currentPage = 1;
-		int sizePage = 5;
-		int numPage=0;
-		int total=vehicleDAO.countOutVehicle();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("listV", vehicleDAO.getListVehicle());
-		mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle(currentPage, sizePage));
-		return new ModelAndView("outvehicle.data.def");
+	public ModelAndView outvehicle(ModelMap mm, HttpSession session){	
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			int currentPage = 1;
+			int sizePage = 5;
+			int numPage=0;
+			int total=vehicleDAO.countOutVehicle();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("listV", vehicleDAO.getListVehicle());
+			mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle(currentPage, sizePage));
+			return new ModelAndView("outvehicle.data.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "outvehicle/load", method = RequestMethod.GET)
-	public ModelAndView outvehicle_loadtime(ModelMap mm){
-//		int status = 0;
-		int currentPage = 1;
-		int sizePage = 5;
-		int numPage=0;
-		int total=vehicleDAO.countOutVehicle_whereLoadStatus();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereLoadStatus(currentPage, sizePage));
-		return new ModelAndView("outvehicle.load.def");
+	public ModelAndView outvehicle_loadtime(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+//			int status = 0;
+			int currentPage = 1;
+			int sizePage = 5;
+			int numPage=0;
+			int total=vehicleDAO.countOutVehicle_whereLoadStatus();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("pOutVehicle", vehicleDAO.getPageOutVehicle_whereLoadStatus(currentPage, sizePage));
+			return new ModelAndView("outvehicle.load.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageOutVehicle", method = RequestMethod.POST)
 	@ResponseBody
@@ -460,27 +494,32 @@ public class VehicleControl {
 	 * 
 	 * */
 	@RequestMapping(value = "mtrstatus", method = RequestMethod.GET)
-	public ModelAndView mtrstatus(ModelMap mm){
-		int currentPage = 1;
-		int sizePage = 15;
-		int status=0;
-		/* InVehicle
-		 * */
-		int totalI=vehicleDAO.countInVehicle_byStatus(0);
-		int numPageI=totalI/sizePage + 1;;
-		if(totalI%sizePage == 0) numPageI = totalI/sizePage;
-		ArrayList<InVehicle> pageIV=vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
-		mm.put("numPageI", numPageI);
-		mm.put("pageIV", pageIV);
-		/* OutVehicle
-		 * */
-		int totalO=vehicleDAO.countOutVehicle_byStatus(0);
-		int numPageO=totalO/sizePage + 1;;
-		if(totalI%sizePage == 0) numPageI = totalI/sizePage;
-		ArrayList<OutVehicle> pageOV=vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
-		mm.put("numPageO", numPageO);
-		mm.put("pageOV", pageOV);
-		return new ModelAndView("mtrstatus.def");
+	public ModelAndView mtrstatus(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			int currentPage = 1;
+			int sizePage = 15;
+			int status=0;
+			/* InVehicle
+			 * */
+			int totalI=vehicleDAO.countInVehicle_byStatus(0);
+			int numPageI=totalI/sizePage + 1;;
+			if(totalI%sizePage == 0) numPageI = totalI/sizePage;
+			ArrayList<InVehicle> pageIV=vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
+			mm.put("numPageI", numPageI);
+			mm.put("pageIV", pageIV);
+			/* OutVehicle
+			 * */
+			int totalO=vehicleDAO.countOutVehicle_byStatus(0);
+			int numPageO=totalO/sizePage + 1;;
+			if(totalI%sizePage == 0) numPageI = totalI/sizePage;
+			ArrayList<OutVehicle> pageOV=vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
+			mm.put("numPageO", numPageO);
+			mm.put("pageOV", pageOV);
+			return new ModelAndView("mtrstatus.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageMtrStatus", method = RequestMethod.POST)
 	@ResponseBody
@@ -516,16 +555,21 @@ public class VehicleControl {
 		return pageOV;
 	}
 	@RequestMapping(value = "transfer", method = RequestMethod.GET)
-	public ModelAndView transfer(ModelMap mm){
-		String date=new MyTool().getDateSystem();
-		ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer(date);
-		ArrayList<InVehicle> listIV=vehicleDAO.getListInVehicle_byCurDate(date);
-		ArrayList<OutVehicle> listOV=vehicleDAO.getListOutVehicle_byCurDate(date);
-		mm.put("currentDate", date);
-		mm.put("listIV", listIV);
-		mm.put("listOV", listOV);
-		mm.put("listPT", listPT);
-		return new ModelAndView("transfer.def");
+	public ModelAndView transfer(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			String date=new MyTool().getDateSystem();
+			ArrayList<ProductTransfer> listPT=vehicleDAO.getProductTransfer(date);
+			ArrayList<InVehicle> listIV=vehicleDAO.getListInVehicle_byCurDate(date);
+			ArrayList<OutVehicle> listOV=vehicleDAO.getListOutVehicle_byCurDate(date);
+			mm.put("currentDate", date);
+			mm.put("listIV", listIV);
+			mm.put("listOV", listOV);
+			mm.put("listPT", listPT);
+			return new ModelAndView("transfer.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getDataTransfer", method = RequestMethod.POST)
 	@ResponseBody

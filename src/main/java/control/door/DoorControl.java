@@ -2,6 +2,8 @@ package control.door;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,6 +18,7 @@ import entity.door.Cost;
 import entity.door.CrossDockingSystem;
 import entity.door.InDoor;
 import entity.door.OutDoor;
+import entity.employee.Employee;
 
 @Controller
 public class DoorControl {
@@ -26,10 +29,15 @@ public class DoorControl {
 	 * 
 	 * */
 	@RequestMapping(value = "indoor", method = RequestMethod.GET)
-	public ModelAndView indoor(ModelMap mm){
-		mm.put("listIDoor", doorDAO.getListInDoor());
-		mm.put("listODoor", doorDAO.getListOutDoor());
-		return new ModelAndView("indoor.data.def");
+	public ModelAndView indoor(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			mm.put("listIDoor", doorDAO.getListInDoor());
+			mm.put("listODoor", doorDAO.getListOutDoor());
+			return new ModelAndView("indoor.data.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "insertInDoor", method = RequestMethod.POST)
 	@ResponseBody
@@ -81,9 +89,14 @@ public class DoorControl {
 	 * 
 	 * */
 	@RequestMapping(value = "outdoor", method = RequestMethod.GET)
-	public ModelAndView outdoor(ModelMap mm){
-		mm.put("listODoor", doorDAO.getListOutDoor());
-		return new ModelAndView("outdoor.def");
+	public ModelAndView outdoor(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			mm.put("listODoor", doorDAO.getListOutDoor());
+			return new ModelAndView("outdoor.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "insertOutDoor", method = RequestMethod.POST)
 	@ResponseBody
@@ -135,15 +148,20 @@ public class DoorControl {
 	 * 
 	 * */
 	@RequestMapping(value = "setcost", method = RequestMethod.GET)
-	public ModelAndView setcost(ModelMap mm){
-		int currentPage=1, sizePage=15;
-		int numPage=0;
-		int total=doorDAO.countCost();
-		if(total%sizePage == 0) numPage=total/sizePage;
-		else numPage=total/sizePage + 1;
-		mm.put("numPage", numPage);
-		mm.put("pageCost", doorDAO.getPageCost(currentPage, sizePage));
-		return new ModelAndView("setcost.def");
+	public ModelAndView setcost(ModelMap mm, HttpSession session){
+		Employee em=(Employee) session.getAttribute("em");
+		if(em != null){
+			int currentPage=1, sizePage=15;
+			int numPage=0;
+			int total=doorDAO.countCost();
+			if(total%sizePage == 0) numPage=total/sizePage;
+			else numPage=total/sizePage + 1;
+			mm.put("numPage", numPage);
+			mm.put("pageCost", doorDAO.getPageCost(currentPage, sizePage));
+			return new ModelAndView("setcost.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageCost", method = RequestMethod.POST)
 	@ResponseBody
