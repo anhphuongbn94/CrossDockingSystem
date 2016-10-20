@@ -1,86 +1,126 @@
-/*.form_add_card{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    margin: 0 20px;
-    border: 1px solid #6678b1;
-    width: 470px;
-    height: 160px;
+body{
+	font-size: 13px;
 }
-.form_text{
-    float: left;
-    width: 270px;
+@media (min-width: 1200px){
+	.page-heading{
+		padding: 5px 15px;
+	}
+	.wrapper{
+		padding: 0 15px;
+	}
+	.msg-error{
+		color: #dd4b39;
+		font-weight: normal;
+		margin: 0 0 5px 10px;
+	}
+	.row{
+		clear: both;
+	}
+	.panel-heading{
+		padding: 10px 15px;
+	}
+	.panel{
+		margin-bottom: 0;
+		border-bottom: 1px dashed rgba(0, 0, 0, 0.2)
+	}
+	.panel-body{
+		padding: 0px 10px 10px;
+	}
+	.form-group{
+		margin-bottom: 10px;
+	}
+	.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2{
+		width: 13.666667%;
+	}
+	.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3{
+		width: 27%;
+	}
+	.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2,
+		.col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+		.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5,
+		.col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+		.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8,
+		.col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9,
+		.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11,
+		.col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+		padding-left: 0;	
+	}
+	.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+		padding: 0;
+	}
+	.select2-container{
+		width: 100%
+	}
+	.select2-container .select2-choice{
+		border: 1px solid #ccc;
+	}
+	div.error .select2-choice{
+		border-color: #dd4b39 !important
+	}
+	
+	.lb-rel input.form-control{
+		width: 100%;
+	}
+	.cmxform{
+		margin: 10px 0 0 0;
+	}
+	.cmxform .form-group label.control-label{
+		margin-left: -15px;
+	}
+	.cmxform .form-group .col-lg-3 label{
+		display: block;
+		position: relative;
+	}
+	.cmxform .form-group .col-lg-3 .form-control{
+		width: 90%;
+	}
+	.cmxform .form-group .col-lg-3 span.btn-primary{
+		position: absolute;
+		right: -9px;
+	}
+	.cmxform .form-group .col-lg-1 input[type=submit]{
+		margin-left: 40px;
+	}
+	.adv-table .dataTables_length select{
+		height: 30px;
+	}
+	.adv-table .dataTables_filter span{
+		float: left;
+		padding: 0;
+		line-height: 30px;
+	}
+	.adv-table .dataTables_filter label input{
+		margin: 2px 0 0 0;
+		float: left;
+		width: 90%;
+	}
+	.adv-table .dataTables_length, .adv-table .dataTables_filter{
+		padding: 0 0 5px 0;
+		width: 100%;
+	}
+	.adv-table .table-bordered thead{
+		background: rgb(66, 79, 99);
+		color: #fff;
+	}
+	.adv-table table tr td{
+		padding: 4px 5px;
+	}
+	button.btn-search{
+	    width: 32px;
+	    height: 31px;
+	    line-height: 17px;
+	    background-color: #424F63;
+	    border: none;
+	    border-radius: 4px;
+	    box-shadow: none;
+	    cursor: pointer;
+	}
+	.btn-search, .btn-search:hover, .btn-search:focus{
+		background-color: #424F63;
+	}
+	button.btn-search:hover{
+		background-color: #374152;
+	    border-color: #2e3644;
+	    color: #FFFFFF
+	}
 }
-.form_text input:focus{
-    border: 1px solid blue;
-}
-.form_btn{   
-    float: left;
-    width: 150px;
-    margin: 20px;
-}
-.form_btn input{
-    width: 120px;
-    border-radius: 10px;
-    border: 1px solid #6678b1;
-    font-size: 18px;
-    padding: 30px 20px;
-    color: #039;
-    font-weight: bold;
-}
-.form_add_card tr td{
-    padding: 6px 8px;
-}
-.form_add_card tr td input{
-    width: 250px;
-    padding: 3px 5px;
-    border-radius: 5px;
-    border: 1px solid #6678b1
-}
-.show_car{
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-    width: 700px;
-    margin:  10px 20px;
-    border: 1px solid #669;
-}
-.table_data {
-    font-size: 12px;
-    background: #fff;
-    width: 1000px;
-    border-collapse: collapse;
-    text-align: left;
-    margin: 5px auto;
-    border: 1px solid #669;
-}
-.table_data th {
-    font-size: 14px;
-    font-weight: bold;
-    color: #039;
-    border-bottom: 2px solid #6678b1;
-    padding: 10px 8px;
-}
-.table_data td {
-    border-bottom: 1px solid #ccc;
-    color: #669;
-    padding: 6px 8px;
-}
-.table_data tr:hover{
-  font-weight: bold
-}
-.table_data tr.row_page{
-	border-bottom: 1px solid #ccc;
-	color: #669;
-}
-.del_car{
-	cursor: pointer;
-}
-.page{
-    padding: 0 140px;
-}
-.page .page_index{
-    font-size: 13px;
-	color: #669;
-	cursor: pointer;
-	padding: 0 5px;	
-}
-.page .page_index:hover{
-	font-weight: bold;
-}*/

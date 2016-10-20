@@ -1,0 +1,77 @@
+@media (min-width: 1200px){
+	.msg-error{
+		color: #dd4b39;
+		font-weight: normal;
+		margin: 0 0 5px 10px;
+	}
+	.row{
+		clear: both;
+	}
+	.panel-heading{
+		padding: 10px 15px;
+	}
+	.panel{
+		margin-bottom: 0;
+		border-bottom: 1px dashed rgba(0, 0, 0, 0.2)
+	}
+	.panel-body{
+		padding-bottom: 15px;
+	}
+	.col-xs-2, .col-sm-2, .col-md-2, .col-lg-2{
+		width: 13.666667%;
+	}
+	.col-xs-3, .col-sm-3, .col-md-3, .col-lg-3{
+		width: 27%;
+	}
+	.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2,
+		.col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3,
+		.col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5,
+		.col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6,
+		.col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8,
+		.col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9,
+		.col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11,
+		.col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+		padding-left: 0;	
+	}
+	.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+		padding: 0;
+	}
+	.select2-container{
+		width: 100%
+	}
+	.select2-container .select2-choice{
+		border: 1px solid #ccc;
+	}
+	div.error .select2-choice{
+		border-color: #dd4b39 !important
+	}
+	
+	.lb-rel input.form-control{
+		width: 100%;
+	}
+	.cmxform .form-group label.control-label{
+		margin-left: -15px;
+	}
+	.cmxform .form-group .col-lg-3 label{
+		display: block;
+		position: relative;
+	}
+	.cmxform .form-group .col-lg-3 .form-control{
+		width: 90%;
+	}
+	.cmxform .form-group .col-lg-3 span.btn-primary{
+		position: absolute;
+		right: -9px;
+	}
+	.cmxform .form-group .col-lg-1 input[type=submit]{
+		margin-left: 40px;
+	}
+	.dataTables_length, .dataTables_filter{
+		padding: 0 0 15px 0;
+		float: left;
+	}
+	.adv-table .table-bordered thead{
+		background: rgb(66, 79, 99);
+		color: #fff;
+	}
+}

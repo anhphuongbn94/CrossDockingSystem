@@ -13,7 +13,7 @@
 					<select class="status-vehicle" size="1" name="dynamic-table_length" aria-controls="dynamic-table">
 						<option value="0" selected="selected">Waitting Assign Door</option>
 						<option value="1">Watting Load-Unload</option>
-						<option value="2">Watting Load-Unload</option>
+						<option value="2">Start Load-Unload</option>
 						<option value="3">Loading-Unloading is Finish</option>
 					</select> 
 				</label>

@@ -6,45 +6,26 @@ var url = window.location.pathname;
 var currentPage = 1;
 $(document).ready(function(e){
 	$('#addID').submit(function(e){
-		insertInDoor();
-		e.preventDefault();
+		var isValid=$(this).valid();
+		if(isValid){
+			insertInDoor(); e.preventDefault();
+		}
+	});
+	$('#addOD').submit(function(e){
+		var isValid=$(this).valid();
+		if(isValid){
+			insertOutDoor(); e.preventDefault();
+		}
 	});
 	$('.edit-indoor').click(function(e){
 		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
 		var trC=$(this).parents('tr');
 		eventEditIndoor(e, trC_old, trC);
 	});	
-	$('#addOD').submit(function(e){
-		insertOutDoor();
-		e.preventDefault();
-	});
 	$('.edit-outdoor').click(function(e){
+		var trC_old=$('.rowO_data').find('.save-outdoor').parents('tr');
 		var trC=$(this).parents('tr');
-		var idOutDoor = trC.find('.idOutDoor').html();
-		var nameD = trC.find('.nameD').html();
-		var capD = trC.find('.capD').html();
-		var statusD = trC.find('.statusD').html();
-		var content="";
-		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
-				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
-				+ "<td>" 
-					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>" 
-						+ "<option value='0'>Processing</option>"
-						+ "<option value='1'>Active</option>"
-						+ "<option value='2'>InActive</option>"
-						+ "<option value='3'>Maintenance</option>"
-					+ "</select>" 
-				+ "</td>"
-				+ "<td><a href='' class='save-outdoor'>Save</a></td>";
-		trC.html(content);
-		$('.save-outdoor').click(function(e){
-			trC=$(this).parents('tr');
-			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
-			statusD = trC.find('.statusD').val();
-			editOutDoor(idOutDoor, nameD, capD, statusD);
-			e.preventDefault();
-		});
-		e.preventDefault();
+		eventEditOutdoor(e, trC_old, trC);
 	});
 	$('.save-cost').click(function(e){
 		var trC = $(this).parents('tr');
@@ -75,35 +56,35 @@ $(document).ready(function(e){
 	});
 });
 function eventEditIndoor(e, trC_old, trC){
-//	var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+	/*TrOld*/
 	var idInDoor_old = trC_old.find('.idInDoor').html();
 	var nameD_old = trC_old.find('.nameD').val();
 	var capD_old = trC_old.find('.capD').val();
-	
 	var statusD_old = trC_old.find('.statusD').val();
+	 
 	if(statusD_old == 0) statusD_old = "Processing";
 	else if(statusD_old == 1) statusD_old = "Active";
 	else if(statusD_old == 2) statusD_old = "InActive";
 	else statusD_old = "Maintenance";
 	
 	var content_old="";
-	content_old += "<td style='display: none'><span class='idInDoor' >"+idInDoor_old+"</span></td>" 
+	content_old += 
+			"<td style='display: none'><span class='idInDoor' >"+idInDoor_old+"</span></td>" 
 			+ "<td><span class='nameD'>"+nameD_old+"</span></td>"
 			+ "<td><span class='capD'>"+capD_old+"</span></td>"
 			+ "<td><span class='statusD'>"+statusD_old+"</span></td>"
 			+ "<td><a href='' class='edit-indoor'>Edit</a></td>";
 	trC_old.html(content_old);
-	
-//	var trC=$(this).parents('tr');
+	/*TrNew*/
 	var idInDoor = trC.find('.idInDoor').html();
 	var nameD = trC.find('.nameD').html();
 	var capD = trC.find('.capD').html();
 	var statusD = trC.find('.statusD').html();
 	var content="";
-	content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
-			+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
+	content += "<td><input type='text' value='"+nameD+"' size='10' class='form-control nameD'></td>" 
+			+ "<td><input type='text' value='"+capD+"' size='3' class='form-control capD'></td>"
 			+ "<td>" 
-				+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
+				+ "<select name='statusD' class='form-control statusD'>"
 					+ "<option value='0'>Processing</option>"
 					+ "<option value='1'>Active</option>"
 					+ "<option value='2'>InActive</option>"
@@ -112,18 +93,85 @@ function eventEditIndoor(e, trC_old, trC){
 			+ "</td>"
 			+ "<td><a href='' class='save-indoor'>Save</a></td>";
 	trC.html(content);
+	$('.rowI_data').find('.edit-indoor-new').removeClass('edit-indoor-new');
+	trC_old.find('.edit-indoor').removeClass('edit-indoor').addClass('edit-indoor-new');
+	/*Save*/
+	$('.edit-indoor-new').click(function(e){
+		trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
+		trC=$(this).parents('tr');
+		console.log(trC.html());
+		eventEditIndoor(e, trC_old, trC);
+	});
 	$('.save-indoor').click(function(e){
 		trC=$(this).parents('tr');
-		nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
+		nameD = trC.find('.nameD').val(); 
+		capD = trC.find('.capD').val(); 
 		statusD = trC.find('.statusD').val();
-		editInDoor(idInDoor, nameD, capD, statusD);
+		var isValid = validateDoor(trC, nameD, capD);
+		if(isValid){
+			editInDoor(idInDoor, nameD, capD, statusD);
+		}
 		e.preventDefault();
 	});
-//	$('.edit-indoor').click(function(e){
-//		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
-//		var trC=$(this).parents('tr');
-//		eventEditIndoor(e, trC_old, trC);
-//	});
+	e.preventDefault();
+}
+function eventEditOutdoor(e, trC_old, trC){
+	/*TrOld*/
+	var idOutDoor_old = trC_old.find('.idOutDoor').html();
+	var nameD_old = trC_old.find('.nameD').val();
+	var capD_old = trC_old.find('.capD').val();
+	var statusD_old = trC_old.find('.statusD').val();
+	 
+	if(statusD_old == 0) statusD_old = "Processing";
+	else if(statusD_old == 1) statusD_old = "Active";
+	else if(statusD_old == 2) statusD_old = "InActive";
+	else statusD_old = "Maintenance";
+	
+	var content_old="";
+	content_old += 
+			"<td style='display: none'><span class='idOutDoor' >"+idOutDoor_old+"</span></td>" 
+			+ "<td><span class='nameD'>"+nameD_old+"</span></td>"
+			+ "<td><span class='capD'>"+capD_old+"</span></td>"
+			+ "<td><span class='statusD'>"+statusD_old+"</span></td>"
+			+ "<td><a href='' class='edit-outdoor'>Edit</a></td>";
+	trC_old.html(content_old);
+	/*TrNew*/
+	var idOutDoor = trC.find('.idOutDoor').html();
+	var nameD = trC.find('.nameD').html();
+	var capD = trC.find('.capD').html();
+	var statusD = trC.find('.statusD').html();
+	var content="";
+	content += "<td><input type='text' value='"+nameD+"' size='10' class='form-control nameD'></td>" 
+			+ "<td><input type='text' value='"+capD+"' size='3' class='form-control capD'></td>"
+			+ "<td>" 
+				+ "<select name='statusD' class='form-control statusD'>"
+					+ "<option value='0'>Processing</option>"
+					+ "<option value='1'>Active</option>"
+					+ "<option value='2'>InActive</option>"
+					+ "<option value='3'>Maintenance</option>"
+				+ "</select>" 
+			+ "</td>"
+			+ "<td><a href='' class='save-outdoor'>Save</a></td>";
+	trC.html(content);
+	$('.rowO_data').find('.edit-outdoor-new').removeClass('edit-outdoor-new');
+	trC_old.find('.edit-outdoor').removeClass('edit-outdoor').addClass('edit-outdoor-new');
+	/*Save*/
+	$('.edit-outdoor-new').click(function(e){
+		trC_old=$('.rowO_data').find('.save-outdoor').parents('tr');
+		trC=$(this).parents('tr');
+		eventEditOutdoor(e, trC_old, trC);
+	});
+	$('.save-outdoor').click(function(e){
+		trC=$(this).parents('tr');
+		nameD = trC.find('.nameD').val(); 
+		capD = trC.find('.capD').val(); 
+		statusD = trC.find('.statusD').val();
+		var isValid = validateDoor(trC, nameD, capD);
+		if(isValid){
+			editOutDoor(idOutDoor, nameD, capD, statusD);
+		}
+		e.preventDefault();
+	});
 	e.preventDefault();
 }
 function getPageCost(currentPage){
@@ -227,32 +275,9 @@ function showContentInDoor(response){
 	}
 	$('.rowI_data').html(content);
 	$('.edit-indoor').click(function(e){
+		var trC_old=$('.rowI_data').find('.save-indoor').parents('tr');
 		var trC=$(this).parents('tr');
-		var idInDoor = trC.find('.idInDoor').html();
-		var nameD = trC.find('.nameD').html();
-		var capD = trC.find('.capD').html();
-		var statusD = trC.find('.statusD').html();		
-		var content="";
-		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
-				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
-				+ "<td>" 
-					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
-						+ "<option value='0'>Processing</option>"
-						+ "<option value='1'>Active</option>"
-						+ "<option value='2'>InActive</option>"
-						+ "<option value='3'>Maintenance</option>"
-					+ "</select>" 
-				+ "</td>"
-				+ "<td><a href='' class='save-indoor'>Save</a></td>";
-		trC.html(content);
-		$('.save-indoor').click(function(e){
-			trC=$(this).parents('tr');
-			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
-			statusD = trC.find('.statusD').val();
-			editInDoor(idInDoor, nameD, capD, statusD);
-			e.preventDefault();
-		});
-		e.preventDefault();
+		eventEditIndoor(e, trC_old, trC);
 	});
 }
 function showContentOutDoor(response){
@@ -263,7 +288,7 @@ function showContentOutDoor(response){
 		else if(response[i].status == 2) status = "InActive";
 		else status = "Maintenance";
 		content += "<tr>"
-			+ "<td style='display: none'><span class='idInDoor'>"+response[i].idDoor+"</span>"
+			+ "<td style='display: none'><span class='idOutDoor'>"+response[i].idDoor+"</span>"
 			+ "<td><span class='nameD'>"+response[i].nameDoor+"</span></td>"
 			+ "<td><span class='capD'>"+response[i].capacity+"</span></td>"
 			+ "<td><span class='statusD'>"+status+"</span></td>"
@@ -272,32 +297,9 @@ function showContentOutDoor(response){
 	}
 	$('.rowO_data').html(content);
 	$('.edit-outdoor').click(function(e){
+		var trC_old=$('.rowO_data').find('.save-outdoor').parents('tr');
 		var trC=$(this).parents('tr');
-		var idInDoor = trC.find('.idInDoor').html();
-		var nameD = trC.find('.nameD').html();
-		var capD = trC.find('.capD').html();
-		var statusD = trC.find('.statusD').html();
-		var content="";
-		content += "<td><input type='text' value='"+nameD+"' class='form-control nameD'></td>" 
-				+ "<td><input type='text' value='"+capD+"' class='form-control capD' style='width: 55%'></td>"
-				+ "<td>" 
-					+ "<select name='statusD' class='form-control statusD' style='width: 105%'>"
-						+ "<option value='0'>Processing</option>"
-						+ "<option value='1'>Active</option>"
-						+ "<option value='2'>InActive</option>"
-						+ "<option value='3'>Maintenance</option>"
-					+ "</select>" 
-				+ "</td>"
-				+ "<td><a href='' class='save-outdoor'>Save</a></td>";
-		trC.html(content);
-		$('.save-outdoor').click(function(e){
-			trC=$(this).parents('tr');
-			nameD = trC.find('.nameD').val(); capD = trC.find('.capD').val(); 
-			statusD = trC.find('.statusD').val();
-			editOutDoor(idInDoor, nameD, capD, statusD);
-			e.preventDefault();
-		});
-		e.preventDefault();
+		eventEditOutdoor(e, trC_old, trC);
 	});
 }
 function insertInDoor(){
@@ -310,8 +312,14 @@ function insertInDoor(){
         },
 		url: contextPath + '/insertInDoor',
         success: function (response) {
-        	if(response == null){
-        		alert("Error");
+        	if(getCurrentLanguage() == "en"){
+        		msgErr='Name door entered already exists';
+        	}else{
+        		msgErr='Tên cửa nhập đã tồn tại';
+        	}
+        	if(response == ''){
+        		$('.pn-form-indoor .msg-error').remove();
+        		$('.pn-form-indoor .cmxform').before("<section class='msg-error'>"+msgErr+"</section>");
         	}else{
         		showContentInDoor(response);
         	}
@@ -331,10 +339,15 @@ function editInDoor(idInDoor, nameD, capD, statusD){
         },
 		url: contextPath + '/editInDoor',
         success: function (response) {
-        	if(response == ''){
-        		alert("You need to setup the cost of the door before transition active state");
+        	var err=response[0];
+        	var arrInDoor=response[1];
+        	if(err != null){
+        		$('.pn-data-indoor .adv-table .msg-error').remove();
+        		$('.pn-data-indoor .adv-table table').before
+        			("<section class='msg-error'>"+errTransitionActive+"</section>")
         	}else{
-        		showContentInDoor(response);
+        		$('.pn-data-indoor .adv-table .msg-error').remove();
+        		showContentInDoor(arrInDoor);
         	}
         },
         error: function (xhr, status, error) {
@@ -352,8 +365,13 @@ function insertOutDoor(){
         },
 		url: contextPath + '/insertOutDoor',
         success: function (response) {
-        	if(response == null){
-        		alert("Error");
+        	if(getCurrentLanguage() == "en"){
+        		msgErr='Name door entered already exists';
+        	}else{
+        		msgErr='Tên cửa nhập đã tồn tại';
+        	}
+        	if(response == ''){
+        		$('.pn-form-outdoor .cmxform').before("<section class='msg-error'>"+msgErr+"</section>")
         	}else{
         		showContentOutDoor(response);
         	}
@@ -373,10 +391,15 @@ function editOutDoor(idOutDoor, nameD, capD, statusD){
         },
 		url: contextPath + '/editOutDoor',
         success: function (response) {
-        	if(response == ''){
-        		alert("You need to setup the cost of the door before transition active state");
+        	var err=response[0];
+        	var arrOutDoor=response[1];
+        	if(err != null){
+        		$('.pn-data-outdoor .adv-table .msg-error').remove();
+        		$('.pn-data-outdoor .adv-table table').before
+        			("<section class='msg-error'>"+errTransitionActive+"</section>")
         	}else{
-        		showContentOutDoor(response);
+        		$('.pn-data-indoor .adv-table .msg-error').remove();
+        		showContentOutDoor(arrOutDoor);
         	}
         },
         error: function (xhr, status, error) {
@@ -390,9 +413,11 @@ function editOutDoor(idOutDoor, nameD, capD, statusD){
  */
 $(document).ready(function() {
 	$('#addV').submit( function (e){
-		insertVehicle();
-		$('#btnV').attr('disabled', 'disabled');
-		e.preventDefault();
+		var isValid=$(this).valid();
+		if(isValid){
+			insertVehicle();
+			e.preventDefault();
+		}
 	});
 	$('.pageV .page_index').click( function() {
 		currentPage = $(this).attr('data-index');
@@ -407,12 +432,9 @@ function showContentVehicle(response){
 		content+=
 			"<tr>" 
 				+ "<td>"+ response[i].vehicleCode +"</td>" 
-				+ "<td>"+ response[i].vehicleType +"</td>"
-				+ "<td>"+ response[i].vehicleYear +"</td>"
-				+ "<td>"+ response[i].vehicleMake +"</td>"
-				+ "<td>"+ response[i].vehicleWeight +"</td>"
-				+ "<td>"+ response[i].vehicleTrailerNum +"</td>"
-				+ "<td>"+ response[i].vehicleDes +"</td>"
+				+ "<td>"+ response[i].type +"</td>"
+				+ "<td>"+ response[i].company +"</td>"
+				+ "<td>"+ response[i].description +"</td>"
 			"</tr>";
 	}        		
 	$('.row_data').html(content);
@@ -448,8 +470,15 @@ function insertVehicle(){
         },
 		url: contextPath + '/insertVehicle',
         success: function (response) {
-        	if(response == null){
-        		alert("Error");
+        	var msgErr='';
+        	if(getCurrentLanguage() == "en"){
+        		msgErr='Vehicle code entered already exists';
+        	}else{
+        		msgErr='Biển số xe nhập đã tồn tại';
+        	}
+        	if(response == ''){
+        		$('.form-insert-v .msg-error').remove();
+        		$('.form-insert-v .cmxform').before("<section class='msg-error'>"+msgErr+"</section>");
         	}else{
         		showContentVehicle(response);
         		currentPage = 1;
@@ -469,21 +498,6 @@ $(document).ready(function() {
 		$('#btnAddIV').removeAttr('disabled');
 		$('#btnTF').removeAttr('disabled');
 		$('#btnV').removeAttr('disabled');
-	});
-	$('.recordI').change( function (){
-		var recordI = $(this).find(':selected').val();
-		getPageInVehicle_byRecords(recordI);
-	});
-	$('#addIV').submit( function(e) {
-		insertInVehicle();
-		$('#btnAddIV').attr('disabled', 'disabled');
-		e.preventDefault();
-	});
-	$('.pageI .page_index').click( function() {
-		currentPage = $(this).attr('data-index');
-		getPageInVehicle(currentPage);
-		$('.pageI').find('li.active').removeClass('active').addClass('page_index');
-		$(this).removeClass('page_index').addClass('active');
 	});
 	$('.btnStartUnload').click( function (){
 		var idInVehicle = $(this).attr('data-bind');
@@ -506,6 +520,10 @@ $(document).ready(function() {
 		getPageInVehicle_whereUnloadStatus(currentPage);
 		$('.pageI_unload').find('li.active').removeClass('active').addClass('page_index');
 		$(this).removeClass('page_index').addClass('active');
+	});
+	$('.pageI-rp .page_index').click(function(){
+		currentPage = $(this).attr('data-index');
+		getPageInVehicleReport(currentPage);
 	});
 });
 function assignDoorInVehicle(arrIDV, arrIDD, cDoor){
@@ -537,34 +555,21 @@ function assignDoorInVehicle(arrIDV, arrIDD, cDoor){
 /* 
  * InVehicle
  * */
-/* Start showContentInVehicle */
-function showContentInVehicle(response){
-	var content="";        		
+/* Start showContentInVehicleReport */
+function showContentInVehicleReport(response){
+	var content="";
 	for(var i=0; i<response.length; i++){
-		var startUnloadTime = "", finishUnloadTime = "", nameDoor = "";
-		if(response[i].startUnloadTime != null){
-			startUnloadTime = response[i].startUnloadTime;        				
-		}if(response[i].finishUnloadTime != null){
-			finishUnloadTime = response[i].finishUnloadTime;
-		}if(response[i].door.nameDoor != null){
-			nameDoor = response[i].door.nameDoor; 
-		}
-		content+=
-			"<tr>" 
-				+ "<td>"+ response[i].vehicleCode +"</td>" 
-				+ "<td>"+ response[i].date +"</td>"
-				+ "<td>"+ response[i].arrivalTime +"</td>"
-				+ "<td>"+ startUnloadTime +"</td>"
-				+ "<td>"+ finishUnloadTime +"</td>"
-				+ "<td>"+ response[i].volumn +"</td>"
-				+ "<td>"+ response[i].status +"</td>"
-				+ "<td>"+ nameDoor +"</td>"
-				/*+ "<td>"+ response[i].cDS.nameCrossDockingSystem +"</td>"*/
-			"</tr>";
-	}        		
-	$('.row_data').html(content);
+		content+="<tr>"
+			+ "<td>"+ response[i].vehicleCode +"</td>"
+			+ "<td>"+ response[i].date +"</td>"
+			+ "<td>"+ response[i].arrivalTime +"</td>"
+			+ "<td>"+ response[i].volumn +"</td>"
+			+ "<td><a href=''>Detail</a></td>"
+			+ "</tr>";
+	}
+	$('.rowI_data').html(content);
 }
-/* End showContentInVehicle */
+/* End showContentInVehicleReport */
 /* Start showContentInPVehicle */
 function showContentPInVehicle(response){
 	var content="";        		
@@ -587,21 +592,21 @@ function showContentPInVehicle(response){
 	$('.rowI_data').html(content);
 }
 /* End showContentInPVehicle */
-/* Start getPageInVehicle_byRecords */
-function getPageInVehicle_byRecords(recordI){
+ /* Start getPageInVehicleReport */
+function getPageInVehicleReport(currentPage){
 	$.ajax({
         type: "POST",
-        data: 'record=' + recordI + '&currentPage=' + currentPage,
+        data: 'currentPage=' + currentPage,
         header: {
             Accept: "application/json; charset=utf-8",
             "Content-Type": "application/json; charset=utf-8"
         },
-		url: contextPath + '/getPageInVehicle_byRecords',
+		url: contextPath + '/getPageInVehicleReport',
         success: function (response) {
         	if(response == null){
         		alert("Error");
         	}else{
-        		showContentInVehicle(response);
+        		showContentInVehicleReport(response);
         	}
         },
         error: function (xhr, status, error) {
@@ -609,7 +614,6 @@ function getPageInVehicle_byRecords(recordI){
         }
 	});
 }
-/* End getPageInVehicle_byRecords */
 /* Start getPInVehicle */
 function getPInVehicle(currentPage){
 	$.ajax({
@@ -633,29 +637,6 @@ function getPInVehicle(currentPage){
 	});
 }
 /* End getPInVehicle */
-/* Start getPageInVehicle */
-function getPageInVehicle(currentPage){
-	$.ajax({
-        type: "POST",
-        data: 'currentPage=' + currentPage,
-        header: {
-            Accept: "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-		url: contextPath + '/getPageInVehicle',
-        success: function (response) {
-        	if(response == null){
-        		alert("Error");
-        	}else{
-        		showContentInVehicle(response);
-        	}
-        },
-        error: function (xhr, status, error) {
-        	alert(error + status + xhr);
-        }
-	});
-}
-/* End getPageInVehicle */
 /* Start showContentInVehicle_whereUnloadStatus */
 function showContentInVehicle_whereUnloadStatus(response){
 	var content="";        		
@@ -719,30 +700,6 @@ function getPageInVehicle_whereUnloadStatus(currentPage){
 	});
 }
 /* End getPageInVehicle_whereUnloadStatus */
-/* Start insertInVehicle */
-function insertInVehicle(){
-	$.ajax({
-        type: "POST",
-        data: $("#addIV").serialize(),
-        header: {
-            Accept: "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-		url: contextPath + '/insertInVehicle',
-        success: function (response) {
-        	if(response == null){
-        		alert("Error");
-        	}else{
-        		showContentInVehicle(response);
-        		currentPage = 1;
-        	}
-        },
-        error: function (xhr, status, error) {
-        	alert(error + status + xhr);
-        }
-    });
-}
-/* End insertInVehicle */
 /* Start upStartUnloadTime */
 function upStartUnloadTime(idInVehicle){
 	$.ajax({
@@ -865,26 +822,11 @@ $(document).ready(function() {
 	$('.form-control').keyup( function (){
 		$('#btnAddOV').removeAttr('disabled');
 	});
-	$('.recordO').change( function (){
-		var recordO = $(this).find(':selected').val();
-		getPageOutVehicle_byRecords(recordO);
-	});
-	$('.pageO .page_index').click( function() {
-		currentPage = $(this).attr('data-index');
-		getPageOutVehicle(currentPage);
-		$('.pageO').find('li.active').removeClass('active').addClass('page_index');
-		$(this).removeClass('page_index').addClass('active');
-	});
 	$('.pageO_load .page_index').click( function() {
 		currentPage = $(this).attr('data-index');
 		getPageOutVehicle_whereLoadStatus(currentPage);
 		$('.pageO_unload').find('li.active').removeClass('active').addClass('page_index');
 		$(this).removeClass('page_index').addClass('active');
-	});
-	$('#addOV').submit( function(e) {
-		insertOutVehicle();
-		$('#btnAddOV').attr('disabled', 'disabled');
-		e.preventDefault();
 	});
 	$('.btnStartLoad').click( function (){
 		var idOutVehicle = $(this).attr('data-bind');
@@ -898,29 +840,6 @@ $(document).ready(function() {
 		setTimeout(function(){upStatusFinishLoadTime(idOutVehicle);}, 2000);
 	});
 });
-/* Start getPageOutVehicle_byRecords */
-function getPageOutVehicle_byRecords(recordO){
-	$.ajax({
-        type: "POST",
-        data: 'record=' + recordO + '&currentPage=' + currentPage,
-        header: {
-            Accept: "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-		url: contextPath + '/getPageOutVehicle_byRecords',
-        success: function (response) {
-        	if(response == null){
-        		alert("Error");
-        	}else{
-        		showContentOutVehicle(response);
-        	}
-        },
-        error: function (xhr, status, error) {
-        	alert(error + status + xhr);
-        }
-	});
-}
-/* End getPageInVehicle_byRecords */
 /* Start showContentOutVehicle */
 function showContentOutVehicle(response){
 	var content="";        		
@@ -1081,30 +1000,6 @@ function getPageOutVehicle_whereLoadStatus(currentPage){
 	});
 }
 /* End getPageOutVehicle_whereLoadStatus */
-/* Start insertOutVehicle */
-function insertOutVehicle(){
-	$.ajax({
-        type: "POST",
-        data: $("#addOV").serialize(),
-        header: {
-            Accept: "application/json; charset=utf-8",
-            "Content-Type": "application/json; charset=utf-8"
-        },
-		url: contextPath + '/insertOutVehicle',
-        success: function (response) {
-        	if(response == null){
-        		alert("Error");
-        	}else{
-        		showContentOutVehicle(response);
-        		currentPage = 1;
-        	}
-        },
-        error: function (xhr, status, error) {
-        	alert(error + status + xhr);
-        }
-    });
-}
-/* End insertInVehicle */
 /* Start assignDoorOutVehicle*/
 function assignDoorOutVehicle(arrODV, arrODD, cODoor){
 	$.ajax({
@@ -1760,7 +1655,7 @@ function getPageOutVehicle_byStatus(currentPage, status){
 }
 $(document).ready(function(){
 	$('.s-vehicle').select2({
-		placeholder: "Please select code vehicle",
+		placeholder: "Please select vehicle",
 		allowClear: true,
 	});
 	$('#addTF').submit( function (e){
@@ -1852,6 +1747,358 @@ function insertTransferTime(){
         				"</tr>";
         		}
         		$('.row_data').html(content);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+$(document).ready(function(){
+	$('.recordI').change( function (){
+		var key=$('.key-invehicle-search').val();
+		var record = $(this).find(':selected').val();
+		searchInVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	});
+	$('#addIV').submit( function(e) {
+		var isValid=$(this).valid();
+		if(isValid){
+			var record=$('.recordI').find(':selected').val();
+			insertInVehicle(record);
+			e.preventDefault();
+		}
+	});
+	$('.page-iv .page_index').click( function() {
+		eventChangePageIV($(this));
+	});
+	$('.page-iv .prev').click(function(){
+		eventPrePageIV();
+	});
+	$('.page-iv .next').click(function(){
+		var numPage = $('.num-page').attr('data-bind');
+		eventNextPageIV(numPage);
+	});
+	$('#btn-search-invehicle').submit(function(e){
+		var record = $('select.recordI').val();
+		var keySearch=$('.key-invehicle-search').val();
+		var currentPage=1;
+		searchInVehicleCurrentDay_byKeySearch(currentPage, keySearch, record);
+		e.preventDefault();
+	});
+	$('#btnSearch').click(function(){
+		var infSearch=$(this).parents('.infor-search');
+		var vehicleCode=infSearch.find('input[name=vehicleCode]').val();
+		var strDate=infSearch.find('input[name=strDate]').val();
+		var endDate=infSearch.find('input[name=endDate]').val();
+		getPageVehiclebyInforSearch(vehicleCode, strDate, endDate);
+	});
+});
+function showDataInVehicleCurrentDay_byKeySearch(numPage, arrIV){
+	var content="";
+	contentPage="";
+	if(arrIV.length < 1){
+		$('.adv-table table').after("<span class='no-record'>" + noRecord + "</span>");
+	}else{
+		$('.adv-table .no-record').remove();
+		for(var i=0; i<arrIV.length; i++){
+			content+="<tr>"
+				+ "<td>"+arrIV[i].vehicleCode+"</td>"
+				+ "<td>"+arrIV[i].date+"</td>"
+				+ "<td>"+arrIV[i].arrivalTime+"</td>"
+				+ "<td>"+standardizeStr(arrIV[i].startUnloadTime)+"</td>"
+				+ "<td>"+standardizeStr(arrIV[i].finishUnloadTime)+"</td>"
+				+ "<td>"+arrIV[i].volumn+"</td>"
+				+ "<td>"+arrIV[i].status+"</td>"
+				+ "<td>"+standardizeStr(arrIV[i].door.nameDoor)+"</td>"
+				+ "</tr>";
+		}
+		contentPage += "<li class='prev'><a>← Previous</a></li>";
+		for(var i=1; i<=numPage; i++){
+			if(i == currentPage){
+				contentPage +="<li class='page_index active' data-index="+i+"><a>"+i+"</a></li>";
+			}else{
+				contentPage +="<li class='page_index' data-index="+i+"><a>"+i+"</a></li>";
+			}
+		}
+		contentPage += "<li class='next'><a>Next → </a></li>";
+	}
+	$('.row_data').html(content);
+	$('.page-iv').html(contentPage);
+	$('.page-iv .page_index').click( function() {
+		eventChangePageIV($(this));
+	});
+	$('.page-iv .prev').click(function(){
+		eventPrePageIV();
+	});
+	$('.page-iv .next').click(function(){
+		eventNextPageIV(numPage);
+	})
+}
+/* Start insertInVehicle */
+function insertInVehicle(record){
+	$.ajax({
+        type: "POST",
+        data: $("#addIV").serialize() + '&record=' + record,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/insertInVehicle',
+        success: function (response) {
+        	if(response == ''){
+        		$('.form-insert-iv .msg-error').remove();
+        		$('.form-insert-iv .cmxform').before
+        			("<section class='msg-error'>"+errExistsVehicle+"</section>");
+        	}else{
+        		$('.form-insert-iv .msg-error').remove();
+        		numPage = response[0];
+        		arrIV = response[1];
+        		showDataInVehicleCurrentDay_byKeySearch(numPage, arrIV);        		
+        		currentPage = 1;
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+/* End insertInVehicle */
+function eventChangePageIV(This){
+	curPage = This.attr('data-index');
+	if(currentPage != curPage){
+		var key=$('.key-invehicle-search').val();
+		var record = $('.recordI').find(':selected').val();
+		searchInVehicleCurrentDay_byKeySearch(curPage, key, record);
+		currentPage=curPage;
+	}
+}
+function eventPrePageIV(){
+	if(currentPage > 1){
+		currentPage = currentPage -1
+		var key=$('.key-invehicle-search').val();
+		var record = $('.recordI').find(':selected').val();
+		searchInVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	}
+}
+function eventNextPageIV(numPage){
+	if(currentPage < numPage){
+		currentPage = currentPage - (-1);
+		var key=$('.key-invehicle-search').val();
+		var record = $('.recordI').find(':selected').val();
+		searchInVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	}
+}
+function searchInVehicleCurrentDay_byKeySearch(currentPage, keySearch, record){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage + '&keySearch=' + keySearch + "&record=" + record,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageInVehicleCurrentDay_byKeySearch',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		numPage = response[0];
+        		arrIV = response[1];
+        		showDataInVehicleCurrentDay_byKeySearch(numPage, arrIV);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+$(document).ready(function(){
+	$('.recordO').change( function (){
+		var key=$('.key-outvehicle-search').val();
+		var record = $(this).find(':selected').val();
+		searchOutVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	});
+	$('#addOV').submit( function(e) {
+		var isValid=$(this).valid();
+		if(isValid){
+			var record=$('.recordO').find(':selected').val();
+			insertOutVehicle(record);
+			e.preventDefault();
+		}
+	});
+	$('.page-ov .page_index').click(function() {
+		eventChangePageOV($(this));
+	});
+	$('.page-ov .prev').click(function(){
+		eventPrePageOV();
+	});
+	$('.page-ov .next').click(function(){
+		var numPage = $('.num-page').attr('data-bind');
+		eventNextPageOV(numPage);
+	});
+	$('#btn-search-outvehicle').submit(function(e){
+		var record = $('select.recordO').val();
+		var keySearch=$('.key-outvehicle-search').val();
+		var currentPage=1;
+		searchOutVehicleCurrentDay_byKeySearch(currentPage, keySearch, record);
+		e.preventDefault();
+	});
+});
+function showDataOutVehicleCurrentDay_byKeySearch(numPage, arrOV){
+	var content="";
+	contentPage="";
+	if(arrOV.length < 1){
+		$('.adv-table table').after("<span class='no-record'>" + noRecord + "</span>");
+	}else{
+		$('.adv-table .no-record').remove();
+		for(var i=0; i<arrOV.length; i++){
+			content+="<tr>"
+				+ "<td>"+arrOV[i].vehicleCode+"</td>"
+				+ "<td>"+arrOV[i].date+"</td>"
+				+ "<td>"+arrOV[i].arrivalTime+"</td>"
+				+ "<td>"+standardizeStr(arrOV[i].startLoadTime)+"</td>"
+				+ "<td>"+standardizeStr(arrOV[i].finishLoadTime)+"</td>"
+				+ "<td>"+arrOV[i].demand+"</td>"
+				+ "<td>"+arrOV[i].status+"</td>"
+				+ "<td>"+standardizeStr(arrOV[i].door.nameDoor)+"</td>"
+				+ "</tr>";
+		}
+		contentPage += "<li class='prev'><a>← Previous</a></li>";
+		for(var i=1; i<=numPage; i++){
+			if(i == currentPage){
+				contentPage +="<li class='page_index active' data-index="+i+"><a>"+i+"</a></li>";
+			}else{
+				contentPage +="<li class='page_index' data-index="+i+"><a>"+i+"</a></li>";
+			}
+		}
+		contentPage += "<li class='next'><a>Next → </a></li>";
+	}
+	$('.row_data').html(content);
+	$('.page-ov').html(contentPage);
+	$('.page-ov .page_index').click(function() {
+		eventChangePageOV($(this));
+	});
+	$('.page-ov .prev').click(function(){
+		eventPrePageOV();
+	});
+	$('.page-ov .next').click(function(){
+		eventNextPageOV(numPage);
+	})
+}
+function insertOutVehicle(record){
+	$.ajax({
+        type: "POST",
+        data: $("#addOV").serialize() + '&record=' + record,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/insertOutVehicle',
+        success: function (response) {
+        	if(response == ''){
+        		$('.form-insert-ov .msg-error').remove();
+        		$('.form-insert-ov .cmxform').before
+        			("<section class='msg-error'>"+errExistsVehicle+"</section>");
+        	}else{
+        		$('.form-insert-ov .msg-error').remove();
+        		numPage = response[0];
+        		arrOV = response[1];
+        		showDataOutVehicleCurrentDay_byKeySearch(numPage, arrOV);        		
+        		currentPage = 1;
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function eventChangePageOV(This){
+	curPage = This.attr('data-index');
+	if(currentPage != curPage){
+		var key=$('.key-outvehicle-search').val();
+		var record = $('.recordO').find(':selected').val();
+		searchOutVehicleCurrentDay_byKeySearch(curPage, key, record);
+		currentPage=curPage;
+	}
+}
+function eventPrePageOV(){
+	if(currentPage > 1){
+		currentPage = currentPage -1
+		var key=$('.key-outvehicle-search').val();
+		var record = $('.recordO').find(':selected').val();
+		searchOutVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	}
+}
+function eventNextPageOV(numPage){
+	if(currentPage < numPage){
+		currentPage = currentPage - (-1);
+		var key=$('.key-outvehicle-search').val();
+		var record = $('.recordO').find(':selected').val();
+		searchOutVehicleCurrentDay_byKeySearch(currentPage, key, record);
+	}
+}
+function searchOutVehicleCurrentDay_byKeySearch(currentPage, keySearch, record){
+	$.ajax({
+        type: "POST",
+        data: 'currentPage=' + currentPage + '&keySearch=' + keySearch + "&record=" + record,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageOutVehicleCurrentDay_byKeySearch',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		numPage = response[0];
+        		arrOV = response[1];
+        		showDataOutVehicleCurrentDay_byKeySearch(numPage, arrOV);
+        	}
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+    });
+}
+function showDataVehiclebyInforSearch(response){
+	var pageIV=response[0];
+	var pageOV=response[1];
+	var contentI="";
+	for(var i=0; i<pageIV.length; i++){
+		contentI+=
+			"<tr>"
+				+ "<td>"+pageIV[i].vehicleCode+"</td>"
+				+ "<td>"+pageIV[i].date+"</td>"
+				+ "<td>"+pageIV[i].volumn+"</td>"
+				+ "<td><a href='#'>Detail</a></td>"
+			+ "</tr>"
+	}
+	$('.rowI_data').html(contentI);
+	var contentO="";
+	for(var i=0; i<pageOV.length; i++){
+		contentO+=
+			"<tr>"
+				+ "<td>"+pageOV[i].vehicleCode+"</td>"
+				+ "<td>"+pageOV[i].date+"</td>"
+				+ "<td>"+pageOV[i].demand+"</td>"
+				+ "<td><a href='#'>Detail</a></td>"
+			+ "</tr>"
+	}
+	$('.rowO_data').html(contentO);
+}
+function getPageVehiclebyInforSearch(vehicleCode, strDate, endDate){
+	$.ajax({
+        type: "POST",
+        data: 'vehicleCode=' + vehicleCode + '&startDate=' + strDate + '&endDate=' + endDate,
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getPageVehiclebyInforSearch',
+        success: function (response) {
+        	if(response == null){
+        		alert("Error");
+        	}else{
+        		showDataVehiclebyInforSearch(response);
         	}
         },
         error: function (xhr, status, error) {
