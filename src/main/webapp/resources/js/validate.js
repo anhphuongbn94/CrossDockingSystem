@@ -1,6 +1,14 @@
 $(document).ready(function(){
 	
-	$('#addID').validate({
+	
+	checkNumber();
+});
+function checkNumber(str){
+	var regex = /^[0-9]*$/gm;
+	return regex.test(str);
+}
+function validateInsertDoor(This){
+	This.validate({
 		rules: {
 			nameD: {
 				required: true, 
@@ -9,6 +17,7 @@ $(document).ready(function(){
 			capD: {
 				required: true,
 				number: true,
+				min: 1,
 			}
 		},
 		messages: {
@@ -19,32 +28,34 @@ $(document).ready(function(){
 			capD: {
 				required: errCapD,
 				number: errTypeCapD,
+				min: "NOT < 1",
 			}
 		}
-	});
-	$('#addOD').validate({
-		rules: {
-			nameD: {
-				required: true, 
-				minlength: 5,
-			},
-			capD: {
-				required: true,
-				number: true,
-			}
-		},
-		messages: {
-			nameD: {
-				required: errNameD,
-				minlength: errLengthNameD,
-			},
-			capD: {
-				required: errCapD,
-				number: errTypeCapD,
-			}
-		}
-	});	
-	$('#addV').validate({
+	}).form();
+}
+function validateEditDoor(trC, capD){
+	var isValid=false;
+	var validC;
+	if(capD == ''){
+		trC.find('.capD').css('border', '1px solid red');
+		trC.parents('.adv-table').find('.msg-error.capD').remove();
+		trC.parents('table').before("<section class='msg-error capD'>"+errCapD+"</section>");
+		validC=false;
+	}else if(!checkNumber(capD)){
+		trC.find('.capD').css('border', '1px solid red');
+		trC.parents('.adv-table').find('.msg-error.capD').remove();
+		trC.parents('table').before("<section class='msg-error capD'>"+errTypeCapD+"</section>");
+		validC=false;
+	}else{
+		trC.parents('.adv-table').find('.msg-error.capD').remove();
+		trC.find('.capD').css('border', '');
+		validC=true;
+	}
+	if(validC) isValid=true;
+	return isValid;
+}
+function validateInsertV(This){
+	This.validate({
 		rules: {
 			code:{
 				required: true,
@@ -64,46 +75,17 @@ $(document).ready(function(){
 			}
 		
 		}
-	});
-	$('#addIV').validate({
+	}).form();
+}
+function validateInsertVehicle(This){
+	This.validate({
 		rules: {
 			idVehicle: {
 				required: true,
 			},
 			date: {
 				required: true,
-			},
-			arrivalTime: {
-				required: true,
-			},
-			volumn: {
-				required: true,
-				number: true,
-			}
-		},
-		messages: {
-			idVehicle: {
-				required: errVehicle,
-			},
-			date: {
-				required: errDate,
-			},
-			arrivalTime: {
-				required: errArrival,
-			},
-			volumn: {
-				required: errVol,
-				number: errTypeVol,
-			}
-		},
-	});
-	$('#addOV').validate({
-		rules: {
-			idVehicle: {
-				required: true,
-			},
-			date: {
-				required: true,
+				date: true,
 			},
 			arrivalTime: {
 				required: true,
@@ -112,6 +94,7 @@ $(document).ready(function(){
 				required: true,
 				number: true,
 			}
+			
 		},
 		messages: {
 			idVehicle: {
@@ -119,6 +102,7 @@ $(document).ready(function(){
 			},
 			date: {
 				required: errDate,
+				date: "Error Date",
 			},
 			arrivalTime: {
 				required: errArrival,
@@ -128,53 +112,107 @@ $(document).ready(function(){
 				number: errTypeDemand,
 			}
 		},
-	});
-	checkNumber();
-});
-function checkNumber(str){
-	var regex = /^[0-9]*$/gm;
-	return regex.test(str);
+	}).form();
 }
-function validateDoor(trC, nameD, capD){
-	var isValid=false;
-	var validN, validC;
-	if(nameD == ''){
-		trC.find('.nameD').css('border', '1px solid red');
-		trC.parents('.adv-table').find('.msg-error.nameD').remove();
-		trC.parents('table').before("<section class='msg-error nameD'>"+errNameD+"</section>");
-		validN=false;
-	}else if(nameD.length < 5){
-		trC.find('.nameD').css('border', '1px solid red');
-		trC.parents('.adv-table').find('.msg-error.nameD').remove();
-		trC.parents('table').before("<section class='msg-error nameD'>"+errLengthNameD+"</section>");
-		validN=false;
-	}else{
-		trC.parents('.adv-table').find('.msg-error.nameD').remove();
-		trC.find('.nameD').css('border', '');
-		validN=true;
-	}		
-	if(capD == ''){
-		trC.find('.capD').css('border', '1px solid red');
-		trC.parents('.adv-table').find('.msg-error.capD').remove();
-		trC.parents('table').before("<section class='msg-error capD'>"+errCapD+"</section>");
-		validC=false;
-	}else if(!checkNumber(capD)){
-		trC.find('.capD').css('border', '1px solid red');
-		trC.parents('.adv-table').find('.msg-error.capD').remove();
-		trC.parents('table').before("<section class='msg-error capD'>"+errTypeCapD+"</section>");
-		validC=false;
-	}else{
-		trC.parents('.adv-table').find('.msg-error.capD').remove();
-		trC.find('.capD').css('border', '');
-		validC=true;
+function validateInsertPIV(This){
+	This.validate({
+		rules:{
+			pName: {
+				required: true, 
+			},
+			pQuantity: {
+				required: true,
+				number: true, 
+				min: 1,
+			}
+		},
+		messages: {
+			pName: {
+				required: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errProduct,
+			},
+			pQuantity: {
+				required: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errQuantity,
+				number: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errTypeQuantity,
+				min: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errMinQuantity,
+			}
+		},
+		errorPlacement: function(error, element) {
+			error.appendTo('#msgInsertTab1');
+		},
+	}).form();
+}
+function validateEditPIV(tr, quantity){
+	var divEditErr=tr.parents('.adv-table').find('#msgEditTabs1');
+	if(quantity == ''){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errQuantity+"</label>");
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
+	}else if(!checkNumber(quantity)){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errTypeQuantity+"</label>");
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
+	}else if(parseInt(quantity) < 1){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errMinQuantity+"</label>");
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
 	}
-	if(validN && validC) isValid=true;
-	return isValid;
+	return true;
 }
-$(document).ready(function(){
-//	var str="<p>test</p>";
-//	console.log(removeHTMLTag(str));
-});
+
+function validateInsertPOV(This){
+	var maxQuantity = parseInt(This.find('.quantity-piv').html());
+	This.validate({
+		rules:{
+			ovCode: {
+				required: true,
+			},
+			pName: {
+				required: true, 
+			},
+			pQuantity: {
+				required: true,
+				number: true, 
+				min: 1,
+				max: maxQuantity,
+			}
+		},
+		messages: {
+			ovCode: {
+				required: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errVehicle,
+			},
+			pName: {
+				required: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errProduct,
+			},
+			pQuantity: {
+				required: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errQuantity,
+				number: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errTypeQuantity,
+				min: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errMinQuantity,
+				max: "<i class='fa fa-exclamation-triangle icon-msg'></i>" + errMaxQuantity,
+			}
+		},
+		errorPlacement: function(error, element) {
+			error.appendTo('#msgInsertTab2');
+		},
+	}).form();
+}
+function validateEditPOV(tr, quantity){
+	var divEditErr=tr.parents('.adv-table').find('#msgEditTabs2');
+	if(quantity == ''){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errQuantity+"</label>")
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
+	}else if(!checkNumber(quantity)){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errTypeQuantity+"</label>")
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
+	}else if(parseInt(quantity) < 1){
+		divEditErr.html("<label class='error'><i class='fa fa-exclamation-triangle icon-msg'></i>"+errMinQuantity+"</label>")
+		tr.find('input.quantity').css('border', '1px solid red');
+		return false;
+	}
+	return true;
+}
+
 function removeHTMLTag(str){
 	var regex = /(<([^>]+)>)/ig;
 	var result = str.replace(regex, '');
@@ -183,4 +221,31 @@ function removeHTMLTag(str){
 function standardizeStr(str){
 	if(str == null) return '';
 	return str;
+}
+function confirmDialog(This, e){
+	e.preventDefault();
+	var defer = $.Deferred();
+    var dynamicDialog = $('<div id="conformBox">'+
+		'<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;">'+
+    	'</span>Are you sure to delete the item?</div>');
+    dynamicDialog.dialog({
+        title : "Are you sure?",
+        closeOnEscape: true,
+        modal : true,        
+        buttons : 
+			[{
+				text : "Yes",
+				click : function() {
+					$(this).dialog("close");
+					defer.resolve("true");
+				}
+			},{
+				text : "No",
+				click : function() {
+					$(this).dialog("close");
+					defer.resolve("false");
+				}
+			}]
+    });
+    return defer.promise();
 }

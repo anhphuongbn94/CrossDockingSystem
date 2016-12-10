@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.cds.dao.BaseDAO;
-import com.cds.tool.MyTool;
+import com.cds.utils.DateUtils;
 
 public class BaseDAOImpl implements BaseDAO{
 	private DataSource dataSource; 
@@ -65,14 +65,55 @@ public class BaseDAOImpl implements BaseDAO{
 		return null;
 	}
 	public int countAll(String table){
-		String sql="SELECT COUNT(*) FROM " + table + " WHERE date=?";
+		String sql="SELECT COUNT(*) FROM " +table+ " WHERE date=?";
 		Connection conn=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
 		try {
 			conn = getConnection();
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, new MyTool().getDateSystem());
+			ps.setString(1, new DateUtils().getDateSystem());
+			rs = ps.executeQuery();
+			if(rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn, ps, rs);
+		}
+		return 0;
+	}
+	public boolean delRecordTable(String table, String id, long value) {
+		String sql="DELETE FROM " +table+ " WHERE " +id+ "=?";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setLong(1, value);
+			int n=ps.executeUpdate();
+			if(n > 0) return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn, ps, null);
+		}
+		return false;
+	}
+	public int countAllVehicle_whereStatusAndDateAndKey(String table, String key, String status){
+		String sql="SELECT COUNT(*) FROM " +table+ " AS iv "
+				+ "JOIN tblVehicle AS v ON iv.idVehicle = v.idVehicle "
+					+ "AND v.code LIKE ? "
+				+ "WHERE status LIKE ? "
+				+ "AND date=CURDATE()"
+				;
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, "%" +key+ "%");
+			ps.setString(2, "%" +status);
 			rs = ps.executeQuery();
 			if(rs.next()) return rs.getInt(1);
 		} catch (SQLException e) {

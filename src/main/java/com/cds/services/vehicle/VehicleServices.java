@@ -12,11 +12,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 public class VehicleServices {
 	public VehicleServices() { }
-	/*public String callAPIAssignDoor(
+	
+	public String callAPIAssignDoor(
 			int sizeInDoor, int sizeOutDoor, 
 			int sizeInVehicle, int sizeOutVehicle,
-			int[] arrIDC, int[] arrODC, double[] arrIVD, double[] arrOVD,
-			double[][] costs, int [][] trips)
+			int[] arrIDC, int[] arrODC, int[] arrIVD, int[] arrOVD,
+			int[][] costs, int [][] trips)
 	{
 		String json = "{";
 		json += "\"inDoorNum\": " + sizeInDoor + ",";
@@ -26,7 +27,7 @@ public class VehicleServices {
 		json += "\"costs\": [";
 		for(int i=0; i<sizeInDoor; i++){
 			for(int j=0; j<sizeOutDoor; j++){
-				json +="{\"fromDoor\": " + i + ", \"toDoor\": " + j + ", \"costs\": " + costs[i][j] + "}";
+				json +="{\"fromDoor\": " + i + ", \"toDoor\": " + j + ", \"cost\": " + costs[i][j] + "}";
 				if (i != sizeInDoor - 1 || j != sizeOutDoor -1)
 					json += ",";
 			}
@@ -70,9 +71,11 @@ public class VehicleServices {
 		}
 		json +="]";
 		json +="}";
+		System.out.println(json);
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost request = new HttpPost("http://103.18.4.32:8080/ezRoutingAPI/solve-cross-docking-system");
+			HttpPost request = new HttpPost("http://202.191.57.103:8080/ezRoutingAPI/solve-cross-docking-system");
+//			HttpPost request = new HttpPost("http://localhost:9090/CrossDockingAPI/solve-cross-docking-system");
 			StringEntity params = new StringEntity(json);
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");
@@ -87,11 +90,11 @@ public class VehicleServices {
 			ex.printStackTrace();
 		}
 		return null;
-	}*/
+	}
 	public String callAPIAssignDoor(String json){
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost request = new HttpPost("http://103.18.4.32:8080/ezRoutingAPI/solve-cross-docking-system");
+			HttpPost request = new HttpPost("http://202.191.57.103:8080/ezRoutingAPI/solve-cross-docking-system");
 			StringEntity params = new StringEntity(json);
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");

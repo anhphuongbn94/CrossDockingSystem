@@ -22,12 +22,6 @@
 	            <button class="btn btn-lg btn-login btn-block" type="submit">
 	                <i class="fa fa-check"></i>
 	            </button>
-	            <section class="registration">
-	                Not a member yet?
-	                <a class="" href="${pageContext.request.contextPath }/register">
-	                    Signup
-	                </a>
-	            </section>
 	        </section>
 	    </form>
 	</section>

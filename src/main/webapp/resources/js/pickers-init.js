@@ -7,12 +7,17 @@ $(function(){
     window.prettyPrint && prettyPrint();
     $('.default-date-picker').datepicker({
         format: 'yyyy-mm-dd',
+        minDate: '0'
     });
     $('.default-date-picker').datepicker().on('changeDate', function(ev) {
     	$(this).datepicker('hide');
     });
     $('.dpYears').datepicker();
     $('.dpMonths').datepicker();
+    
+    $('.s-vehicle').select2({
+    	placeholder: 'Please select a vehicle',    
+    });
     
 //    var startDate = new Date(2012,1,20);
 //    var endDate = new Date(2012,1,25);

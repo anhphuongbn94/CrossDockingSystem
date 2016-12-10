@@ -37,8 +37,8 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.countInVehicle();
 	}
 
-	public int countInVehicle_byStatus(int status) {
-		return vehicleDAO.countInVehicle_byStatus(status);
+	public int countInVehicle_byStatusAndKey(String key, String status) {
+		return vehicleDAO.countInVehicle_byStatusAndKey(key, status);
 	}
 
 	public int countInVehicle_whereUnloadStatus() {
@@ -61,20 +61,20 @@ public class VehicleServiceImpl implements VehicleService{
 		vehicleDAO.insertInVehicle(iVehicle);
 	}
 
-	public boolean assignDoorInVehicle(int idInVehicle, int idInDoor) {
+	public boolean assignDoorInVehicle(long idInVehicle, long idInDoor) {
 		return vehicleDAO.assignDoorInVehicle(idInVehicle, idInDoor);
 	}
 
-	public boolean upStartUnloadTime(int idInVehicle) {
-		return vehicleDAO.upStartUnloadTime(idInVehicle);
+	public boolean upDataUnloadTime(long idInVehicle, String sTime, String eTime) {
+		return vehicleDAO.upDataUnloadTime(idInVehicle, sTime, eTime);
 	}
 
-	public boolean upFinishUnloadTime(int idInVehicle) {
+	public boolean upFinishUnloadTime(long idInVehicle) {
 		return vehicleDAO.upFinishUnloadTime(idInVehicle);
 	}
 
-	public boolean upStatusInVehicle(int idInVehicle, int status) {
-		return vehicleDAO.upStatusInVehicle(idInVehicle, status);
+	public boolean upInVehicle(long idInVehicle, String date, String arrivalTime){
+		return vehicleDAO.upInVehicle(idInVehicle, date, arrivalTime);
 	}
 
 	public ArrayList<InVehicle> getPageInVehicle(int currentPage, int sizePage) {
@@ -93,8 +93,8 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.getPageInVehicle_whereUnloadStatus(currentPage, sizePage);
 	}
 
-	public ArrayList<InVehicle> getPageInVehicle_byStatus(int status, int currentPage, int sizePage) {
-		return vehicleDAO.getPageInVehicle_byStatus(status, currentPage, sizePage);
+	public ArrayList<InVehicle> getPageInVehicle_byStatusAndKey(String key, String status, int currentPage, int sizePage) {
+		return vehicleDAO.getPageInVehicle_byStatusAndKey(key, status, currentPage, sizePage);
 	}
 
 	public ArrayList<InVehicle> getPageInVehicle_byDateAndCodeVehicle(String strDate, String endDate,
@@ -110,8 +110,8 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.countAllOutVehicleCurDate_byKeySearch(key);
 	}
 	
-	public void delInVehicle_byIdVehicle(int idInVehicle) {
-		vehicleDAO.delInVehicle_byIdVehicle(idInVehicle);
+	public boolean delInVehicle_byIdVehicle(long idInVehicle) {
+		return vehicleDAO.delInVehicle_byIdVehicle(idInVehicle);
 	}
 
 	public ArrayList<InVehicle> getPageInVehicleCurDate_byKeySearch(String key, int currentPage, int sizePage){
@@ -122,7 +122,7 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.countAllInVehicleCurDate_byKeySearch(key);
 	}
 	
-	public Double getVolumnInVehicle(int idInVehicle) {
+	public int getVolumnInVehicle(Long idInVehicle) {
 		return vehicleDAO.getVolumnInVehicle(idInVehicle);
 	}
 
@@ -130,8 +130,8 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.countOutVehicle();
 	}
 
-	public int countOutVehicle_byStatus(int status) {
-		return vehicleDAO.countOutVehicle_byStatus(status);
+	public int countOutVehicle_byStatusAndKey(String key, String status) {
+		return vehicleDAO.countOutVehicle_byStatusAndKey(key, status);
 	}
 
 	public int countOutVehicle_whereLoadStatus() {
@@ -154,20 +154,19 @@ public class VehicleServiceImpl implements VehicleService{
 		vehicleDAO.insertOutVehicle(ov);
 	}
 
-	public boolean assignDoorOutVehicle(int idOutVehicle, int idOutDoor) {
+	public boolean assignDoorOutVehicle(long idOutVehicle, long idOutDoor) {
 		return vehicleDAO.assignDoorOutVehicle(idOutVehicle, idOutDoor);
 	}
 
-	public boolean upStartLoadTime(int idOutVehicle) {
-		return vehicleDAO.upStartLoadTime(idOutVehicle);
+	public boolean upDataLoadTime(long idOutVehicle, String startTime, String endTime) {
+		return vehicleDAO.upDataLoadTime(idOutVehicle, startTime, endTime);
 	}
 
-	public boolean upFinishLoadTime(int idOutVehicle) {
+	public boolean upFinishLoadTime(long idOutVehicle) {
 		return vehicleDAO.upFinishLoadTime(idOutVehicle);
 	}
-
-	public boolean upStatusOutVehicle(int idOutVehicle, int status) {
-		return vehicleDAO.upStatusOutVehicle(idOutVehicle, status);
+	public boolean upOutVehicle(long idInVehicle, String date, String arrivalTime){
+		return vehicleDAO.upOutVehicle(idInVehicle, date, arrivalTime);
 	}
 
 	public ArrayList<OutVehicle> getPageOutVehicle_byDateAndCodeVehicle(String strDate, String endDate,
@@ -191,28 +190,26 @@ public class VehicleServiceImpl implements VehicleService{
 		return vehicleDAO.getPageOutVehicle_whereLoadStatus(currentPage, sizePage);
 	}
 
-	public ArrayList<OutVehicle> getPageOutVehicle_byStatus(int status, int currentPage, int sizePage) {
-		return vehicleDAO.getPageOutVehicle_byStatus(status, currentPage, sizePage);
+	public ArrayList<OutVehicle> getPageOutVehicle_byStatusAndKey(String key, String status, int currentPage, int sizePage) {
+		return vehicleDAO.getPageOutVehicle_byStatusAndKey(key, status, currentPage, sizePage);
 	}
 
-	public void delOutVehicle_byIdVehicle(int idOutVehicle) {
-		vehicleDAO.delOutVehicle_byIdVehicle(idOutVehicle);
+	public boolean delOutVehicle_byIdVehicle(long idOutVehicle) {
+		return vehicleDAO.delOutVehicle_byIdVehicle(idOutVehicle);
 	}
 
-	public Double getDemandOutVehicle(int idOutVehicle) {
+	public int getDemandOutVehicle(Long idOutVehicle) {
 		return vehicleDAO.getDemandOutVehicle(idOutVehicle);
 	}
 
-	public int getIdProductTransferInsert() {
-		return vehicleDAO.getIdProductTransferInsert();
+	@Override
+	public ArrayList<InVehicle> getAllInVehicleCurDate() {
+		return vehicleDAO.getAllInVehicleCurDate();
 	}
 
-	public void insertTransfer(ProductTransfer pTransfer) {
-		vehicleDAO.insertTransfer(pTransfer);
-	}
-
-	public ArrayList<ProductTransfer> getProductTransfer(String date) {
-		return vehicleDAO.getProductTransfer(date);
+	@Override
+	public ArrayList<OutVehicle> getAllOutVehicleCurDate() {
+		return vehicleDAO.getAllOutVehicleCurDate();
 	}
 
 }

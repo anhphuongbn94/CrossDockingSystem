@@ -9,9 +9,10 @@ public class InVehicle extends Vehicle{
 	private String arrivalTime;
 	private String startUnloadTime;
 	private String finishUnloadTime;
-	private Double volumn;
+	private int volumn;
 	private Integer status; // 0: Dang cho gan cua, 1: Dang cho do hang, 2: Bat dau do hang, 3: Ket thuc do hang
 	private Door door;
+	private Integer idDoorAI;
 	private CrossDockingSystem cDS;
 	
 	public InVehicle() {
@@ -22,7 +23,7 @@ public class InVehicle extends Vehicle{
 		super(idVehicle, vehicleCode, type, company, description);
 	}
 	public InVehicle(Long idInVehicle, String date, String arrivalTime, String startUnloadTime,
-			String finishUnloadTime, Double volumn, Integer status, Door door, CrossDockingSystem cDS) {
+			String finishUnloadTime, int volumn, Integer status, Door door, CrossDockingSystem cDS) {
 		super();
 		this.idInVehicle = idInVehicle;
 		this.date = date;
@@ -64,10 +65,10 @@ public class InVehicle extends Vehicle{
 	public void setFinishUnloadTime(String finishUnloadTime) {
 		this.finishUnloadTime = finishUnloadTime;
 	}
-	public Double getVolumn() {
+	public int getVolumn() {
 		return volumn;
 	}
-	public void setVolumn(Double volumn) {
+	public void setVolumn(int volumn) {
 		this.volumn = volumn;
 	}
 	public Integer getStatus() {
@@ -81,6 +82,12 @@ public class InVehicle extends Vehicle{
 	}
 	public void setDoor(Door door) {
 		this.door = door;
+	}
+	public Integer getIdDoorAI() {
+		return idDoorAI;
+	}
+	public void setIdDoorAI(Integer idDoorAI) {
+		this.idDoorAI = idDoorAI;
 	}
 	public CrossDockingSystem getcDS() {
 		return cDS;

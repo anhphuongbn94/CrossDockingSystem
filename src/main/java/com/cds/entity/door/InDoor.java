@@ -2,6 +2,7 @@ package com.cds.entity.door;
 
 public class InDoor extends Door{
 	private Long idInDoor;
+	private int capuse;
 
 	public InDoor() {
 		super();
@@ -19,6 +20,12 @@ public class InDoor extends Door{
 	}
 	public void setIdInDoor(Long idInDoor) {
 		this.idInDoor = idInDoor;
+	}
+	public int getCapuse() {
+		return capuse;
+	}
+	public void setCapuse(int capuse) {
+		this.capuse = capuse;
 	}	
 	
 

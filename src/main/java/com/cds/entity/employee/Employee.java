@@ -1,7 +1,7 @@
 package com.cds.entity.employee;
 
 public class Employee {
-	private Integer idEmployee;
+	private Long idEmployee;
 	private String fullname;
 	private Integer gender; // 1.Male, 2.Female
 	private String email;
@@ -9,40 +9,16 @@ public class Employee {
 	private String address;
 	private String username;
 	private String password;
-	private Integer active;
+	private int active;
+	private int level;
 	
 	public Employee() {
 		super();
 	}
-	public Employee(String fullname, Integer gender, String email, String phonenumber, String address,
-			String username, String password, Integer active) {
-		super();
-		this.fullname = fullname;
-		this.gender = gender;
-		this.email = email;
-		this.phonenumber = phonenumber;
-		this.address = address;
-		this.username = username;
-		this.password = password;
-		this.active = active;
-	}
-	public Employee(Integer idEmployee, String fullname, Integer gender, String email, String phonenumber, String address,
-			String username, String password, Integer active) {
-		super();
-		this.idEmployee = idEmployee;
-		this.fullname = fullname;
-		this.gender = gender;
-		this.email = email;
-		this.phonenumber = phonenumber;
-		this.address = address;
-		this.username = username;
-		this.password = password;
-		this.active = active;
-	}
-	public Integer getIdEmployee() {
+	public Long getIdEmployee() {
 		return idEmployee;
 	}
-	public void setIdEmployee(Integer idEmployee) {
+	public void setIdEmployee(Long idEmployee) {
 		this.idEmployee = idEmployee;
 	}
 	public String getFullname() {
@@ -87,11 +63,17 @@ public class Employee {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Integer getActive() {
+	public int getActive() {
 		return active;
 	}
-	public void setActive(Integer active) {
+	public void setActive(int active) {
 		this.active = active;
+	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
 	}
 	
 }

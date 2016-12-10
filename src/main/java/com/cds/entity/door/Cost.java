@@ -1,31 +1,31 @@
 package com.cds.entity.door;
 
 public class Cost {
-	private Integer idCost;
+	private Long idCost;
 	private InDoor inDoor;
 	private OutDoor outDoor;
-	private Double cost;
+	private int cost;
 	
 	public Cost() {
 		super();
 	}
-	public Cost(InDoor inDoor, OutDoor outDoor, Double cost) {
+	public Cost(InDoor inDoor, OutDoor outDoor, int cost) {
 		super();
 		this.inDoor = inDoor;
 		this.outDoor = outDoor;
 		this.cost = cost;
 	}
-	public Cost(Integer idCost, InDoor inDoor, OutDoor outDoor, Double cost) {
+	public Cost(Long idCost, InDoor inDoor, OutDoor outDoor, int cost) {
 		super();
 		this.idCost = idCost;
 		this.inDoor = inDoor;
 		this.outDoor = outDoor;
 		this.cost = cost;
 	}
-	public Integer getIdCost() {
+	public Long getIdCost() {
 		return idCost;
 	}
-	public void setIdCost(Integer idCost) {
+	public void setIdCost(Long idCost) {
 		this.idCost = idCost;
 	}
 	public InDoor getInDoor() {
@@ -40,10 +40,10 @@ public class Cost {
 	public void setOutDoor(OutDoor outDoor) {
 		this.outDoor = outDoor;
 	}
-	public Double getCost() {
+	public int getCost() {
 		return cost;
 	}
-	public void setCost(Double cost) {
+	public void setCost(int cost) {
 		this.cost = cost;
 	}
 	

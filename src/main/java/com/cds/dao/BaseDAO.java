@@ -12,4 +12,8 @@ public interface BaseDAO {
 	public Long getIdSEQ(String table, String id);
 	
 	public int countAll(String table);
+	
+	public boolean delRecordTable(String table, String id, long value); 
+	
+	public int countAllVehicle_whereStatusAndDateAndKey(String table, String key, String status);
 }

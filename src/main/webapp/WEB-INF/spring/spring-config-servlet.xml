@@ -15,10 +15,6 @@
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:annotation-driven />
-	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/" />
-		<property name="suffix" value=".jsp" />
-	</bean> -->
 	<!--Multiple languages -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="resources/lang/msg" />
@@ -51,5 +47,6 @@
             </list>
         </property>
     </bean>
+    <import resource="excel-view.xml" />
 	<import resource="spring-config-datasource.xml" />
 </beans>

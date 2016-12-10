@@ -4,9 +4,33 @@
 
 
 <section class="page-heading">
-    <h3><s:message code="invehicle.title" /></h3>
+    <h3><s:message code="assign.title" /></h3>
 </section><!-- End Page-Heading -->
-<section class="wrapper">		
+<section class="wrapper">
+	<div id="ac-wrapper">
+		<div class="img-load">
+			<center>
+				<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+			</center>
+		</div>
+	</div>
+	<section class="row">
+	<section class="col-sm-12">
+	<section class="panel">
+	<section class="panel-body">
+		<section style="float: left; padding-top: 10px">
+			User assign cost: <span class="total-cost">${totalCost }</span>  
+			| AI assign cost: <span class="total-cost-ai">${totalCostAI }</span>
+		</section>
+		<section style="float: right; padding-top: 10px" class="div-btn-assign-ai">
+			<c:if test="${checkExistsAI }">
+				<button class="btnDefault btn-primary" id="btnAssAI">AI Assign</button>
+			</c:if>
+		</section>
+	</section>
+	</section>
+	</section>
+	</section>		
 	<!--------------------------------------------------------------------------------------------------->
        <!-- InVehicle -->
        <section class="row">
@@ -23,87 +47,91 @@
         <table class="display table table-bordered table-striped" id="dynamic-table">
 	        <thead>
 		        <tr>
-		            <th><s:message code="vehicle.code" /></th>
-					<th><s:message code="invehicle.volumn" /></th>
-					<th><s:message code="invehicle.arrival" /></th>
-					<c:set var="numDoor" value="0" />						
-					<c:forEach items="${listInDoor }" var="rowID">
-						<c:set var="remain" value="${rowID.capacity }" />
-						<c:set var="uIDoor" value="0" />
-						<c:forEach items="${pInVehicle }" var="rowIV">
-							<c:if test="${rowID.idDoor == rowIV.door.idDoor}">
-								<c:set var="remain" value="${remain - rowIV.volumn}"/>
-								<c:set var="uIDoor" value="${uIDoor + rowIV.volumn}"/>
-							</c:if>
-						</c:forEach>
-						<th style="text-align: center;">
+		            <td><s:message code="vehicle.code" /></td>
+					<td><s:message code="invehicle.volumn" /></td>
+					<td><s:message code="invehicle.arrival" /></td>
+					<c:forEach items="${listInDoor }" var="rowID" varStatus="n">
+						<td style="text-align: center;">
 							${rowID.nameDoor }
-							<br/>
-							<span class="uIDoor-${numDoor }" style="display: none">${uIDoor }</span>
-							(<span class="cIDoor-${numDoor}">${rowID.capacity }</span>)
-						</th>
-						<c:set var="numDoor" value="${numDoor + 1 }" />
+							<span class="uIDoor-${n.index }" style="display: none">${rowID.capuse }</span>
+							<div style="margin-top: -5px">(<span class="cIDoor-${n.index}" data-bind="${rowID.capacity-rowID.capuse }">${rowID.capacity }</span>)</div>
+						</td>
 					</c:forEach>
-					<th style="display: none"><span class="sizeIDoor">${listInDoor.size() }</span></th>
+					<td style="display: none"><span class="sizeIDoor">${listInDoor.size() }</span></td>
 		        </tr>
 	        </thead>
 	        <tbody class="rowI_data">
-				<c:set var="group" value="0" />
-				<c:set var="uDoor" value="0" />
 				<tr style="display: none"><td><span class="size-in-vehicle" data-bind="${pInVehicle.size() }"></span></td></tr>
 				<c:set var="n" value="0" />
-		        <c:forEach items="${pInVehicle }" var="rowIV">
+		        <c:forEach items="${pInVehicle }" var="rowIV" varStatus="n">
 					<tr class="gIDoor">
-						<td>${rowIV.vehicleCode }</td>
-						<td><span class="volumn" data-bind="${rowIV.volumn }">${rowIV.volumn }</span>
-							<span class="volumn-${n }" data-bind=${rowIV.volumn }></span>
-							<c:set var="n" value="${n + 1 }"/>
+						<td class="code-iv">${rowIV.vehicleCode }</td>
+						<td class="volumn-iv">
+							<span class="volumn" data-bind="${rowIV.volumn }">${rowIV.volumn }</span>
+							<span class="volumn-${n.index }" data-bind=${rowIV.volumn }></span>
 						</td>
-						<td>${rowIV.arrivalTime }</td>
-						<c:set var="numDoor" value="0" />		
-						<c:forEach items="${listInDoor }" var="rowID">
-							<c:set var="remain" value="${rowID.capacity }" />
-							<c:forEach items="${pInVehicle }" var="rowIv">
-								<c:if test="${rowID.idDoor == rowIv.door.idDoor}">
-									<c:set var="remain" value="${remain - rowIv.volumn}"/>
-								</c:if>
-							</c:forEach>
+						<td class="arrival-iv">${rowIV.arrivalTime }</td>
+						<c:forEach items="${listInDoor }" var="rowID" varStatus="m">
 							<td style="text-align: center;">
-								<c:choose>
-									<c:when test="${rowIV.door.idDoor == rowID.idDoor}">
-										<input type="radio" id="iDoor"
-											name="groupI-${group }" class="iDoor-${numDoor }" 
-											data-idInVehicle="${rowIV.idInVehicle }" 
-											data-index="${numDoor }" 
-											data-idDoor="${rowID.idDoor }"
-											checked="checked" data-flag="choose"/>
-									</c:when> 
-									<c:otherwise>
-										<input type="radio" 
-											name="groupI-${group }" class="iDoor-${numDoor }" 
-											data-idInVehicle="${rowIV.idInVehicle }" 
-											data-index="${numDoor }" 
-											data-idDoor="${rowID.idDoor }"/>
-									</c:otherwise>
-								</c:choose>
-								<span class="remain">${remain }</span>
+								<label>
+									<c:choose>
+										<c:when test="${rowIV.door.idDoor == rowID.idDoor}">
+											<input type="radio" 
+												id="iDoor"
+												name="groupI-${n.index }" 
+												class="iDoor-${m.index }" 
+												data-idInVehicle="${rowIV.idInVehicle }" 
+												data-index="${m.index }" 
+												data-idDoor="${rowID.idDoor }"
+												checked="checked" 
+												data-flag="choose"
+											/>
+										</c:when> 
+										<c:otherwise>
+											<input type="radio" 
+												name="groupI-${n.index }" 
+												class="iDoor-${m.index }" 
+												data-idInVehicle="${rowIV.idInVehicle }" 
+												data-index="${m.index }" 
+												data-idDoor="${rowID.idDoor }"
+											/>
+										</c:otherwise>
+									</c:choose>
+									<c:set var="cssDoorAI" value="" />
+									<c:if test="${rowIV.idDoorAI == rowID.idDoor }">
+										<c:set var="cssDoorAI" value="door-assign-ai" />
+									</c:if>
+									<span class="remain ${cssDoorAI }">${rowID.capacity-rowID.capuse }</span>
+								</label>
 							</td>
-							<c:set var="numDoor" value="${numDoor + 1 }" />
 						</c:forEach>
 					</tr>
-					<c:set var="group" value="${group + 1 }" />
 				</c:forEach>
-				<tr style="display: none"><td><span class="sizeGroup">${group }</span></td></tr>
 	        </tbody>
         </table><!-- End Display-Table -->
+        <c:if test="${pInVehicle.size() < 1 }">
+        	<s:message code="msg.norecord" />
+        </c:if>
        </section><!-- End Adv-Table -->
-       <section class="dataTables_paginate paging_bootstrap pagination">
-			<ul class="page-invehicle-assign-door">
-				<c:forEach begin="1" end="${numPageI }" var="i">
-					<li class="page_index" data-index="${i }"><a>${i }</a></li>
-				</c:forEach>
-			</ul>
-		</section><!-- End Pagination -->
+       <c:if test="${pInVehicle.size() > 0 }">
+	       <section class="dataTables_paginate paging_bootstrap pagination">
+				<ul class="page-iv-assign">
+					<li class="prev"><a>←</a></li>
+					<c:forEach items="${pagerI.listPage }" var="item">
+						<c:choose>
+							<c:when test="${item==1 }">
+								<li class="page_index active" data-index="${item }"><a>${item }</a></li>
+							</c:when>
+							<c:otherwise>
+								<li class="page_index" data-index="${item }"><a>${item }</a></li>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					<li style="display: none" class="num-pageI" data-bind="${pagerI.numPage }"></li>
+					<li class="next"><a>→ </a></li>
+				</ul>
+			</section><!-- End Pagination -->
+		</c:if>
        </section><!-- End Panel-Body-->
        </section><!-- End Panel -->
        </section><!-- End Col-Sm-12 -->
@@ -124,110 +152,86 @@
         <table class="display table table-bordered table-striped" id="dynamic-table">
 	        <thead>
 		        <tr>
-		            <th><s:message code="vehicle.code" /></th>
-					<th><s:message code="outvehicle.demand" /></th>
-					<th><s:message code="outvehicle.arrival" /></th>
-					<c:set var="numDoor" value="0" />						
-					<c:forEach items="${listOutDoor }" var="rowOD">
-						<c:set var="remain" value="${rowOD.capacity }" />
-						<c:set var="uODoor" value="0" />
-						<c:forEach items="${pOutVehicle }" var="rowOV">
-							<c:if test="${rowOD.idDoor == rowOV.door.idDoor}">
-								<c:set var="remain" value="${remain - rowOV.demand}"/>
-								<c:set var="uODoor" value="${uODoor + rowOV.demand}"/>
-							</c:if>
-						</c:forEach>
-						<th style="text-align: center;">
-							${rowOD.nameDoor }
-							<br/>
-							<span class="uODoor-${numDoor }" style="display: none">${uODoor }</span>
-							(<span class="cODoor-${numDoor}">${rowOD.capacity }</span>)
-						</th>
-						<c:set var="numDoor" value="${numDoor + 1 }" />
+		            <td><s:message code="vehicle.code" /></td>
+					<td><s:message code="outvehicle.demand" /></td>
+					<td><s:message code="outvehicle.arrival" /></td>
+					<c:forEach items="${listOutDoor }" var="rowOD" varStatus="n">
+						<td style="text-align: center;">${rowOD.nameDoor }
+							<span class="uODoor-${n.index }" style="display: none">${rowOD.capuse }</span>
+							<div style="margin-top: -5px">(<span class="cODoor-${n.index}">${rowOD.capacity }</span>)</div>
+						</td>
 					</c:forEach>
-					<th style="display: none"><span class="sizeODoor">${listOutDoor.size() }</span></th>
+					<td style="display: none"><span class="sizeODoor">${listOutDoor.size() }</span></td>
 		        </tr>
 	        </thead>
 	        <tbody class="rowO_data">
-				<c:set var="group" value="0" />
-				<c:set var="uDoor" value="0" />
 				<tr style="display: none"><td><span class="size-out-vehicle" data-bind="${pOutVehicle.size() }"></span></td></tr>
-				<c:set var="n" value="0" />
-		        <c:forEach items="${pOutVehicle }" var="rowOV">
+		        <c:forEach items="${pOutVehicle }" var="rowOV" varStatus="n">
 					<tr class="gODoor">
 						<td>${rowOV.vehicleCode }</td>
 						<td><span class="demand" data-bind="${rowOV.demand }">${rowOV.demand }</span>
-							<span class="demand-${n }" data-bind="${rowOV.demand }"></span>
-							<c:set var="n" value="${n + 1 }" />
+							<span class="demand-${n.index }" data-bind="${rowOV.demand }"></span>
 						</td>
 						<td>${rowOV.arrivalTime }</td>
-						<c:set var="numDoor" value="0" />		
-						<c:forEach items="${listOutDoor }" var="rowOD">
-							<c:set var="remain" value="${rowOD.capacity }" />
-							<c:forEach items="${pOutVehicle }" var="rowOv">
-								<c:if test="${rowOD.idDoor == rowOv.door.idDoor}">
-									<c:set var="remain" value="${remain - rowOv.demand}"/>
-								</c:if>
-							</c:forEach>
+						<c:forEach items="${listOutDoor }" var="rowOD" varStatus="m">
 							<td style="text-align: center;">
-								<c:choose>
-									<c:when test="${rowOV.door.idDoor == rowOD.idDoor}">
-										<input type="radio" id="oDoor"
-											name="groupO-${group }" class="oDoor-${numDoor }" 
-											data-idOutVehicle="${rowOV.idOutVehicle }" 
-											data-index="${numDoor }" 
-											data-idDoor="${rowOD.idDoor }"
-											checked="checked" data-flag="choose"/>
-									</c:when> 
-									<c:otherwise>
-										<input type="radio" 
-											name="groupO-${group }" class="oDoor-${numDoor }" 
-											data-idOutVehicle="${rowOV.idOutVehicle }" 
-											data-index="${numDoor }" 
-											data-idDoor="${rowOD.idDoor }"/>
-									</c:otherwise>
-								</c:choose>
-								<span class="remain">${remain }</span>
+								<label>
+									<c:choose>
+										<c:when test="${rowOV.door.idDoor == rowOD.idDoor}">
+											<input type="radio" id="oDoor"
+												name="groupO-${n.index }" 
+												class="oDoor-${m.index }" 
+												data-idOutVehicle="${rowOV.idOutVehicle }" 
+												data-index="${m.index }" 
+												data-idDoor="${rowOD.idDoor }"
+												checked="checked" data-flag="choose"/>
+										</c:when> 
+										<c:otherwise>
+											<input type="radio" 
+												name="groupO-${n.index }" 
+												class="oDoor-${m.index }" 
+												data-idOutVehicle="${rowOV.idOutVehicle }" 
+												data-index="${m.index }" 
+												data-idDoor="${rowOD.idDoor }"/>
+										</c:otherwise>
+									</c:choose>
+									<c:set var="cssDoorAI" value="" />
+									<c:if test="${rowOV.idDoorAI == rowOD.idDoor }">
+										<c:set var="cssDoorAI" value="door-assign-ai" />
+									</c:if>
+									<span class="remain ${cssDoorAI }">${rowOD.capacity-rowOD.capuse }</span>
+								</label>
 							</td>
-							<c:set var="numDoor" value="${numDoor + 1 }" />
 						</c:forEach>
 					</tr>
-					<c:set var="group" value="${group + 1 }" />
 				</c:forEach>
-				<tr style="display: none"><td><span class="sizeGroup">${group }</span></td></tr>
 	        </tbody>
         </table><!-- End Display-Table -->
-        <section class="dataTables_paginate paging_bootstrap pagination">
-			<ul class="page-outvehicle-assign-door">
-				<c:forEach begin="1" end="${numPageO }" var="i">
-					<li class="page_index" data-index="${i }"><a>${i }</a></li>
-				</c:forEach>
-			</ul>
-		</section><!-- End Pagination -->
-		<br/>
-		<section>
-        	<button class="btnDefault btn-primary" id="btnAssDoor">Submit</button>
-        	<button class="btnDefault btn-primary" id="btnAssAI">AI Assign</button>
-        </section>
-        <section>
-        	Total cost: <span class="total-cost">0</span> <br/>
-        	AI Total cost: <span class="total-cost-ai">0</span>
-        </section>
+        <c:if test="${pInVehicle.size() < 1 }">
+        	<s:message code="msg.norecord" />
+        </c:if>
+        <c:if test="${pInVehicle.size() > 0 }">
+	        <section class="dataTables_paginate paging_bootstrap pagination">
+				<ul class="page-ov-assign">
+					<li class="prev"><a>←</a></li>
+					<c:forEach items="${pagerO.listPage }" var="item">
+						<c:choose>
+							<c:when test="${item==1 }">
+								<li class="page_index active" data-index="${item }"><a>${item }</a></li>
+							</c:when>
+							<c:otherwise>
+								<li class="page_index" data-index="${item }"><a>${item }</a></li>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					<li style="display: none" class="num-pageO" data-bind="${pagerO.numPage }"></li>
+					<li class="next"><a>→ </a></li>
+				</ul>
+			</section><!-- End Pagination -->
+	   </c:if>
        </section><!-- End Adv-Table -->
        </section><!-- End Panel-Body-->
        </section><!-- End Panel -->
        </section><!-- End Col-Sm-12 -->
        </section><!-- End Row -->
-       <section class="row">
-       	<c:forEach begin="0" end="${listCost.size()-1 }" var="i">
-       		<span class="cost-${i }" data-bind="${listCost[i].cost }"></span>
-       	</c:forEach>
-       	<span class="size-transfer" data-bind="${listPT.size() }"></span>
-       	<c:if test="${listPT.size() != 0 }">
-	       	<c:forEach begin="0" end="${listPT.size()-1 }" var="i">
-	       		<span class="trip-${listPT[i].iVehicle.idInVehicle }-${listPT[i].oVehicle.idOutVehicle}" data-bind="${listPT[i].transfer }"></span>
-	       		<span class="trip-${i }" data-bind="${listPT[i].transfer }"></span>
-	       	</c:forEach>
-       	</c:if>
-       </section>
 </section><!-- End Wraper -->

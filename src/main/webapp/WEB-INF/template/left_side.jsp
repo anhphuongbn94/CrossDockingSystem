@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="s" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <meta charset="utf-8">
 <section class="left-side">  
@@ -36,19 +37,19 @@
 	            	<span><s:message code="menu.home" /></span>
             	</a>
            	</li>
-           	<li class="menu-list">
-            	<a href=""><i class="fa fa-laptop"></i><span><s:message code="menu.door" /></span></a>
-                <ul class="sub-menu-list">
-                    <li><a href="${pageContext.request.contextPath }/indoor"><s:message code="menu.door.data" /></a></li>
-                    <li><a href="${pageContext.request.contextPath }/setcost"><s:message code="menu.setcost" /></a></li>
-                </ul>
+           	<c:if test="${em.level==1 }">
+           		<li><a href="${pageContext.request.contextPath }/empManager">
+	            		<i class="fa fa-users"></i>
+	            		<span><s:message code="menu.employee" /></span>
+	                </a>
+	            </li>
+            </c:if>
+           	<li><a href="${pageContext.request.contextPath }/doorManager">
+            		<i class="fa fa-laptop"></i>
+            		<span><s:message code="menu.door" /></span>
+                </a>
             </li>
-           	<li><a href="${pageContext.request.contextPath }/mtrstatus">
-           			<i class="fa fa-tv"></i> 
-            		<span><s:message code="menu.mtrstatus" /></span>
-           		</a>
-           	</li>
-           	<li><a href="${pageContext.request.contextPath }/vehicle">
+           	<li><a href="${pageContext.request.contextPath }/vehicleManager">
            			<i class="fa fa-truck"></i> 
             		<span><s:message code="menu.vehicle" /></span>
            		</a>
@@ -56,7 +57,10 @@
             <li class="menu-list">
             	<a href=""><i class="fa fa-truck"></i><span><s:message code="menu.invehicle" /></span></a>
                 <ul class="sub-menu-list">
-                    <li><a href="${pageContext.request.contextPath }/invehicle">
+              		<li><a href="${pageContext.request.contextPath }/mtrinv">
+                    	<s:message code="menu.invehicle.mtr"/>
+                   	</a></li>
+                    <li><a href="${pageContext.request.contextPath }/invManager">
                     	<s:message code="menu.invehicle.data"/>
                    	</a></li>
                     <li><a href="${pageContext.request.contextPath }/unload">
@@ -67,7 +71,10 @@
             <li class="menu-list">
             	<a href=""><i class="fa fa-truck"></i><span><s:message code="menu.outvehicle" /></span></a>
                 <ul class="sub-menu-list">
-                    <li><a href="${pageContext.request.contextPath }/outvehicle">
+                	<li><a href="${pageContext.request.contextPath }/mtroutv">
+                    	<s:message code="menu.outvehicle.mtr" />
+                   	</a></li>
+                    <li><a href="${pageContext.request.contextPath }/outvManager">
                     	<s:message code="menu.outvehicle.data" />
                    	</a></li>
                     <li><a href="${pageContext.request.contextPath }/load">
@@ -80,19 +87,17 @@
 	            	<span><s:message code="menu.assign" /></span>
             	</a>
            	</li>
-            <li><a href="${pageContext.request.contextPath }/transfer">
-            		<i class="fa fa-line-chart"></i> 
-            		<span><s:message code="menu.transfer" /></span>
-           		</a>
-           	</li>
-           	<li class="menu-list">
-            	<a href=""><i class="fa fa-language"></i><span><s:message code="menu.language" /></span></a>
+            <li class="menu-list">
+            	<a href=""><i class="fa fa-bar-chart"></i><span><s:message code="menu.statistics" /></span></a>
                 <ul class="sub-menu-list">
-                    <li><a href="?lang=en" ><s:message code="language.en" /></a></li>
-                    <li><a href="?lang=vi"><s:message code="language.vi" /></a></li>
+                	<li><a href="${pageContext.request.contextPath }/rpvmonth">
+                    	<s:message code="menu.statistics.month" />
+                   	</a></li>
+                    <li><a href="${pageContext.request.contextPath }/rpvyear">
+                    	<s:message code="menu.statistics.year" />
+                   	</a></li>
                 </ul>
             </li>
-            <li><a href="login"><i class="fa fa-sign-in"></i> <span><s:message code="menu.login" /></span></a></li>
         </ul><!-- End Nav Nav-pills -->
     </section><!-- End Left-Side-Inner -->
 </section>

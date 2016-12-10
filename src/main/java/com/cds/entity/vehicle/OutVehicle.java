@@ -9,41 +9,17 @@ public class OutVehicle extends Vehicle{
 	private String arrivalTime;
 	private String startLoadTime;
 	private String finishLoadTime;
-	private Double demand;
+	private int demand;
 	private Integer status; // 0: Dang cho gan cua, 1: Dang cho do hang, 2: Bat dau do hang, 3: Ket thuc do hang
 	private Door door;
 	private CrossDockingSystem cDS;
+	private Integer idDoorAI;
 	
 	public OutVehicle() {
 		super();
 	}
 	public OutVehicle(Long idVehicle, String vehicleCode, String type, String company, String description) {
 		super(idVehicle, vehicleCode, type, company, description);
-	}
-	public OutVehicle(String date, String arrivalTime, String startLoadTime, String finishLoadTime, Double demand,
-			Integer status, Door door, CrossDockingSystem cDS) {
-		super();
-		this.date = date;
-		this.arrivalTime = arrivalTime;
-		this.startLoadTime = startLoadTime;
-		this.finishLoadTime = finishLoadTime;
-		this.demand = demand;
-		this.status = status;
-		this.door = door;
-		this.cDS = cDS;
-	}
-	public OutVehicle(Long idOutVehicle, String date, String arrivalTime, String startLoadTime,
-			String finishLoadTime, Double demand, Integer status, Door door, CrossDockingSystem cDS) {
-		super();
-		this.idOutVehicle = idOutVehicle;
-		this.date = date;
-		this.arrivalTime = arrivalTime;
-		this.startLoadTime = startLoadTime;
-		this.finishLoadTime = finishLoadTime;
-		this.demand = demand;
-		this.status = status;
-		this.door = door;
-		this.cDS = cDS;
 	}
 	public Long getIdOutVehicle() {
 		return idOutVehicle;
@@ -75,10 +51,10 @@ public class OutVehicle extends Vehicle{
 	public void setFinishLoadTime(String finishLoadTime) {
 		this.finishLoadTime = finishLoadTime;
 	}
-	public Double getDemand() {
+	public int getDemand() {
 		return demand;
 	}
-	public void setDemand(Double demand) {
+	public void setDemand(int demand) {
 		this.demand = demand;
 	}
 	public Integer getStatus() {
@@ -98,6 +74,12 @@ public class OutVehicle extends Vehicle{
 	}
 	public void setcDS(CrossDockingSystem cDS) {
 		this.cDS = cDS;
+	}
+	public Integer getIdDoorAI() {
+		return idDoorAI;
+	}
+	public void setIdDoorAI(Integer idDoorAI) {
+		this.idDoorAI = idDoorAI;
 	}
 	
 }

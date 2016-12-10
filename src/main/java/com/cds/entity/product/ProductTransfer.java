@@ -4,44 +4,38 @@ import com.cds.entity.vehicle.InVehicle;
 import com.cds.entity.vehicle.OutVehicle;
 
 public class ProductTransfer {
-	private Integer idProductTrasfer;
-	private InVehicle iVehicle;
-	private OutVehicle oVehicle;
+	private Integer id;
+	private InVehicle iv;
+	private OutVehicle ov;
 	private int transfer;
 	
 	public ProductTransfer() {
 		super();
 	}
-	public ProductTransfer(InVehicle iVehicle, OutVehicle oVehicle, int transfer) {
+	public ProductTransfer(Integer id, InVehicle iv, OutVehicle ov, int transfer) {
 		super();
-		this.iVehicle = iVehicle;
-		this.oVehicle = oVehicle;
+		this.id = id;
+		this.iv = iv;
+		this.ov = ov;
 		this.transfer = transfer;
 	}
-	public ProductTransfer(Integer idProductTrasfer, InVehicle iVehicle, OutVehicle oVehicle, int transfer) {
-		super();
-		this.idProductTrasfer = idProductTrasfer;
-		this.iVehicle = iVehicle;
-		this.oVehicle = oVehicle;
-		this.transfer = transfer;
+	public Integer getId() {
+		return id;
 	}
-	public Integer getIdProductTrasfer() {
-		return idProductTrasfer;
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	public void setIdProductTrasfer(Integer idProductTrasfer) {
-		this.idProductTrasfer = idProductTrasfer;
+	public InVehicle getIv() {
+		return iv;
 	}
-	public InVehicle getiVehicle() {
-		return iVehicle;
+	public void setIv(InVehicle iv) {
+		this.iv = iv;
 	}
-	public void setiVehicle(InVehicle iVehicle) {
-		this.iVehicle = iVehicle;
+	public OutVehicle getOv() {
+		return ov;
 	}
-	public OutVehicle getoVehicle() {
-		return oVehicle;
-	}
-	public void setoVehicle(OutVehicle oVehicle) {
-		this.oVehicle = oVehicle;
+	public void setOv(OutVehicle ov) {
+		this.ov = ov;
 	}
 	public int getTransfer() {
 		return transfer;
@@ -49,6 +43,7 @@ public class ProductTransfer {
 	public void setTransfer(int transfer) {
 		this.transfer = transfer;
 	}
+	
 	
 	
 }

@@ -12,8 +12,9 @@
   	<link href="resources/css/datepicker-custom.css" rel="stylesheet">
   	<link href="resources/css/datepicker.min.css" rel="stylesheet">
   	<link href="resources/css/select2.css" rel="stylesheet">
-	<link href="resources/css/css.css" rel="stylesheet">
   	<link href="resources/css/tip-yellow/tip-yellow.css" rel="stylesheet">
+  	<link href="resources/css/jquery-ui.css" rel="stylesheet">
+	<link href="resources/css/css.css" rel="stylesheet">
 </head>
 <body class="boxed-view">
 	<section>
@@ -30,11 +31,12 @@
 			<script src="resources/js/jquery-1.10.2.min.js"></script>
 			<script src="resources/js/bootstrap.min.js"></script>
 			<script src="resources/js/jquery.nicescroll.js"></script>
+			<script src="resources/js/jquery-ui.js"></script>
+			<!-- <script src="resources/js/bootstrap-datepicker.js"></script> -->
 			<script src="resources/js/bootstrap-datetimepicker.js"></script>
-			<script src="resources/js/bootstrap-datepicker.js"></script>
 			<script src="resources/js/bootstrap-timepicker.js"></script>
-			<script src="resources/js/pickers-init.js"></script>
 			<script src="resources/js/scripts.js"></script>
+			<script src="resources/js/pickers-init.js"></script>
 			<script src="resources/js/js.js"></script>
 			<script src="resources/js/jquery.poshytip.min.js"></script>
 			<script src="resources/js/jquery.validate.min.js"></script>

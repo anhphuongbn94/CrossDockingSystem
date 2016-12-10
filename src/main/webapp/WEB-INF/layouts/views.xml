@@ -8,11 +8,14 @@
 	<definition name="home.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
 	</definition>
-	<definition name="vehicle.def" extends="temp.def">
-	    <put-attribute name="content" value="/WEB-INF/views/vehicle.jsp" />
+	<definition name="vehicleManager.def" extends="temp.def">
+	    <put-attribute name="content" value="/WEB-INF/views/vehicleManager.jsp" />
 	</definition>
-	<definition name="mtrstatus.def" extends="temp.def">
-	    <put-attribute name="content" value="/WEB-INF/views/mtrstatus.jsp" />
+	<definition name="mtrinv.def" extends="temp.def">
+	    <put-attribute name="content" value="/WEB-INF/views/invehicle/mtrinv.jsp" />
+	</definition>
+	<definition name="mtroutv.def" extends="temp.def">
+	    <put-attribute name="content" value="/WEB-INF/views/outvehicle/mtroutv.jsp" />
 	</definition>
 	<definition name="transfer.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/transfer.jsp" />
@@ -21,29 +24,30 @@
 	    <put-attribute name="content" value="/WEB-INF/views/assign.jsp" />
 	</definition>
 	<!-- Door -->
-	<definition name="indoor.data.def" extends="temp.def">
-		<put-attribute name="content" value="/WEB-INF/views/door/indoor.jsp"/>
-	</definition>
-	<definition name="outdoor.def" extends="temp.def">
-		<put-attribute name="content" value="/WEB-INF/views/door/outdoor.jsp"/>
-	</definition>
-	<definition name="setcost.def" extends="temp.def">
-		<put-attribute name="content" value="/WEB-INF/views/door/setcost.jsp"/>
+	<definition name="doorManager.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/doorManager.jsp"/>
 	</definition>
 	<!-- Vehicle -->
-	<definition name="invehicle.def" extends="temp.def">
-	    <put-attribute name="content" value="/WEB-INF/views/invehicle/data.jsp" />
+	<definition name="invManager.def" extends="temp.def">
+	    <put-attribute name="content" value="/WEB-INF/views/invehicle/invManager.jsp" />
 	</definition>
 	<definition name="invehicle.unload.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/invehicle/unload.jsp" />
 	</definition>
-	<definition name="outvehicle.def" extends="temp.def">
-	    <put-attribute name="content" value="/WEB-INF/views/outvehicle/data.jsp" />
+	<definition name="outvManager.def" extends="temp.def">
+	    <put-attribute name="content" value="/WEB-INF/views/outvehicle/outvManager.jsp" />
 	</definition>
 	<definition name="outvehicle.load.def" extends="temp.def">
 	    <put-attribute name="content" value="/WEB-INF/views/outvehicle/load.jsp" />
 	</definition>
-	<definition name="rpvehicle.def" extends="temp.def">
-		<put-attribute name="content" value="/WEB-INF/views/rpvehicle.jsp" />
+	<definition name="rpvmonth.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/rpvmonth.jsp" />
+	</definition>
+	<definition name="rpvyear.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/rpvyear.jsp" />
+	</definition>
+	
+	<definition name="empManager.def" extends="temp.def">
+		<put-attribute name="content" value="/WEB-INF/views/empManager.jsp" />
 	</definition>
 </tiles-definitions>
