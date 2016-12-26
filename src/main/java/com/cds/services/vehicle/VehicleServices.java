@@ -74,8 +74,8 @@ public class VehicleServices {
 		System.out.println(json);
 		try {
 			HttpClient httpClient = new DefaultHttpClient();
-			HttpPost request = new HttpPost("http://202.191.57.103:8080/ezRoutingAPI/solve-cross-docking-system");
-//			HttpPost request = new HttpPost("http://localhost:9090/CrossDockingAPI/solve-cross-docking-system");
+//			HttpPost request = new HttpPost("http://202.191.57.103:8080/ezRoutingAPI/solve-cross-docking-system");
+			HttpPost request = new HttpPost("http://localhost:9090/CrossDockingAPI/solve-cross-docking-system");
 			StringEntity params = new StringEntity(json);
 			request.addHeader("content-type", "application/json");
 			request.addHeader("Accept", "application/json");

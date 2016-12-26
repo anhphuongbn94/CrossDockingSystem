@@ -22,7 +22,7 @@ public class HomeControl {
 	private EmployeeService empService;
 	
 	@RequestMapping(value = {"", "home"}, method = RequestMethod.GET)
-	public ModelAndView home(HttpSession session){
+	public ModelAndView home(HttpSession session, ModelMap mm){
 		Employee em=(Employee) session.getAttribute("em");
 		if(em != null){
 			return new ModelAndView("home.def");
@@ -43,21 +43,26 @@ public class HomeControl {
 		Employee em=empService.checkLogin(username, password);
 		if(em != null){
 			session.setAttribute("em", em);
-			return new ModelAndView("home.def");
+			return new ModelAndView("redirect:home");
 		}
 		return new ModelAndView("login.def");
 	}
 	@RequestMapping(value = "empManager", method = RequestMethod.GET)
-	public ModelAndView empManager(ModelMap mm){
-		String key = Constants.EMPTY;
-		int currentPage = Constants.START_PAGE;
-		int size = Constants.SIZE_PAGE;
-		int total = empService.countAllEmployee(key);
-		Pager pager=new Pager();
-		pager.initPage(size, total, currentPage);
-		mm.put("pager", pager);
-		mm.put("pageEmp", empService.getPageEmployee(size, currentPage, key));
-		return new ModelAndView("empManager.def");
+	public ModelAndView empManager(ModelMap mm, HttpSession session){
+		Employee em = (Employee) session.getAttribute("em");
+		if(em != null && em.getLevel() == 1){
+			String key = Constants.EMPTY;
+			int currentPage = Constants.START_PAGE;
+			int size = Constants.SIZE_PAGE;
+			int total = empService.countAllEmployee(key);
+			Pager pager=new Pager();
+			pager.initPage(size, total, currentPage);
+			mm.put("pager", pager);
+			mm.put("pageEmp", empService.getPageEmployee(size, currentPage, key));
+			return new ModelAndView("empManager.def");
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "logout", method = RequestMethod.GET)
 	public String logout(HttpSession session){

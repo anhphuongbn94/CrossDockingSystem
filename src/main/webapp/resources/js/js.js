@@ -1545,6 +1545,11 @@ $(document).ready(function(){
 		$(this).parent().html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw fa-load'></i>")
 		assignDoorAI();
 	});
+	$('#btnUseAssAI').click(function(){
+		$(this).parent().html("<i class='fa fa-spinner fa-pulse fa-3x fa-fw fa-load'></i>")
+		useAssignDoorAI();		
+		getTotalCost();
+	});
 });
 function getDataTransferNumber(curPage){
 	$.ajax({
@@ -1622,6 +1627,23 @@ function assignDoorIV(idInVehicle, idInDoor){
             "Content-Type": "application/json; charset=utf-8"
         },
 		url: contextPath + '/assignDoorIV',
+        success: function (response) {
+        	var ttCost = response;
+        	$('.total-cost').html(ttCost);
+        },
+        error: function (xhr, status, error) {
+        	alert(error + status + xhr);
+        }
+	});
+}
+function getTotalCost(){
+	$.ajax({
+        type: "POST",
+        header: {
+            Accept: "application/json; charset=utf-8",
+            "Content-Type": "application/json; charset=utf-8"
+        },
+		url: contextPath + '/getTotalCost',
         success: function (response) {
         	var ttCost = response;
         	$('.total-cost').html(ttCost);
@@ -1778,6 +1800,7 @@ function useAssignDoorAI(){
         	getPageInVehicle_whereAssignDoor(currentPage);
         	getPageOutVehicle_whereAssignDoor(currentPage);
         	$('.div-btn-assign-ai').html('');
+        	getTotalCost();
         },
         error: function (xhr, status, error) {
         	alert(error + status + xhr);

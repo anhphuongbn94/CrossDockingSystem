@@ -237,6 +237,12 @@ public class DoorControl {
 		double ttCost = doorService.getTotalCostCurDate();
 		return ttCost;
 	}
+	@RequestMapping(value = "getTotalCost", method = RequestMethod.POST)
+	@ResponseBody
+	public Double getTotalCost(){
+		double ttCost = doorService.getTotalCostCurDate();
+		return ttCost;
+	}
 	@RequestMapping(value = "assignDoorOV", method = RequestMethod.POST)
 	@ResponseBody
 	public Double assignDoorOV(
@@ -315,17 +321,17 @@ public class DoorControl {
 			JSONObject jsonObject=new JSONObject(str);
 			JSONArray inVehicleAssignments = jsonObject.getJSONArray("inVehicleAssignments");
 			for(int i=0; i<inVehicleAssignments.length(); i++){
-//				arrInDoorAI[i] = (int) inVehicleAssignments.get(i);
+				arrInDoorAI[i] = (int) inVehicleAssignments.get(i);
 				if(inVehicleAssignments.get(i) != null){
-					int index = (int) inVehicleAssignments.get(i);
+					Integer index = (Integer) inVehicleAssignments.get(i);
 					arrInDoorAI[i] = arrID[index];
 				}
 			}
 			JSONArray outVehicleAssignments = jsonObject.getJSONArray("outVehicleAssignments");
 			for(int i=0; i<outVehicleAssignments.length(); i++){
-//				arrOutDoorAI[i] = (int) outVehicleAssignments.get(i);
+				arrOutDoorAI[i] = (int) outVehicleAssignments.get(i);
 				if(outVehicleAssignments.get(i) != null){
-					int index = (int) outVehicleAssignments.get(i);
+					Integer index = (Integer) outVehicleAssignments.get(i);
 					arrOutDoorAI[i] = arrOD[index];
 				}
 			}

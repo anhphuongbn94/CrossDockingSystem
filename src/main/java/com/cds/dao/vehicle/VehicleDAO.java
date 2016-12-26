@@ -8,10 +8,9 @@ import com.cds.entity.vehicle.OutVehicle;
 import com.cds.entity.vehicle.Vehicle;
 
 public interface VehicleDAO {
+	public int countAllVehicle();
 	public ArrayList<Vehicle> getListVehicle();
-	
 	public ArrayList<Vehicle> getPageVehicle(int currentPage, int sizePage);
-	
 	public boolean checkInsertVehicle(Vehicle v);
 	public boolean insertVehicle(Vehicle v);
 	

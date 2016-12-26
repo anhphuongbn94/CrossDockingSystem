@@ -52,14 +52,12 @@ public class VehicleControl {
 	public ModelAndView vehicle(ModelMap mm, HttpSession session, HttpServletResponse response){
 		Employee em=(Employee) session.getAttribute("em");
 //		if(em != null){
-			int currentPage = 1;
-			int sizePage = 10;
-			int numPage=0;
-//			int total=baseDAO.countAll(Vehicle_.TABLE);
-			int total=0;
-			if(total%sizePage == 0) numPage=total/sizePage;
-			else numPage=total/sizePage + 1;
-			mm.put("numPage", numPage);
+			int sizePage = Constants.SIZE_PAGE;
+			int currentPage = Constants.START_PAGE;
+			int total=vehicleService.countAllVehicle();
+			Pager pager = new Pager();
+			pager.initPage(sizePage, total, currentPage);
+			mm.put("pager", pager);
 			mm.put("pVehicle", vehicleService.getPageVehicle(currentPage, sizePage));
 			return new ModelAndView("vehicleManager.def");
 //		}else{

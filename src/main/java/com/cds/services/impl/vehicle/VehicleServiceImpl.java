@@ -17,6 +17,9 @@ public class VehicleServiceImpl implements VehicleService{
 	@Autowired
 	private VehicleDAO vehicleDAO;
 	
+	public int countAllVehicle(){
+		return vehicleDAO.countAllVehicle();
+	}
 	public ArrayList<Vehicle> getListVehicle() {
 		return vehicleDAO.getListVehicle();
 	}

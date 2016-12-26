@@ -41,6 +41,23 @@ public class VehicleDAOImpl extends BaseDAOImpl implements VehicleDAO{
 	 * ****************************************************************************************************
 	 * Vehicle
 	 * */
+	public int countAllVehicle(){
+		String sql="SELECT COUNT(*) FROM tblVehicle";
+		Connection conn=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try {
+			conn = getConnection();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			if(rs.next()) return rs.getInt(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			closeConnection(conn, ps, rs);				
+		}
+		return 0;
+	}
 	public ArrayList<Vehicle> getListVehicle(){
 		String sql="SELECT v.idVehicle, v.code, v.type, v.company, v.description "
 				+ "FROM tblVehicle AS v ";

@@ -196,15 +196,15 @@
         <section class="dialog-pov">
         	<section id="tabs">
         		<ul>
-				    <li><a href="#fragment-1"><span>Product Vehicle</span></a></li>
-				    <li><a href="#fragment-2"><span>Two</span></a></li>
+				    <li><a href="#fragment-1"><span><s:message code="product.vehicle.tab"/></span></a></li>
+				    <li><a href="#fragment-2"><span><s:message code="product.transform.tab" /></span></a></li>
 			  	</ul>
 			  	<div id="fragment-1">
 		   			<section class="row" style="margin-top: -15px">
 					<section class="col-sm-12">
 					<section class="panel">
 					<header class="panel-heading">
-						<s:message code="invehicle.title.data" />
+						<s:message code="product.vehicle.title" />
 					</header>
 					<section class="panel-body">
 					<section class="adv-table">
@@ -240,7 +240,7 @@
 					<section class="col-sm-12">
 					<section class="panel">
 					<header class="panel-heading">
-						<s:message code="invehicle.title.data" />
+						<s:message code="product.transform.title" />
 					</header>
 					<section class="panel-body">
 					<section class="adv-table">

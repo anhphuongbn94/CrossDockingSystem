@@ -65,14 +65,13 @@ public class BaseDAOImpl implements BaseDAO{
 		return null;
 	}
 	public int countAll(String table){
-		String sql="SELECT COUNT(*) FROM " +table+ " WHERE date=?";
+		String sql="SELECT COUNT(*) FROM " +table+ " WHERE date=CURDATE()";
 		Connection conn=null;
 		PreparedStatement ps=null;
 		ResultSet rs=null;
 		try {
 			conn = getConnection();
 			ps = conn.prepareStatement(sql);
-			ps.setString(1, new DateUtils().getDateSystem());
 			rs = ps.executeQuery();
 			if(rs.next()) return rs.getInt(1);
 		} catch (SQLException e) {
