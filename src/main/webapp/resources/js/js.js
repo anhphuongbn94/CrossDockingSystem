@@ -57,6 +57,7 @@ $(document).ready(function(e){
 		dialogSC.dialog('open');
 	});
 	var dialogSC=$( '.dialog-setup-cost' ).dialog({
+		title: "Setup Cost Door",
 		autoOpen: false,
 		modal : true,     
      	buttons: {

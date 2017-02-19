@@ -46,13 +46,13 @@ public class DoorControl {
 	@RequestMapping(value = "doorManager", method = RequestMethod.GET)
 	public ModelAndView indoor(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			mm.put("listIDoor", doorService.getListInDoor());
 			mm.put("listODoor", doorService.getListOutDoor());
 			return new ModelAndView("doorManager.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "insertInDoor", method = RequestMethod.POST)
 	@ResponseBody
@@ -198,7 +198,7 @@ public class DoorControl {
 	@RequestMapping(value = "assign", method = RequestMethod.GET)
 	public ModelAndView invehicle_assign(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			int currentPage = Constants.START_PAGE;
 			int sizePage = Constants.SIZE_PAGE;
 //			int sizePage = 5;
@@ -223,9 +223,9 @@ public class DoorControl {
 			mm.put("totalCostAI", doorService.getTotalCostAICurDate());
 			mm.put("totalCost", doorService.getTotalCostCurDate());
 			return new ModelAndView("assign.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "assignDoorIV", method = RequestMethod.POST)
 	@ResponseBody
@@ -321,7 +321,7 @@ public class DoorControl {
 			JSONObject jsonObject=new JSONObject(str);
 			JSONArray inVehicleAssignments = jsonObject.getJSONArray("inVehicleAssignments");
 			for(int i=0; i<inVehicleAssignments.length(); i++){
-				arrInDoorAI[i] = (int) inVehicleAssignments.get(i);
+				arrInDoorAI[i] = (Integer) inVehicleAssignments.get(i);
 				if(inVehicleAssignments.get(i) != null){
 					Integer index = (Integer) inVehicleAssignments.get(i);
 					arrInDoorAI[i] = arrID[index];
@@ -329,7 +329,7 @@ public class DoorControl {
 			}
 			JSONArray outVehicleAssignments = jsonObject.getJSONArray("outVehicleAssignments");
 			for(int i=0; i<outVehicleAssignments.length(); i++){
-				arrOutDoorAI[i] = (int) outVehicleAssignments.get(i);
+				arrOutDoorAI[i] = (Integer) outVehicleAssignments.get(i);
 				if(outVehicleAssignments.get(i) != null){
 					Integer index = (Integer) outVehicleAssignments.get(i);
 					arrOutDoorAI[i] = arrOD[index];

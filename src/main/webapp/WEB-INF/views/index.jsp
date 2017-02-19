@@ -19,21 +19,21 @@
 	<section class="panel-body">
 		<div id="container" style="min-width: 100%; height: 300px; margin: 0 auto"></div>
 		<section class="col-sm-2" style="width: 170px;">
-			<div>InVehicle to the day: 30</div>
-			<div>Total InVehicle: 350</div>
-			<div>Company 1: 60</div>
-			<div>Company 2: 140</div>
-			<div>Company 3: 80</div>
-			<div>Company 4: 70</div>
+			<div>InVehicle to the day: 10</div>
+			<div>Total InVehicle: 525</div>
+			<div>Company 1: 85</div>
+			<div>Company 2: 240</div>
+			<div>Company 3: 100</div>
+			<div>Company 4: 90</div>
 		</section>
 		<section class="col-sm-4" style="width: 270px;">
 			<div id="company-iv" style="width: 100%; height: 200px;"></div>
 		</section>
 		<section class="col-sm-2" style="width: 170px;">		
-			<div>OutVehicle to the day: 20</div>
-			<div>Total OutVehicle: 345</div>
-			<div>Company 1: 145</div>
-			<div>Company 2: 80</div>
+			<div>OutVehicle to the day: 7</div>
+			<div>Total OutVehicle: 500</div>
+			<div>Company 1: 245</div>
+			<div>Company 2: 100</div>
 			<div>Company 3: 60</div>
 			<div>Company 4: 60</div>
 		</section>
@@ -44,7 +44,7 @@
 	</section><!-- End Panel -->
 	</section><!-- End Col -->
 	</section><!-- End Row -->
-	<script src="https://code.highcharts.com/highcharts.js"></script>
+	<script src="resources/js/highcharts.js"></script>
 	<script>
 		    var chart=Highcharts.chart('container', {
 		        title: {
@@ -56,7 +56,10 @@
 		            x: -20
 		        },
 		        xAxis: {
-		            categories: ['Day1','Day2','Day3','Day4','Day5','Day6','Day7','Day8','Day9','Day10','Day11','Day12','Day13','Day14','Day15','Day16','Day17','Day18','Day19','Day20','Day21','Day22','Day23','Day24','Day25','Day26','Day27','Day28','Day29','Day30']
+		            categories: ['Day1','Day2','Day3','Day4','Day5','Day6','Day7','Day8','Day9','Day10',
+		                         'Day11','Day12','Day13','Day14','Day15','Day16','Day17','Day18','Day19',
+		                         'Day20','Day21','Day22','Day23','Day24','Day25','Day26','Day27','Day28','Day29',
+		                         'Day30', 'Day31']
 		        },
 		        yAxis: {
 		            title: {
@@ -79,11 +82,15 @@
 		        },
 		        series: [{
 		            name: 'InVehicle',
-		            data: [20, 25, 30, 25, 20, 25, 30, 25, 20, 30, 35, 30, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0, 0, 0, 0, 0, 0, 0, 0, 0],
+		            data: [20, 25, 30, 25, 20, 25, 30, 25, 20, 30, 35, 
+		                   30, 20, 15, 10, 20, 20, 30, 10, 20 ,10 , 30, 
+		                   40, 20, 15, 25, 10, 0, 0, 0, 0],
 		            color: '#000080'
 		        }, {
 		            name: 'OutVehicle',
-		            data: [25, 20, 35, 40, 20, 30, 35, 45, 10, 40, 25, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 , 0, 0, 0, 0, 0, 0, 0, 0],
+		            data: [25, 20, 35, 40, 20, 30, 35, 45, 10, 40, 25, 20, 
+		                   10, 20, 30, 25, 15, 10, 20, 30, 40 ,10 , 15, 20, 
+		                   15, 20, 7, 0, 0, 0, 0],
 		            color: '#B22222'
 		        }]
 		    });

@@ -23,9 +23,9 @@
 			| AI assign cost: <span class="total-cost-ai">${totalCostAI }</span>
 		</section>
 		<section style="float: right; padding-top: 10px" class="div-btn-assign-ai">
-			<%-- <c:if test="${checkExistsAI }"> --%>
+			<c:if test="${checkExistsAI }">
 				<button class="btnDefault btn-primary" id="btnAssAI">AI Assign</button>
-			<%-- </c:if> --%>
+			</c:if>
 			<c:if test="${!checkExistsAI }">
 				<button class="btnDefault btn-primary" id="btnUseAssAI">Use AI Assign</button>
 			</c:if>

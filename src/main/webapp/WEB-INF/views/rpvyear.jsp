@@ -283,7 +283,7 @@
 		    var chart = new CanvasJS.Chart("chartContainer",
 		    {
 		      title:{
-		        text: "Statistics of Vehicle"
+		        text: "Vehicle Statistics"
 		      },
 			  axisY: {
 		        title: "Number of Vehicle"

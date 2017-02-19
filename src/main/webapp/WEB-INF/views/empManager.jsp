@@ -4,7 +4,7 @@
 
 
 	<section class="page-heading">
-	    <h3><s:message code="invehicle.title" /></h3>
+	    <h3><s:message code="employee.title" /></h3>
 	</section><!-- End Page-Heading -->
 	<section class="wrapper">
 		<section class="row">
@@ -132,7 +132,7 @@
 			            <td><s:message code="employee.email" /></td>
  						<td><s:message code="employee.address" /></td>
 						<td><s:message code="employee.phonenumber" /></td>
-						<td><s:message code="employee.password" /></td>
+						<%-- <td><s:message code="employee.password" /></td> --%>
 						<td><s:message code="employee.level" /></td>
 						<td><s:message code="employee.active" /></td>
 						<td colspan="1"><s:message code="label.option" /></td>
@@ -154,7 +154,7 @@
 								<td>${rows.email }</td>
 								<td>${rows.address }</td>
 								<td>${rows.phonenumber }</td>
-								<td>${rows.password }</td>
+								<%-- <td>${rows.password }</td> --%>
 								<td><c:if test="${rows.gender==1}">
 										<s:message code="level.admin" />
 									</c:if>

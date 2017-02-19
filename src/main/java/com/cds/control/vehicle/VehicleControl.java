@@ -51,7 +51,7 @@ public class VehicleControl {
 	@RequestMapping(value = "vehicleManager", method = RequestMethod.GET)
 	public ModelAndView vehicle(ModelMap mm, HttpSession session, HttpServletResponse response){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			int sizePage = Constants.SIZE_PAGE;
 			int currentPage = Constants.START_PAGE;
 			int total=vehicleService.countAllVehicle();
@@ -60,9 +60,9 @@ public class VehicleControl {
 			mm.put("pager", pager);
 			mm.put("pVehicle", vehicleService.getPageVehicle(currentPage, sizePage));
 			return new ModelAndView("vehicleManager.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageVehicle", method = RequestMethod.POST)
 	@ResponseBody
@@ -100,7 +100,7 @@ public class VehicleControl {
 	@RequestMapping(value = "invManager", method = RequestMethod.GET)
 	public ModelAndView invehicle(ModelMap mm, HttpSession session){	
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			int currentPage = 1;
 			int sizePage = 15;
 			String key="";
@@ -115,9 +115,9 @@ public class VehicleControl {
 			mm.put("listU", pService.getListUnit());
 			mm.put("listOV", vehicleService.getListOutVehicle_byCurDate(date));
 			return new ModelAndView("invManager.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getTotalCostAssignOutDoor", method = RequestMethod.POST)
 	@ResponseBody
@@ -133,7 +133,7 @@ public class VehicleControl {
 	@RequestMapping(value = "unload", method = RequestMethod.GET)
 	public ModelAndView invehicle_uploadtime(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 //			int status = 0;
 			int currentPage = Constants.START_PAGE;
 			int sizePage = Constants.SIZE_PAGE;
@@ -144,9 +144,9 @@ public class VehicleControl {
 			mm.put("pager", pager);
 			mm.put("pInVehicle", vehicleService.getPageInVehicle_whereUnloadStatus(currentPage, sizePage));
 			return new ModelAndView("invehicle.unload.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "rpvyear", method = RequestMethod.GET)
 	public ModelAndView reportInVehicle(ModelMap mm){
@@ -315,7 +315,7 @@ public class VehicleControl {
 	@RequestMapping(value = "outvManager", method = RequestMethod.GET)
 	public ModelAndView outvehicle(ModelMap mm, HttpSession session){	
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			String key="";
 			int currentPage = 1;
 			int sizePage = 15;
@@ -327,14 +327,14 @@ public class VehicleControl {
 			mm.put("listV", vehicleService.getListVehicle());
 			mm.put("pOutVehicle", vehicleService.getPageOutVehicleCurDate_byKeySearch(key, currentPage, sizePage));
 			return new ModelAndView("outvManager.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "load", method = RequestMethod.GET)
 	public ModelAndView outvehicle_loadtime(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 //			int status = 0;
 			int currentPage = Constants.START_PAGE;
 			int sizePage = 15;
@@ -345,9 +345,9 @@ public class VehicleControl {
 			mm.put("pager", pager);
 			mm.put("pOutVehicle", vehicleService.getPageOutVehicle_whereLoadStatus(currentPage, sizePage));
 			return new ModelAndView("outvehicle.load.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageOutVehicle_whereAssignDoor", method = RequestMethod.POST)
 	@ResponseBody
@@ -474,7 +474,7 @@ public class VehicleControl {
 	@RequestMapping(value = "mtrinv", method = RequestMethod.GET)
 	public ModelAndView mtrInVehicle(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			int currentPage = 1;
 			int sizePage = Constants.SIZE_PAGE;
 			String key=Constants.EMPTY;
@@ -491,9 +491,9 @@ public class VehicleControl {
 			mm.put("listU", pService.getListUnit());
 			mm.put("listOV", vehicleService.getListOutVehicle_byCurDate(date));
 			return new ModelAndView("mtrinv.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "displayProductIV", method = RequestMethod.POST)
 	@ResponseBody
@@ -679,7 +679,7 @@ public class VehicleControl {
 	@RequestMapping(value = "mtroutv", method = RequestMethod.GET)
 	public ModelAndView mtrOutVehicle(ModelMap mm, HttpSession session){
 		Employee em=(Employee) session.getAttribute("em");
-//		if(em != null){
+		if(em != null){
 			int currentPage = 1;
 			int sizePage = Constants.SIZE_PAGE;
 			String key=Constants.EMPTY;
@@ -692,9 +692,9 @@ public class VehicleControl {
 			mm.put("pager", pager);
 			mm.put("pageV", pageV);
 			return new ModelAndView("mtroutv.def");
-//		}else{
-//			return new ModelAndView("login.def");
-//		}
+		}else{
+			return new ModelAndView("login.def");
+		}
 	}
 	@RequestMapping(value = "getPageOutVehicle_byStatusAndKey", method = RequestMethod.POST)
 	@ResponseBody
